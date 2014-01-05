@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <data xmlns="http://www.netbeans.org/ns/make-project-private/1">
+        <activeConfTypeElem>1</activeConfTypeElem>
+        <activeConfIndexElem>0</activeConfIndexElem>
+    </data>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/home/sienio/NetBeansProjects/Chess/chess.cpp</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/queen.cpp</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/checkboard.h</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/figure.h</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/empty.cpp</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/king.h</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/king.cpp</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/pawn.h</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/empty.h</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/pawn.cpp</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/rook.h</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/checkboard.cpp</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/rook.cpp</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/figure.cpp</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/knight.h</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/queen.h</file>
+        </group>
+    </open-files>
+</project-private>
