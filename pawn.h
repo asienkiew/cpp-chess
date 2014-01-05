@@ -11,8 +11,7 @@
 
 class pawn : public figure {
 public:
-    
-    static const bool can_jump_over = false;
+   
     pawn(figure::color cc);
 
     virtual ~pawn();

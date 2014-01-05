@@ -19,9 +19,9 @@ bool rook::can_move(int x1, int x2, int y1, int y2) {
  
         if ( 
              (  
-                (x1 == x2 ) || //ruch pionowo
-                (y1 == y2 ) //ruch poziomo
-             ) && (x1 != x2  && y1 != y2)  // nie może pozostać w miejscu  
+                (x1 == x2 && y1 != y2) || //ruch pionowo
+                (y1 == y2 && x1 != x2) //ruch poziomo
+             ) 
            ) 
         {
             return true;   

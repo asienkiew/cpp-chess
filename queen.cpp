@@ -21,7 +21,7 @@ bool queen::can_move(int x1, int x2, int y1, int y2 ) {
                 (x1 == x2 ) || //ruch pionowo
                 (y1 == y2 ) || //ruch poziomo
                 (std::abs(x1 - x2) == std::abs(y1 - y2)) // ruch po przekątnych
-             ) && (x1 != x2  && y1 != y2)  // nie może pozostać w miejscu  
+             ) && !(x1 == x2 && y1 == y2)  // nie może pozostać w miejscu  
            ) 
         {
             return true;   

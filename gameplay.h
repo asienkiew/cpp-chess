@@ -8,6 +8,7 @@
 #ifndef GAMEPLAY_H
 #define	GAMEPLAY_H
 #include <string>
+#include <vector>
 
 class gameplay {
 public:
@@ -16,7 +17,7 @@ public:
     virtual ~gameplay();
     short int parse_command(std::string &);
 private:
-
+    std::vector< std::string > history;
 };
 
 #endif	/* GAMEPLAY_H */

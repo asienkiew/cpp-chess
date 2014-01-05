@@ -8,7 +8,9 @@
 #include "king.h"
 #include <cmath>
 
-king::king(figure::color cc):figure(cc){ sign = 'K';
+king::king(figure::color cc):figure(cc){ 
+    sign = 'K';
+    is_capturable = false;
   
 }
 
@@ -16,7 +18,7 @@ king::king(figure::color cc):figure(cc){ sign = 'K';
 
 bool king::can_move(int x1, int x2, int y1, int y2) {
  
-        if  (std::abs(x1 - x2) == 1 || std::abs(y1 - y2) == 1) {
+        if  (std::abs(x1 - x2) <= 1 && std::abs(y1 - y2) <= 1 && !(x1 == x2 && y1 == y2)) {
             return true;   
         }
 

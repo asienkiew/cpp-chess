@@ -20,7 +20,6 @@
  */
 
 
-
 int main(int argc, char** argv) {
 
      checkboard chec;
@@ -32,7 +31,41 @@ int main(int argc, char** argv) {
      std::string s = "sample.chess";
      chec.load_from_file(s);
      chec.print();
-    //delete chec;
+     /*
+     int * wsk = new int(3);
+     delete wsk;
+     std::cout<<*wsk;
+     */
+     
+     std::cout << chec.move("a2a3", figure::white);
+     chec.print();
+     std::cout << chec.move("a3a4", figure::white);
+     chec.print();
+     std::cout << chec.move("a4a5", figure::white);
+     chec.print();
+     std::cout << chec.move("b1a2", figure::white);
+     chec.print();
+     std::cout << chec.move("c1b3", figure::white);
+     chec.print();
+     std::cout << chec.move("b3d4", figure::white);
+     chec.print();
+     
+     std::cout << chec.move("d4f5", figure::white);
+     chec.print();
+     
+     std::cout << chec.move("f5d6", figure::white);
+     chec.print();
+     
+     std::cout << chec.move("d6e8", figure::white);
+     chec.print();
+     std::cout << chec.move("e7e6", figure::black);
+     chec.print();
+      std::cout << chec.move("e8e7", figure::black);
+     chec.print();
+      std::cout << chec.move("e7d6", figure::black);
+     chec.print();
+     
+     //delete chec;
     int a = 1;
 
     return 0;

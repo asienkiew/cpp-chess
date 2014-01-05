@@ -18,8 +18,8 @@ bishop::~bishop() {
 bool bishop::can_move(int x1, int x2, int y1, int y2) {
  
         if ( 
-             (std::abs(x1 - x2) == std::abs(y1 - y2)) && // ruch po przekątnych
-                (x1 != x2  && y1 != y2)  // nie może pozostać w miejscu  
+             (std::abs(x1 - x2) == std::abs(y1 - y2)) // ruch po przekątnych
+             && !(x1 == x2 && y1 == y2) // nie może pozostać w miejscu  
            ) 
         {
             return true;   

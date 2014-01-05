@@ -24,10 +24,12 @@ public:
     checkboard();
     //checkboard(const checkboard& orig);
     virtual ~checkboard();
+    bool move(std::string , figure::color );
     
 private:
+    int * translate(std::string );
     figure * sign_to_object(char sign/*, figure::color c*/); 
-   
+    bool is_another_figure_between(int,int,int,int);
     //static std::string b = "black";
      //= new pawn("black"); 
    

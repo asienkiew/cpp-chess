@@ -8,7 +8,7 @@
 #include "knight.h"
 #include <cmath>
 #include <iostream>
-knight::knight(figure::color cc):figure(cc){sign = 'S';
+knight::knight(figure::color cc):figure(cc){sign = 'S'; jump_over = true;
     
 }
 
