@@ -36,7 +36,13 @@ checkboard::checkboard() {
 }
 
 checkboard::~checkboard() {
-   
+       for (int y=7; y>-1; y--) {
+      
+        for (int x=0; x<8; x++) {
+            //delete board[x][y];
+        }
+    }
+  
 }
 
 void checkboard::load_from_file(std::string& file) {
@@ -66,7 +72,22 @@ void checkboard::print() {
     for (int y=7; y>-1; y--) {
         std::cout<<"\n"<<y+1<<"  ";
         for (int x=0; x<8; x++) {
-            std::cout<<board[x][y]->get_sign()<<" ";
+            if (board[x][y]->get_sign() == '.' ) {
+                if ( (x + y) % 2 == 0) {
+                    std::cout<<"\033[35;1m"<<board[x][y]->get_sign()<<"\033[0m ";
+                } else {
+                    std::cout<<"\033[37;1m"<<board[x][y]->get_sign()<<"\033[0m ";
+                }
+                
+            } else {
+                if (board[x][y]->get_color() == figure::black) {
+                    std::cout<<"\033[31;1m"<<board[x][y]->get_sign()<<"\033[0m ";
+                } else {
+                    std::cout<<"\033[37;1m"<<board[x][y]->get_sign()<<"\033[0m ";
+                }
+                 
+            }
+           
              
         }
         std::cout<<" "<<y+1;
@@ -101,8 +122,11 @@ bool checkboard::is_another_figure_between(int  x1, int  x2, int  y1, int  y2) {
     return false;
 }
 
+std::string checkboard::to_string(int* t){
+    //return std::string(char(t[0] + 97)+char(t[1] + 49)+char(t[2] + 97)+char(t[3] + 49));
+}
 
-int * checkboard::translate(std::string s){
+int * checkboard::to_table(std::string s){
    int t[4] ;
    t[0] = int(s[0]) - 97;
    t[1] = int(s[1]) - 49;
@@ -111,12 +135,12 @@ int * checkboard::translate(std::string s){
    return t;
 }
 
-bool checkboard::move(std::string s, figure::color who_moves) {
-    int *table = translate(s);
-    int x1 = table[0];
-    int x2 = table[2];
-    int y1 = table[1];
-    int y2 = table[3];        
+bool checkboard::move_from_raw_coordinates(int x1, int x2, int y1, int y2, figure::color who_moves) {
+    int coordinates[4];
+    coordinates[0] = x1;
+    coordinates[1] = x2;
+    coordinates[2] = y1;
+    coordinates[3] = y2;
     //czy porusz się swoim
     if (who_moves != board[x1][y1]->get_color() ) {
         return false;
@@ -145,6 +169,8 @@ bool checkboard::move(std::string s, figure::color who_moves) {
                board[x2][y2] = board[x1][y1];
               
                board[x1][y1] = tmp;
+         
+               history.push_back(coordinates);
                return true;
                
            } 
@@ -154,19 +180,28 @@ bool checkboard::move(std::string s, figure::color who_moves) {
                board[x2][y2] = board[x1][y1];
               
                board[x1][y1] = new empty(figure::none);
+               history.push_back(coordinates);
                return true;
            }     
        } 
-    } 
-       return false;
+    }
+    return false;
+}
+
+bool checkboard::move(std::string s, figure::color who_moves) {
+    int *table = to_table(s);
+    int x1 = table[0];
+    int x2 = table[2];
+    int y1 = table[1];
+    int y2 = table[3];        
+     
+    return move_from_raw_coordinates(x1, x2, y1, y2, who_moves);
 }
 
 
 
 figure * checkboard::sign_to_object(char sign/*, figure::color c*/) {
     figure * f;
-    //king * k = new king(figure::black);
-    //return k;
    switch(sign) {
         case 'k':
             f = new king(figure::black);

@@ -14,6 +14,7 @@
 
 #include <map>
 #include <string>
+#include <vector>
 
 class checkboard {
 public:
@@ -25,9 +26,12 @@ public:
     //checkboard(const checkboard& orig);
     virtual ~checkboard();
     bool move(std::string , figure::color );
-    
+    bool move_from_raw_coordinates(int, int, int, int, figure::color);
+    std::string to_string(int *);
 private:
-    int * translate(std::string );
+    std::vector< int * > history;
+    int * to_table(std::string );
+    
     figure * sign_to_object(char sign/*, figure::color c*/); 
     bool is_another_figure_between(int,int,int,int);
     //static std::string b = "black";

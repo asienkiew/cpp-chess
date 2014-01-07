@@ -35,6 +35,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/AI.o \
 	${OBJECTDIR}/bishop.o \
 	${OBJECTDIR}/checkboard.o \
 	${OBJECTDIR}/chess.o \
@@ -43,6 +44,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/gameplay.o \
 	${OBJECTDIR}/king.o \
 	${OBJECTDIR}/knight.o \
+	${OBJECTDIR}/move.o \
 	${OBJECTDIR}/pawn.o \
 	${OBJECTDIR}/queen.o \
 	${OBJECTDIR}/rook.o
@@ -78,6 +80,11 @@ LDLIBSOPTIONS=
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/chess: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/chess ${OBJECTFILES} ${LDLIBSOPTIONS}
+
+${OBJECTDIR}/AI.o: AI.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/AI.o AI.cpp
 
 ${OBJECTDIR}/bishop.o: bishop.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -118,6 +125,11 @@ ${OBJECTDIR}/knight.o: knight.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/knight.o knight.cpp
+
+${OBJECTDIR}/move.o: move.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/move.o move.cpp
 
 ${OBJECTDIR}/pawn.o: pawn.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -171,6 +183,19 @@ ${TESTDIR}/tests/queen_test.o: tests/queen_test.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/queen_test.o tests/queen_test.cpp
 
+
+${OBJECTDIR}/AI_nomain.o: ${OBJECTDIR}/AI.o AI.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/AI.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/AI_nomain.o AI.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/AI.o ${OBJECTDIR}/AI_nomain.o;\
+	fi
 
 ${OBJECTDIR}/bishop_nomain.o: ${OBJECTDIR}/bishop.o bishop.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -274,6 +299,19 @@ ${OBJECTDIR}/knight_nomain.o: ${OBJECTDIR}/knight.o knight.cpp
 	    $(COMPILE.cc) -O2 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/knight_nomain.o knight.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/knight.o ${OBJECTDIR}/knight_nomain.o;\
+	fi
+
+${OBJECTDIR}/move_nomain.o: ${OBJECTDIR}/move.o move.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/move.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/move_nomain.o move.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/move.o ${OBJECTDIR}/move_nomain.o;\
 	fi
 
 ${OBJECTDIR}/pawn_nomain.o: ${OBJECTDIR}/pawn.o pawn.cpp 

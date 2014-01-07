@@ -24,7 +24,14 @@ figure::figure(const figure& orig) {
 figure::~figure() {
 }
 char figure::get_sign() {
-    return sign;
+    if (c == white) {
+        return sign;    
+    } else if (c == black){
+        return char(int(sign) + 32);
+    } else {
+        return sign;
+    }
+    
 };
 bool figure::can_move(int x1, int x2, int y1, int y2) {
     return true;
