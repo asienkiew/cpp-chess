@@ -4,15 +4,28 @@
  * 
  * Created on 7 styczeń 2014, 00:33
  */
-
+#include <iostream>
+#include <string>
 #include "move.h"
+#include "figure.h"
 
 move::move() {
 }
-
-move::move(const move& orig) {
+move::move(short int x1, short int x2,short int y1,short int y2, figure::color c, char which_moved, char which_was_captured ): x1(x1), x2(x2), y1(y1), y2(y2), c(c), which_moved(which_moved), which_was_captured(which_was_captured) {
+    
 }
+
 
 move::~move() {
 }
+ std::ostream&  operator<< (std::ostream& os, move& m){
+     std::string s;
+     if (m.c == figure::black) {
+         s = "black";
+     } else {
+         s = "white";
+     }
 
+     os<<s<<":"<<m.which_moved<<"("<<m.x1<<","<<m.y1<<")->"<<m.which_was_captured<<"("<<m.x2<<","<<m.y2<<")";
+     return os;
+ }

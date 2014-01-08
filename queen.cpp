@@ -14,7 +14,7 @@ queen::queen(figure::color cc):figure(cc){sign = 'H';}
 queen::~queen() {
 }
 
-bool queen::can_move(int x1, int x2, int y1, int y2 ) {
+bool queen::can_move(short int x1, short int x2, short int y1, short int y2 ) {
  
         if ( 
              (  

@@ -16,7 +16,7 @@ knight::knight(figure::color cc):figure(cc){sign = 'S'; jump_over = true;
 knight::~knight() {
 }
 
-bool knight::can_move(int x1, int x2, int y1, int y2) {
+bool knight::can_move(short int x1, short int x2, short int y1, short int y2) {
  
         if ( 
              (std::abs(x1 - x2) + std::abs(y1 - y2) == 3) && // może się przesunąc o 3 pola sumując x i y

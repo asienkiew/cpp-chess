@@ -7,13 +7,22 @@
 
 #ifndef MOVE_H
 #define	MOVE_H
+#include "figure.h"
+#include <iostream>
 
 class move {
 public:
+    short int x1, x2, y1, y2;
+    figure::color c;
+    char which_moved;
+    char which_was_captured;
     move();
-    move(const move& orig);
+    move(short int,short int,short int,short int, figure::color, char, char);
+
     virtual ~move();
+    friend std::ostream& operator<<(std::ostream&, move&);
 private:
+    
 
 };
 

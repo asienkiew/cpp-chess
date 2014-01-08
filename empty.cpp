@@ -13,6 +13,6 @@ empty::empty(figure::color cc):figure(cc){sign = '.';}
 empty::~empty() {
 }
 
-bool empty::can_move(int x1, int x2, int y1, int y2) {
+bool empty::can_move(short int x1, short int x2, short int y1, short int y2) {
     return false;
 }

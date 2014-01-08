@@ -33,10 +33,16 @@ char figure::get_sign() {
     }
     
 };
-bool figure::can_move(int x1, int x2, int y1, int y2) {
+char figure::get_sign_raw() {
+ 
+        return sign;
+   
+    
+};
+bool figure::can_move(short int x1, short int x2, short int y1, short int y2) {
     return true;
 }
-bool figure::can_capture(int x1, int x2, int y1, int y2) {
+bool figure::can_capture(short int x1, short int x2, short int y1, short int y2) {
     return can_move(x1, x2, y1, y2);
 }
  bool figure::can_jump_over(){

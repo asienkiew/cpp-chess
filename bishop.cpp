@@ -15,7 +15,7 @@ bishop::bishop(figure::color cc):figure(cc){sign = 'G';}
 bishop::~bishop() {
 }
 
-bool bishop::can_move(int x1, int x2, int y1, int y2) {
+bool bishop::can_move(short int x1, short int x2, short int y1, short int y2) {
  
         if ( 
              (std::abs(x1 - x2) == std::abs(y1 - y2)) // ruch po przekątnych

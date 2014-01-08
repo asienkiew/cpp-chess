@@ -16,7 +16,7 @@ king::king(figure::color cc):figure(cc){
 
 
 
-bool king::can_move(int x1, int x2, int y1, int y2) {
+bool king::can_move(short int x1, short int x2, short int y1, short int y2) {
  
         if  (std::abs(x1 - x2) <= 1 && std::abs(y1 - y2) <= 1 && !(x1 == x2 && y1 == y2)) {
             return true;   

@@ -22,8 +22,9 @@ public:
     figure(const figure& );
     virtual ~figure();
     char get_sign();
-    virtual bool can_move(int x1, int x2, int y1, int y2);
-    virtual bool can_capture(int x1, int x2, int y1, int y2);
+    char get_sign_raw();
+    virtual bool can_move(short int x1, short int x2, short int y1, short int y2);
+    virtual bool can_capture(short int x1, short int x2, short int y1, short int y2);
     virtual bool can_be_captured();
 protected:
     bool jump_over;
