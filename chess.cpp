@@ -8,6 +8,8 @@
 #include <cstdlib>
 #include <iostream>
 #include <map>
+#include <regex>
+
 
 #include "checkboard.h"
 #include "queen.h"
@@ -35,16 +37,47 @@ int main(int argc, char** argv) {
      std::cout<<*wsk;
      */
       int x;
-     std::cout<<sizeof(x);
-     AI ai_b(figure::white);
-     AI ai_w(figure::black);
+     //std::cout<<sizeof(x);
+     AI ai_b(figure::black);
+    //AI ai_w(figure::white);
+     std::regex rgx("^[a-h][0-7][a-h][0-7]$", std::regex_constants::extended);
+     
+     bool is_move_ok ;
+     bool is_command_ok;
+     
+     while (true) {
+
+         do {
+             is_move_ok = true;
+             is_command_ok = true;
+             
+             std::string command;
+             std::cin>>command;
+
+             if (command.size() !=4) { // !std::regex_match(command, rgx)
+                 std::cout<<"Bad syntax\n";
+                 is_command_ok = false;
+             } else {
+                 is_move_ok = chec.move_from_string(command, figure::white); 
+                 if (!is_move_ok) {
+                     std::cout<<"Illegal move\n";
+                 } 
+             }
+
+         } while (!is_move_ok || !is_command_ok);
+         chec.print();
+         ai_b.select_move(chec);
+
+         chec.print();
+     }
+     /*
      for (int i = 0; i <50 ; i++) {
          ai_b.select_move(chec);
          ai_w.select_move(chec);
          chec.print();
          
      }
-
+*/
  
     // int * move = ai.select_move(chec);
      //std::cout <<"\n"<< move[0]<<" "<< move[1]<<" "<< move[2]<<" "<< move[3]<<" \n";

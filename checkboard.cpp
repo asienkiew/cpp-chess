@@ -69,7 +69,7 @@ void checkboard::save_to_file(std::string&) {
 
 void checkboard::print() {
     
-    std::cout<<"*"<<check_whether_castling_is_possible(figure::black)<< "*\n";
+    //std::cout<<"*"<<check_whether_castling_is_possible(figure::black)<< "*\n";
     std::cout<<"\n"<<"   a b c d e f g h\n";
 
     for (short int y=7; y>-1; y--) {
