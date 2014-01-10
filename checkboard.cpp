@@ -114,11 +114,13 @@ bool checkboard::is_another_figure_between(short int  x1, short int  x2, short i
            }
        }
     } else if (std::abs(x1 - x2) == std::abs(y1 - y2)) {
-       for (short int i =  1; i < std::abs(x1 - x2); i++ ) {
-           if (board[std::min(x1, x2) + i][std::min(y1, y2) + i]->get_sign() != '.') {
-               return true;
-           } 
-       }
+        short int sign_x = (x2 > x1) ? 1 : -1;
+        short int sign_y = (y2 > y1) ? 1 : -1;
+        for (short int i =  1; i < std::abs(x1 - x2); i++ ) {
+            if (board[x1 + sign_x * i][y1 + sign_y * i]->get_sign() != '.') { 
+                return true;
+            } 
+        }
     } else {
         return false;
     }
@@ -253,27 +255,23 @@ bool checkboard::is_move_possible(short int& x1, short int& x2,short int& y1,sho
         return false;
     }
     
-    //zbijanie swojego
-    
+    //zbijanie swojego    
     if (who_moves == board[x2][y2]->get_color() ) {
         return false;
-    }
-    
+    }    
     
     //przeskakiwanie
     if (!board[x1][y1]->can_jump_over()) {
         if (is_another_figure_between(x1,x2,y1,y2)) {
             return false;
+        }   
     }
     
-    }
     //typowy ruch
-
     if (board[x1][y1]->get_sign() != '.') {
        if ((board[x2][y2]->get_sign() == '.' && board[x1][y1]->can_move(x1,x2,y1,y2))
                || ((board[x2][y2]->get_sign() != '.' && board[x1][y1]->can_capture(x1,x2,y1,y2) && board[x2][y2]->can_be_captured()))) {  
-           
-           
+                     
            return true;
        } 
     }

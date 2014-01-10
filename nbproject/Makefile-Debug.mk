@@ -61,8 +61,8 @@ TESTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=-std=c++0x
-CXXFLAGS=-std=c++0x
+CCFLAGS=-L../../boost_1_55_0/stage/lib
+CXXFLAGS=-L../../boost_1_55_0/stage/lib
 
 # Fortran Compiler Flags
 FFLAGS=
@@ -71,7 +71,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=
+LDLIBSOPTIONS=-L../../boost_1_55_0/stage/lib -L../../boost_1_55_0/libs -Wl,-rpath,../../boost_1_55_0/stage/lib -l boost_regex
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -79,72 +79,72 @@ LDLIBSOPTIONS=
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/chess: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/chess ${OBJECTFILES} ${LDLIBSOPTIONS}
+	g++ -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/chess ${OBJECTFILES} ${LDLIBSOPTIONS}
 
 ${OBJECTDIR}/AI.o: AI.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/AI.o AI.cpp
+	$(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/AI.o AI.cpp
 
 ${OBJECTDIR}/bishop.o: bishop.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/bishop.o bishop.cpp
+	$(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/bishop.o bishop.cpp
 
 ${OBJECTDIR}/checkboard.o: checkboard.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/checkboard.o checkboard.cpp
+	$(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/checkboard.o checkboard.cpp
 
 ${OBJECTDIR}/chess.o: chess.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/chess.o chess.cpp
+	$(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/chess.o chess.cpp
 
 ${OBJECTDIR}/empty.o: empty.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/empty.o empty.cpp
+	$(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/empty.o empty.cpp
 
 ${OBJECTDIR}/figure.o: figure.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/figure.o figure.cpp
+	$(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/figure.o figure.cpp
 
 ${OBJECTDIR}/gameplay.o: gameplay.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/gameplay.o gameplay.cpp
+	$(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/gameplay.o gameplay.cpp
 
 ${OBJECTDIR}/king.o: king.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/king.o king.cpp
+	$(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/king.o king.cpp
 
 ${OBJECTDIR}/knight.o: knight.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/knight.o knight.cpp
+	$(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/knight.o knight.cpp
 
 ${OBJECTDIR}/move.o: move.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/move.o move.cpp
+	$(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/move.o move.cpp
 
 ${OBJECTDIR}/pawn.o: pawn.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/pawn.o pawn.cpp
+	$(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/pawn.o pawn.cpp
 
 ${OBJECTDIR}/queen.o: queen.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/queen.o queen.cpp
+	$(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/queen.o queen.cpp
 
 ${OBJECTDIR}/rook.o: rook.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/rook.o rook.cpp
+	$(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/rook.o rook.cpp
 
 # Subprojects
 .build-subprojects:
@@ -163,25 +163,25 @@ ${TESTDIR}/TestFiles/f2: ${TESTDIR}/tests/chesstestrunner.o ${TESTDIR}/tests/que
 ${TESTDIR}/tests/newtestclass.o: tests/newtestclass.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/newtestclass.o tests/newtestclass.cpp
+	$(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/newtestclass.o tests/newtestclass.cpp
 
 
 ${TESTDIR}/tests/newtestrunner.o: tests/newtestrunner.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/newtestrunner.o tests/newtestrunner.cpp
+	$(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/newtestrunner.o tests/newtestrunner.cpp
 
 
 ${TESTDIR}/tests/chesstestrunner.o: tests/chesstestrunner.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/chesstestrunner.o tests/chesstestrunner.cpp
+	$(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/chesstestrunner.o tests/chesstestrunner.cpp
 
 
 ${TESTDIR}/tests/queen_test.o: tests/queen_test.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/queen_test.o tests/queen_test.cpp
+	$(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/queen_test.o tests/queen_test.cpp
 
 
 ${OBJECTDIR}/AI_nomain.o: ${OBJECTDIR}/AI.o AI.cpp 
@@ -192,7 +192,7 @@ ${OBJECTDIR}/AI_nomain.o: ${OBJECTDIR}/AI.o AI.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/AI_nomain.o AI.cpp;\
+	    $(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/AI_nomain.o AI.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/AI.o ${OBJECTDIR}/AI_nomain.o;\
 	fi
@@ -205,7 +205,7 @@ ${OBJECTDIR}/bishop_nomain.o: ${OBJECTDIR}/bishop.o bishop.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/bishop_nomain.o bishop.cpp;\
+	    $(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/bishop_nomain.o bishop.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/bishop.o ${OBJECTDIR}/bishop_nomain.o;\
 	fi
@@ -218,7 +218,7 @@ ${OBJECTDIR}/checkboard_nomain.o: ${OBJECTDIR}/checkboard.o checkboard.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/checkboard_nomain.o checkboard.cpp;\
+	    $(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/checkboard_nomain.o checkboard.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/checkboard.o ${OBJECTDIR}/checkboard_nomain.o;\
 	fi
@@ -231,7 +231,7 @@ ${OBJECTDIR}/chess_nomain.o: ${OBJECTDIR}/chess.o chess.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/chess_nomain.o chess.cpp;\
+	    $(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/chess_nomain.o chess.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/chess.o ${OBJECTDIR}/chess_nomain.o;\
 	fi
@@ -244,7 +244,7 @@ ${OBJECTDIR}/empty_nomain.o: ${OBJECTDIR}/empty.o empty.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/empty_nomain.o empty.cpp;\
+	    $(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/empty_nomain.o empty.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/empty.o ${OBJECTDIR}/empty_nomain.o;\
 	fi
@@ -257,7 +257,7 @@ ${OBJECTDIR}/figure_nomain.o: ${OBJECTDIR}/figure.o figure.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/figure_nomain.o figure.cpp;\
+	    $(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/figure_nomain.o figure.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/figure.o ${OBJECTDIR}/figure_nomain.o;\
 	fi
@@ -270,7 +270,7 @@ ${OBJECTDIR}/gameplay_nomain.o: ${OBJECTDIR}/gameplay.o gameplay.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/gameplay_nomain.o gameplay.cpp;\
+	    $(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/gameplay_nomain.o gameplay.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/gameplay.o ${OBJECTDIR}/gameplay_nomain.o;\
 	fi
@@ -283,7 +283,7 @@ ${OBJECTDIR}/king_nomain.o: ${OBJECTDIR}/king.o king.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/king_nomain.o king.cpp;\
+	    $(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/king_nomain.o king.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/king.o ${OBJECTDIR}/king_nomain.o;\
 	fi
@@ -296,7 +296,7 @@ ${OBJECTDIR}/knight_nomain.o: ${OBJECTDIR}/knight.o knight.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/knight_nomain.o knight.cpp;\
+	    $(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/knight_nomain.o knight.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/knight.o ${OBJECTDIR}/knight_nomain.o;\
 	fi
@@ -309,7 +309,7 @@ ${OBJECTDIR}/move_nomain.o: ${OBJECTDIR}/move.o move.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/move_nomain.o move.cpp;\
+	    $(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/move_nomain.o move.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/move.o ${OBJECTDIR}/move_nomain.o;\
 	fi
@@ -322,7 +322,7 @@ ${OBJECTDIR}/pawn_nomain.o: ${OBJECTDIR}/pawn.o pawn.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/pawn_nomain.o pawn.cpp;\
+	    $(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/pawn_nomain.o pawn.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/pawn.o ${OBJECTDIR}/pawn_nomain.o;\
 	fi
@@ -335,7 +335,7 @@ ${OBJECTDIR}/queen_nomain.o: ${OBJECTDIR}/queen.o queen.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/queen_nomain.o queen.cpp;\
+	    $(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/queen_nomain.o queen.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/queen.o ${OBJECTDIR}/queen_nomain.o;\
 	fi
@@ -348,7 +348,7 @@ ${OBJECTDIR}/rook_nomain.o: ${OBJECTDIR}/rook.o rook.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/rook_nomain.o rook.cpp;\
+	    $(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/rook_nomain.o rook.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/rook.o ${OBJECTDIR}/rook_nomain.o;\
 	fi

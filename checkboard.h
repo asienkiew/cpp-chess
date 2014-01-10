@@ -42,14 +42,10 @@ private:
     std::vector< move > history;
     short int * to_table(std::string );
     void push_move_to_history(short int,short int,short int,short int, figure::color, char, char);
-    figure * sign_to_object(char sign/*, figure::color c*/); 
+    figure * sign_to_object(char sign); 
     bool is_another_figure_between(short int,short int,short int,short int);
     bool check_whether_castling_is_possible(figure::color);
-    //static std::string b = "black";
-     //= new pawn("black"); 
-   
-    //static const  p_b = pawn("black"); 
-    //static const  p_b = pawn("black"); 
+
 };
 
 #endif	/* CHECKBOARD_H */

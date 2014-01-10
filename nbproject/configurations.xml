@@ -91,9 +91,26 @@
       </toolsSet>
       <compileType>
         <ccTool>
+          <standard>4</standard>
           <commandlineTool>g++</commandlineTool>
-          <commandLine>-std=c++0x</commandLine>
+          <incDir>
+            <pElem>../../boost_1_55_0</pElem>
+          </incDir>
+          <commandLine>-L../../boost_1_55_0/stage/lib</commandLine>
         </ccTool>
+        <linkerTool>
+          <linkerAddLib>
+            <pElem>../../boost_1_55_0/stage/lib</pElem>
+            <pElem>../../boost_1_55_0/libs</pElem>
+          </linkerAddLib>
+          <linkerDynSerch>
+            <pElem>../../boost_1_55_0/stage/lib</pElem>
+          </linkerDynSerch>
+          <commandlineTool>g++</commandlineTool>
+          <linkerLibItems>
+            <linkerOptionItem>-l boost_regex</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
       </compileType>
       <item path="AI.cpp" ex="false" tool="1" flavor2="0">
       </item>
