@@ -24,10 +24,13 @@
 //}
 
 checkboard::checkboard() {
-         for (short int y=7; y>-1; y--) {
+    is_castling_possible[figure::black] = true;    
+    is_castling_possible[figure::white] = true;
+    end_with = in_progress;
+    for (short int y=7; y>-1; y--) {
 
         for (short int x=0; x<8; x++) {
-              empty * p      = new empty(figure::black); 
+              empty * p      = new empty(figure::none); 
              //std::cout<<p->get_sign();
               board[x][y]= p;
              
@@ -57,6 +60,12 @@ void checkboard::load_from_file(std::string& file) {
         
         for (short int x=0; x<8; x++) {
             board[x][y] = sign_to_object(linia[x]);
+            if (board[x][y]->get_sign_raw() == 'K') {
+       
+                   king_pos[board[x][y]->get_color()][0] = x;
+                   king_pos[board[x][y]->get_color()][1] = y;
+ 
+            }
         }
     }
   
@@ -146,7 +155,13 @@ bool checkboard::move_from_raw_coordinates(short int x1, short int x2, short int
     move m(x1, x2, y1, y2, who_moves,sign_from, sign_to);
     
     if(is_move_possible(x1,x2,y1,y2,who_moves)) {
-       return move_without_assert(m); 
+        if (board[x1][y1]->get_sign_raw() == 'K' && std::abs(x1 - x2) > 1 ) {
+ 
+           return execute_castling(m);
+        } else {
+           return move_without_assert(m, true);  
+        }
+       
     } else {
         return false;
     }
@@ -214,13 +229,12 @@ figure * checkboard::sign_to_object(char sign/*, figure::color c*/) {
             break;
         default:
             throw "BadSign";
-            break;
-            //throw "sss";
-           
+            break;           
     } 
     
 }
-bool checkboard::move_without_assert(move m){
+bool checkboard::move_without_assert(move m, bool add_to_history){
+ 
     
     if (board[m.x2][m.y2]->get_sign_raw() != '.') {
         delete board[m.x2][m.y2];
@@ -234,21 +248,112 @@ bool checkboard::move_without_assert(move m){
               
         board[m.x1][m.y1] = tmp;       
     }
-    history.push_back(m) ;
-    std::cout<<m<<"\n";
+    if (board[m.x2][m.y2]->get_sign_raw() == 'K') {
+        
+             king_pos[board[m.x2][m.y2]->get_color()][0] = m.x2;
+             king_pos[board[m.x2][m.y2]->get_color()][1] = m.y2;
+        
+    }
+    
+    if (add_to_history) {
+        history.push_back(m) ;
+        std::cout<<is_in_check(m.c)<<"\n";
+        std::cout<<m<<"\n";
+    }
+
     return true;
 }
-bool checkboard::check_whether_castling_is_possible(figure::color c){
+
+bool checkboard::revert_move_without_assert(move m, bool remove_last_move_from_history){
+   
+    figure::color opposite_player = m.c == figure::black ? figure::white : figure::black;
+    char colored_sign;
+    if (m.which_was_captured != '.') {
+        
+        if (opposite_player == figure::white) {
+            colored_sign = m.which_was_captured;    
+        } else if (opposite_player == figure::black){
+            colored_sign = char(int(m.which_was_captured) + 32);  
+        }
+ 
+        
+        delete board[m.x1][m.y1];
+        board[m.x1][m.y1] = board[m.x2][m.y2];
+       
+        
+        board[m.x2][m.y2] = sign_to_object(colored_sign) ;     
+
+    } else {     
+        figure * tmp = board[m.x2][m.y2];
+        board[m.x2][m.y2] = board[m.x1][m.y1];
+              
+        board[m.x1][m.y1] = tmp;  
+  
+    }
+    if (board[m.x1][m.y1]->get_sign_raw() == 'K') {
+        
+             king_pos[board[m.x1][m.y1]->get_color()][0] = m.x1;
+             king_pos[board[m.x1][m.y1]->get_color()][1] = m.y1;
+        
+    }
+    
+    if (remove_last_move_from_history) {
+        history.pop_back() ;
+    }
+
+    return true;
+}
+bool checkboard::check_whether_castling_is_possible(bool right_side, figure::color c){
+    if (!is_castling_possible[c]) {
+        return false;
+    }
     std::vector < move >::iterator it = history.begin();
+    short int rook_x = right_side ? 7 : 0;
+    short int rook_y = c == figure::black ? 7 : 0;
+
+    
+    
     for(; it != history.end(); it++ ){
         
-        //TODO: błąd trzeba sprawdzać tylko jedną wieżę
-        if ((it->c == c) && (it->which_moved == 'W' || it->which_moved == 'K')) {
+        //todo: SPRAwdzić czy pola sa szachowane
+        if ((it->c == c) && 
+                ((it->which_moved == 'W' && it-> x1 == rook_x && it-> y1 == rook_y) 
+               || it->which_moved == 'K')) {
             return false;
         }
     }
+    //czy jest tam wieża
+    if (board[rook_x][rook_y]->get_sign_raw() != 'W' || board[rook_x][rook_y]->get_color() != c) {
+        return false;    
+    }
+    //czy nie ma nic pomiędzy1
+    if (right_side) {
+        if (board[5][rook_y]->get_sign_raw() != '.' ||
+                board[6][rook_y]->get_sign_raw() != '.') {
+            return false;            
+        }
+    } else {
+        if (board[3][rook_y]->get_sign_raw() != '.' ||
+                board[2][rook_y]->get_sign_raw() != '.' ||
+                    board[1][rook_y]->get_sign_raw() != '.') {
+            return false;            
+        }
+        
+    }
+    
      return true;    
 }
+
+bool checkboard::execute_castling(move& move_king) {
+    move move_rook = move_king;
+    move_rook.x1 = move_king.x2 > move_king.x1 ? 7 : 0; 
+    move_rook.x2 = move_king.x2 > move_king.x1 ? 5 : 3;
+    
+    //fixme: to powinno być później
+    is_castling_possible[move_king.c] = false;
+    return (move_without_assert(move_rook, false) && move_without_assert(move_king, true));
+}
+
 bool checkboard::is_move_possible(short int& x1, short int& x2,short int& y1,short int& y2, figure::color& who_moves) {
 
     if (who_moves != board[x1][y1]->get_color() ) {
@@ -269,29 +374,95 @@ bool checkboard::is_move_possible(short int& x1, short int& x2,short int& y1,sho
     
     //typowy ruch
     if (board[x1][y1]->get_sign() != '.') {
-       if ((board[x2][y2]->get_sign() == '.' && board[x1][y1]->can_move(x1,x2,y1,y2))
-               || ((board[x2][y2]->get_sign() != '.' && board[x1][y1]->can_capture(x1,x2,y1,y2) && board[x2][y2]->can_be_captured()))) {  
-                     
-           return true;
+       if ((board[x2][y2]->get_sign() == '.' && 
+               board[x1][y1]->can_move(x1,x2,y1,y2) ) || 
+             ((board[x2][y2]->get_sign() != '.' && 
+                   board[x1][y1]->can_capture(x1,x2,y1,y2) && 
+                       board[x2][y2]->can_be_captured()))) {  
+           if (!will_be_in_check(x1,x2,y1,y2, who_moves)) {
+            bool right_side  = x2 - x1 > 0;
+            if (board[x1][y1]->get_sign_raw() == 'K' && std::abs(x1 -x2) > 1) {
+                if (check_whether_castling_is_possible(right_side, who_moves)) {
+                    return true;
+                }
+               
+            } else {
+                return true;
+            }          
+           }
        } 
     }
     return false;
 }
 
 
-    bool checkboard::is_stalemate(figure::color& who_moves) {
-        if (!is_any_move_possible(who_moves) && !is_check(who_moves)) {
-            return true;
+bool checkboard::is_stalemate(figure::color who_moves) {
+    if (!is_any_move_possible(who_moves) && !is_in_check(who_moves)) {
+        return true;
+    }
+}
+bool checkboard::is_checkmate(figure::color who_moves){
+    if (!is_any_move_possible(who_moves) && is_in_check(who_moves)) {
+        return true;
+    }
+}
+
+bool checkboard::is_any_move_possible(figure::color& who_moves){
+    for (short int x1 = 7; x1 > -1; x1--) {       
+        for (short int x2 = 0; x2 < 8; x2++) {
+            for (short int y1 = 0; y1 < 8; y1++) {
+                for (short int y2 = 0; y2 < 8; y2++) {
+                    if (is_move_possible(x1,x2,y1,y2,who_moves) ) {
+                            return true;
+                    }             
+                }
+            }    
         }
-    }
-    bool checkboard::is_checkmate(figure::color& who_moves){
-        if (!is_any_move_possible(who_moves) && is_check(who_moves)) {
-            return true;
-        }
-    }
-    bool checkboard::is_any_move_possible(figure::color& who_moves){
+    } 
+    return false;
+}
+
+bool checkboard::is_in_check(figure::color& who_moves){
+   
+    figure::color who_is_trying_to_check = who_moves == figure::black ? figure::white : figure::black;
+     for (short int x1 = 7; x1 > -1; x1--) {
         
+        for (short int y1 = 0; y1 < 8; y1++) {
+            if (is_under_attack(x1, king_pos[who_moves][0], y1, king_pos[who_moves][1], who_is_trying_to_check)) {
+                return true;
+            }
+            
+        }    
+     }
+     return false;
+}
+
+
+bool checkboard::is_under_attack(short int& x1, short int& x2,short int& y1,short int& y2, figure::color& who_moves) {
+    
+    if (who_moves != board[x1][y1]->get_color() ) {
+        return false;
     }
-    bool checkboard::is_check(figure::color& who_moves){
-        
+    
+    if (!board[x1][y1]->can_jump_over()) {
+        if (is_another_figure_between(x1,x2,y1,y2)) {
+            return false;
+        }   
     }
+    if  (board[x1][y1]->can_capture(x1,x2,y1,y2)) {
+        return true;
+    }
+    return false;
+}
+
+bool checkboard::will_be_in_check(short int& x1, short int& x2,short int& y1,short int& y2, figure::color& who_moves) {
+    bool will_be ;
+    char sign_from = board[x1][y1]->get_sign_raw();
+    char sign_to = board[x2][y2]->get_sign_raw();
+    move m(x1, x2, y1, y2, who_moves,sign_from, sign_to);
+    move_without_assert(m, false);
+    
+    will_be = is_in_check(who_moves);
+    revert_move_without_assert(m, false);
+    return will_be;
+}
