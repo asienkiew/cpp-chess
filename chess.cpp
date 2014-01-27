@@ -22,9 +22,9 @@
 
 int main(int argc, char** argv) {
 
-     checkboard chec;
+    checkboard chec;
  
-     std::string s = "white_win.chess";
+     std::string s = "not_castling.chess";
      chec.load_from_file(s);
      chec.print();
 
@@ -35,8 +35,8 @@ int main(int argc, char** argv) {
      bool is_move_ok ;
      bool is_command_ok;
      checkboard::status status = chec.in_progress;
-    
-
+     
+     
      while (status == chec.in_progress) {
 
          do {
@@ -47,12 +47,12 @@ int main(int argc, char** argv) {
              std::cin>>command;
 
              if (!boost::regex_match(command, rgx)) { // 
-                 std::cout<<"Bad syntax\n";
+                 std::cout<<"Nieprawidłowy format komendy\n";
                  is_command_ok = false;
              } else {
                  is_move_ok = chec.move_from_string(command, figure::white); 
                  if (!is_move_ok) {
-                     std::cout<<"Illegal move\n";
+                     std::cout<<"Niedozwolony ruch\n";
                  } else {
                  if (chec.is_checkmate(figure::black)) {
                      status = chec.white_won;
@@ -79,13 +79,12 @@ int main(int argc, char** argv) {
          }
      }
      
-     
      if (status == chec.black_won) {
-         std::cout<<"\n*************\n* Black won *\n*************\n"; 
+          std::cout<<"\n***********************\n* Zwycięstwo czarnych *\n***********************\n"; 
      } else if (status == chec.white_won) {
-          std::cout<<"\n*************\n* White won *\n*************\n"; 
+          std::cout<<"\n**********************\n* Zwycięstwo białych *\n**********************\n";  
      } else if (status == chec.draw) {
-          std::cout<<"\n*************\n**  Draw  ***\n*************\n"; 
+          std::cout<<"\n**********************\n*******  Remis  ******\n**********************\n"; 
      } else {
          throw "Bad status";
      }

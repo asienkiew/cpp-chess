@@ -53,7 +53,8 @@ private:
     figure * sign_to_object(char sign); 
     bool is_another_figure_between(short int,short int,short int,short int);
     bool check_whether_castling_is_possible(bool, figure::color);
-    bool is_under_attack(short int &,short int &,short int &,short int &, figure::color &);
+    bool is_under_attack_by_given(short int &,short int &,short int &,short int &, figure::color &);
+    bool is_under_attack_by_any(short int &, short int &, figure::color&);
     bool will_be_in_check(short int &,short int &,short int &,short int &, figure::color &);
 };
 

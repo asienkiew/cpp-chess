@@ -43,7 +43,7 @@ checkboard::~checkboard() {
        for (short int y=7; y>-1; y--) {
       
         for (short int x=0; x<8; x++) {
-            //delete board[x][y];
+            delete board[x][y];
         }
     }
   
@@ -310,12 +310,10 @@ bool checkboard::check_whether_castling_is_possible(bool right_side, figure::col
     std::vector < move >::iterator it = history.begin();
     short int rook_x = right_side ? 7 : 0;
     short int rook_y = c == figure::black ? 7 : 0;
-
+    short int king_x = 4;
     
     
     for(; it != history.end(); it++ ){
-        
-        //todo: SPRAwdzić czy pola sa szachowane
         if ((it->c == c) && 
                 ((it->which_moved == 'W' && it-> x1 == rook_x && it-> y1 == rook_y) 
                || it->which_moved == 'K')) {
@@ -326,22 +324,27 @@ bool checkboard::check_whether_castling_is_possible(bool right_side, figure::col
     if (board[rook_x][rook_y]->get_sign_raw() != 'W' || board[rook_x][rook_y]->get_color() != c) {
         return false;    
     }
-    //czy nie ma nic pomiędzy1
-    if (right_side) {
-        if (board[5][rook_y]->get_sign_raw() != '.' ||
-                board[6][rook_y]->get_sign_raw() != '.') {
+    
+    //czy nie ma nic pomiędzy   
+    for (short int i = 1; i <  std::abs(king_x - rook_x); i++) { 
+        short int x = king_x  - i + 2 * i * right_side;
+        if ( board[x][rook_y]->get_sign_raw() != '.') {
             return false;            
         }
-    } else {
-        if (board[3][rook_y]->get_sign_raw() != '.' ||
-                board[2][rook_y]->get_sign_raw() != '.' ||
-                    board[1][rook_y]->get_sign_raw() != '.') {
-            return false;            
-        }
-        
     }
     
-     return true;    
+    // pola gdzie: jest król, król przez nie przechodzi i będzie król nie są
+    // szachowane
+    figure::color opposite_color = c == figure::black ? figure::white : figure::black;
+
+    for (short int i = 0; i <  3; i++) { 
+        short int x = king_x  - i + 2 * i * right_side;
+        if ( is_under_attack_by_any(x, rook_y, opposite_color)) {
+            return false;            
+        }
+    }
+
+    return true;    
 }
 
 bool checkboard::execute_castling(move& move_king) {
@@ -358,6 +361,14 @@ bool checkboard::is_move_possible(short int& x1, short int& x2,short int& y1,sho
 
     if (who_moves != board[x1][y1]->get_color() ) {
         return false;
+    }
+    
+    //roszada          
+    if (board[x1][y1]->get_sign_raw() == 'K' && std::abs(x1 -x2) > 1) {
+          bool right_side  = x2 - x1 > 0;
+          if (!check_whether_castling_is_possible(right_side, who_moves)) {
+              return false;
+          }
     }
     
     //zbijanie swojego    
@@ -380,15 +391,7 @@ bool checkboard::is_move_possible(short int& x1, short int& x2,short int& y1,sho
                    board[x1][y1]->can_capture(x1,x2,y1,y2) && 
                        board[x2][y2]->can_be_captured()))) {  
            if (!will_be_in_check(x1,x2,y1,y2, who_moves)) {
-            bool right_side  = x2 - x1 > 0;
-            if (board[x1][y1]->get_sign_raw() == 'K' && std::abs(x1 -x2) > 1) {
-                if (check_whether_castling_is_possible(right_side, who_moves)) {
-                    return true;
-                }
-               
-            } else {
-                return true;
-            }          
+               return true;   
            }
        } 
     }
@@ -425,20 +428,24 @@ bool checkboard::is_any_move_possible(figure::color& who_moves){
 bool checkboard::is_in_check(figure::color& who_moves){
    
     figure::color who_is_trying_to_check = who_moves == figure::black ? figure::white : figure::black;
-     for (short int x1 = 7; x1 > -1; x1--) {
-        
+     
+    return is_under_attack_by_any(king_pos[who_moves][0], king_pos[who_moves][1],  who_is_trying_to_check);
+
+}
+
+bool checkboard::is_under_attack_by_any(short int & x, short int & y, figure::color& who_is_trying_to_attack){
+    
+    for (short int x1 = 7; x1 > -1; x1--) {       
         for (short int y1 = 0; y1 < 8; y1++) {
-            if (is_under_attack(x1, king_pos[who_moves][0], y1, king_pos[who_moves][1], who_is_trying_to_check)) {
+            if (is_under_attack_by_given(x1, x, y1, y, who_is_trying_to_attack)) {
                 return true;
-            }
-            
+            }            
         }    
      }
      return false;
 }
 
-
-bool checkboard::is_under_attack(short int& x1, short int& x2,short int& y1,short int& y2, figure::color& who_moves) {
+bool checkboard::is_under_attack_by_given(short int& x1, short int& x2,short int& y1,short int& y2, figure::color& who_moves) {
     
     if (who_moves != board[x1][y1]->get_color() ) {
         return false;
