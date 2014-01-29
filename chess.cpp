@@ -23,8 +23,8 @@
 int main(int argc, char** argv) {
 
     checkboard chec;
- 
-     std::string s = "not_castling.chess";
+    sizeof(chec);
+     std::string s = argv[1];
      chec.load_from_file(s);
      chec.print();
 

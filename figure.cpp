@@ -6,6 +6,7 @@
  */
 
 #include "figure.h"
+#include <ctype.h>
 figure::figure() {
   
 }
@@ -27,7 +28,7 @@ char figure::get_sign() {
     if (c == white) {
         return sign;    
     } else if (c == black){
-        return char(int(sign) + 32);
+        return tolower(sign);
     } else {
         return sign;
     }

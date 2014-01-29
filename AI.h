@@ -12,7 +12,7 @@
 class AI {
 public:
     figure::color who;
-    short int * select_move(checkboard & check);
+    void select_move(checkboard & check);
     AI(figure::color c);
     AI(const AI& orig);
     virtual ~AI();

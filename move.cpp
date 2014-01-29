@@ -11,7 +11,15 @@
 
 move::move() {
 }
-move::move(short int x1, short int x2,short int y1,short int y2, figure::color c, char which_moved, char which_was_captured ): x1(x1), x2(x2), y1(y1), y2(y2), c(c), which_moved(which_moved), which_was_captured(which_was_captured) {
+move::move(short int x1, short int x2,short int y1,short int y2, 
+        figure::color c, char which_moved, char which_was_captured , char promote_to): 
+            x1(x1), x2(x2), y1(y1), y2(y2), c(c), which_moved(which_moved), 
+                  which_was_captured(which_was_captured), promote_to(promote_to) {
+    
+    is_valid = true;
+    is_castling = false;
+    is_enpassant = false;
+    is_promotion = false;
     
 }
 
