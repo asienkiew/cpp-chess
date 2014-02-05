@@ -33,7 +33,9 @@ move::~move() {
      } else {
          s = "white";
      }
-
-     os<<s<<":"<<m.which_moved<<"("<<m.x1<<","<<m.y1<<")->"<<m.which_was_captured<<"("<<m.x2<<","<<m.y2<<")";
+     std:: string castling = m.is_castling ? "castling" : "";
+     std:: string promotion = m.is_promotion ? "promotion" : "";
+     std:: string enpassant = m.is_enpassant ? "enpassant" : "";
+     os<<s<<":"<<m.which_moved<<"("<<m.x1<<","<<m.y1<<")->"<<m.which_was_captured<<"("<<m.x2<<","<<m.y2<<")"<<" "<<castling<<" "<<promotion<<" "<<enpassant;
      return os;
  }

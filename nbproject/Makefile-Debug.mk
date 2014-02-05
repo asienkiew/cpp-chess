@@ -36,6 +36,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/AI.o \
+	${OBJECTDIR}/AI_basic.o \
+	${OBJECTDIR}/AI_tree.o \
 	${OBJECTDIR}/bishop.o \
 	${OBJECTDIR}/checkboard.o \
 	${OBJECTDIR}/chess.o \
@@ -85,6 +87,16 @@ ${OBJECTDIR}/AI.o: AI.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/AI.o AI.cpp
+
+${OBJECTDIR}/AI_basic.o: AI_basic.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/AI_basic.o AI_basic.cpp
+
+${OBJECTDIR}/AI_tree.o: AI_tree.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/AI_tree.o AI_tree.cpp
 
 ${OBJECTDIR}/bishop.o: bishop.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -195,6 +207,32 @@ ${OBJECTDIR}/AI_nomain.o: ${OBJECTDIR}/AI.o AI.cpp
 	    $(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/AI_nomain.o AI.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/AI.o ${OBJECTDIR}/AI_nomain.o;\
+	fi
+
+${OBJECTDIR}/AI_basic_nomain.o: ${OBJECTDIR}/AI_basic.o AI_basic.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/AI_basic.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/AI_basic_nomain.o AI_basic.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/AI_basic.o ${OBJECTDIR}/AI_basic_nomain.o;\
+	fi
+
+${OBJECTDIR}/AI_tree_nomain.o: ${OBJECTDIR}/AI_tree.o AI_tree.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/AI_tree.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -I../../boost_1_55_0 -std=c++98 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/AI_tree_nomain.o AI_tree.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/AI_tree.o ${OBJECTDIR}/AI_tree_nomain.o;\
 	fi
 
 ${OBJECTDIR}/bishop_nomain.o: ${OBJECTDIR}/bishop.o bishop.cpp 

@@ -27,8 +27,9 @@
           <runcommandpicklistitem>"${OUTPUT_PATH}"</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" small.chess</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" enpassant.chess</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" promotion.chess</runcommandpicklistitem>
         </runcommandpicklist>
-        <runcommand>"${OUTPUT_PATH}" enpassant.chess</runcommand>
+        <runcommand>"${OUTPUT_PATH}" promotion.chess</runcommand>
         <rundir></rundir>
         <buildfirst>true</buildfirst>
         <terminal-type>0</terminal-type>

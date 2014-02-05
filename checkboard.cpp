@@ -259,9 +259,9 @@ bool checkboard::move_without_assert(move m, bool add_to_history){
     // promocja
     if (m.is_promotion) {
          char colored_promote_to; 
-         if (board[m.x2][m.y2]->get_color() == figure::white) {
+         if (m.c == figure::white) {
             colored_promote_to = m.promote_to;    
-         } else if (board[m.x2][m.y2]->get_color() == figure::black){
+         } else if (m.c == figure::black){
             colored_promote_to = tolower(m.promote_to);  
          }
     
@@ -330,8 +330,8 @@ bool checkboard::revert_move_without_assert(move m, bool remove_last_move_from_h
        board[rook_x1][m.y1] = tmp; 
     }
         //en passant
-    char colored_opposite_pawn =  opposite_player == figure::white ? 'P' : 'p';
-     
+    char colored_pawn =  m.c == figure::white ? 'P' : 'p';
+    char colored_opposite_pawn = m.c == figure::white ? 'p' : 'P'; 
     if (m.is_enpassant) {
          
         delete board[m.x2][m.y1];
@@ -341,7 +341,7 @@ bool checkboard::revert_move_without_assert(move m, bool remove_last_move_from_h
     if (m.is_promotion) {
 
          delete board[m.x1][m.y1];
-         board[m.x1][m.y1] = sign_to_object(colored_opposite_pawn) ; 
+         board[m.x1][m.y1] = sign_to_object(colored_pawn) ; 
      
     }
     
@@ -432,14 +432,14 @@ move checkboard::is_move_possible(short int& x1, short int& x2,short int& y1,sho
         move last_move = history.back();
     
         if ((board[x2][y2]->get_sign_raw() == '.') &&  
-            (x1 != x2) && 
+            (std::abs(x1 - x2) == 1) && 
                    (board[x1][y1]->get_sign_raw() == 'P') && 
                         last_move.x1 == x2 && 
                             last_move.x2 == x2 && 
                                last_move.y2 == y1 && 
                                    last_move.y1 == y1 + 2 * (y2- y1) &&
                                         last_move.which_moved == 'P') {
-           if (!will_be_in_check(x1,x2,y1,y2, who_moves, promote_to)) {
+           if (!will_be_in_check(m)) {
                m.is_enpassant = true;
                return m;
            }
@@ -467,7 +467,7 @@ move checkboard::is_move_possible(short int& x1, short int& x2,short int& y1,sho
          ((sign_to != '.' && 
                board[x1][y1]->can_capture(x1,x2,y1,y2) && 
                    board[x2][y2]->can_be_captured()))) {  
-       if (!will_be_in_check(x1,x2,y1,y2, who_moves, promote_to)) {
+       if (!will_be_in_check(m)) {
            if (sign_from == 'P' && (y2 == 7 || y2 == 0)) {
                m.is_promotion = true;
            }
@@ -543,14 +543,16 @@ bool checkboard::is_under_attack_by_given(short int& x1, short int& x2,short int
     return false;
 }
 
-bool checkboard::will_be_in_check(short int& x1, short int& x2,short int& y1,short int& y2, figure::color& who_moves, char  promote_to) {
+bool checkboard::will_be_in_check(move m, bool opposite_player) {
     bool will_be ;
-    char sign_from = board[x1][y1]->get_sign_raw();
-    char sign_to = board[x2][y2]->get_sign_raw();
-    move m(x1, x2, y1, y2, who_moves,sign_from, sign_to, promote_to);
-    move_without_assert(m, false);
     
-    will_be = is_in_check(who_moves);
+    move_without_assert(m, false);
+    figure::color c = m.c;
+    if (opposite_player) {
+         c = m.c == figure::black ? figure::white : figure::black;
+    }
+    
+    will_be = is_in_check(c);
     revert_move_without_assert(m, false);
     return will_be;
 }

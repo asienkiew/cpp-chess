@@ -40,6 +40,19 @@ char figure::get_sign_raw() {
    
     
 };
+
+void figure::set_possible_moves_table() {
+    for (short int x1 = 0; x1 < 8; x1++) {  
+        for (short int x2 = 0; x2 < 8; x2++) {
+            for (short int y1 = 0; y1 < 8; y1++) {
+                for (short int y2 = 0; y2 < 8; y2++) {
+                    possible_normal_moves[x1][x2][y1][y2] = can_move(x1, x2, y1, y2);
+                            
+                }            
+            }           
+        }   
+    }
+}
 bool figure::can_move(short int x1, short int x2, short int y1, short int y2) {
     return true;
 }

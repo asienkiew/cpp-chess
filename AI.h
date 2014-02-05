@@ -8,6 +8,7 @@
 #ifndef AI_H
 #define	AI_H
 #include "checkboard.h"
+#include "figure.h"
 
 class AI {
 public:
@@ -17,7 +18,7 @@ public:
     AI(const AI& orig);
     virtual ~AI();
 private:
-
+ 
 };
 
 #endif	/* AI_H */

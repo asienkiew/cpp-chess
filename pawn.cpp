@@ -14,9 +14,12 @@
 
 pawn::pawn(figure::color cc):figure(cc){
     sign = 'P';
+    //set_possible_move_table();
 }
 pawn::~pawn() {
 }
+
+
 
 bool pawn::can_move(short int x1, short int x2, short int y1, short int y2 ) {
     if (c == figure::black) {

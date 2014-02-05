@@ -21,6 +21,7 @@
 
 class checkboard {
     friend class AI;
+    friend class AI_basic;
 public:
     figure *board[8][8];
     
@@ -58,7 +59,7 @@ private:
     bool check_whether_castling_is_possible(bool, figure::color);
     bool is_under_attack_by_given(short int &,short int &,short int &,short int &, figure::color &);
     bool is_under_attack_by_any(short int &, short int &, figure::color&);
-    bool will_be_in_check(short int &,short int &,short int &,short int &, figure::color &, char);
+    bool will_be_in_check(move, bool opposite_player = false);
 };
 
 #endif	/* CHECKBOARD_H */

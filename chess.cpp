@@ -18,6 +18,7 @@
 #include "king.h"
 #include "figure.h"
 #include "AI.h"
+#include "AI_basic.h"
 
 
 int main(int argc, char** argv) {
@@ -28,7 +29,7 @@ int main(int argc, char** argv) {
      chec.load_from_file(s);
      chec.print();
 
-     AI ai_b(figure::black);
+     AI_basic ai_b(figure::black);
     //AI ai_w(figure::white);
      boost::regex rgx("^[a-h][1-8][a-h]([1-8]|8[whgs])$");
      

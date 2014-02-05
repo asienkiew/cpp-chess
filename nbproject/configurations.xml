@@ -17,6 +17,10 @@
                    displayName="Header Files"
                    projectFiles="true">
       <itemPath>AI.h</itemPath>
+      <itemPath>AI_basic.cpp</itemPath>
+      <itemPath>AI_basic.h</itemPath>
+      <itemPath>AI_tree.cpp</itemPath>
+      <itemPath>AI_tree.h</itemPath>
       <itemPath>bishop.h</itemPath>
       <itemPath>checkboard.h</itemPath>
       <itemPath>empty.h</itemPath>
@@ -115,6 +119,14 @@
       <item path="AI.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="AI.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="AI_basic.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="AI_basic.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="AI_tree.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="AI_tree.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Makefile" ex="false" tool="3" flavor2="0">
       </item>
@@ -230,6 +242,14 @@
       <item path="AI.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="AI.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="AI_basic.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="AI_basic.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="AI_tree.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="AI_tree.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Makefile" ex="false" tool="3" flavor2="0">
       </item>
