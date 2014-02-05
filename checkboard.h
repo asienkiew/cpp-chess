@@ -44,10 +44,11 @@ public:
     
 private:
     bool is_castling_possible[2];
-    short int king_pos[2][2];
+    short int * king_pos[2][2];
 
+    short int figures_position[2][16][2]; //[kolor][16figur][x,y] [p,p,p,p,p,p,p,p,g,g,s,s,w,w,h,k]
  
-    //std::map <char, std::vector<figure * > >
+    void update_figures_position(short int coordinates[], short int ,short int );
     bool move_without_assert(move, bool);
     bool put_figure(short int &, short int & ,figure::color &, char &);
     bool revert_move_without_assert(move, bool);

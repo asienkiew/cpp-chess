@@ -37,6 +37,18 @@ checkboard::checkboard() {
              
         }
     }
+    for (short int i=0; i<2; i++) {
+
+        for (short int j=0; j<16; j++) {
+             for (short int k=0; k<2; k++) {
+                 figures_position[i][j][k] = -1;
+             }  
+        }
+    } 
+    king_pos[0][1] = & figures_position[0][15][1];
+    king_pos[1][1] = & figures_position[1][15][1];
+    king_pos[0][0] = & figures_position[0][15][0];
+    king_pos[1][0] = & figures_position[1][15][0];
 
 }
 
@@ -55,18 +67,35 @@ void checkboard::load_from_file(std::string& file) {
     std::ifstream  f(file.c_str());
 
     std::string linia; 
+    short int non_king[2] = {0,0};
     
     for (short int y=7; y>-1; y--) {
         std::getline(f,linia);
         
         for (short int x=0; x<8; x++) {
             board[x][y] = sign_to_object(linia[x]);
-            if (board[x][y]->get_sign_raw() == 'K') {
-       
-                   king_pos[board[x][y]->get_color()][0] = x;
-                   king_pos[board[x][y]->get_color()][1] = y;
- 
+            figure:: color  c = board[x][y]->get_color();
+            
+            //std::cout<<non_king[0]<< non_king[1]<<"\n" ;
+
+            if (board[x][y]->get_color() != figure::none) {
+                if ( non_king[0] > 15 || non_king[1] > 15)  {
+                   throw "Bad data";
+                   
+                } 
+                
+                if (board[x][y]->get_sign_raw() == 'K') {
+                    figures_position[c][15][0] = x;
+                    figures_position[c][15][1] = y;
+                } else {
+                    figures_position[c][non_king[c]][0] = x;
+                    figures_position[c][non_king[c]][1] = y;
+                    
+                     non_king[c]++;
+                }
+                
             }
+ 
         }
     }
   
@@ -225,13 +254,20 @@ figure * checkboard::sign_to_object(char sign/*, figure::color c*/) {
     
 }
 bool checkboard::move_without_assert(move m, bool add_to_history){
+ 
+    short int pos1[2] = {m.x1, m.y1}; 
+    short int pos2[2] = {m.x2, m.y2}; 
 
-    
     if (board[m.x2][m.y2]->get_sign_raw() != '.') {
+        
         delete board[m.x2][m.y2];
         board[m.x2][m.y2] = board[m.x1][m.y1];
         
-        board[m.x1][m.y1] = new empty(figure::none); 
+        board[m.x1][m.y1] = new empty(figure::none);
+        
+        update_figures_position(pos2, -1, -1) ;
+  
+        
         
     } else {
         figure * tmp = board[m.x2][m.y2];
@@ -239,6 +275,9 @@ bool checkboard::move_without_assert(move m, bool add_to_history){
               
         board[m.x1][m.y1] = tmp;       
     }
+    
+    update_figures_position(pos1, m.x2, m.y2) ;
+    
     //roszada
     if (m.is_castling) {
        short int rook_x1 = m.x2 > m.x1 ? 7 : 0; 
@@ -249,11 +288,20 @@ bool checkboard::move_without_assert(move m, bool add_to_history){
        board[rook_x2][m.y2] = board[rook_x1][m.y1];
               
        board[rook_x1][m.y1] = tmp; 
+       
+       short int rook_pos[2] = {rook_x1, m.y1}; 
+       update_figures_position(rook_pos, rook_x2, m.y2) ;
+  
+       
     }
     //en passant
     if (m.is_enpassant) {
         delete board[m.x2][m.y1];
         board[m.x2][m.y1] = new empty(figure::none); 
+        
+            
+         short int pawn_pos[2] = {m.x2, m.y1}; 
+         update_figures_position(pawn_pos, -1, -1) ;
     }
     
     // promocja
@@ -264,20 +312,21 @@ bool checkboard::move_without_assert(move m, bool add_to_history){
          } else if (m.c == figure::black){
             colored_promote_to = tolower(m.promote_to);  
          }
-    
+         
          delete board[m.x2][m.y2];
          board[m.x2][m.y2] = sign_to_object(colored_promote_to) ; 
+     
      
     }
     
     //aktualizacja informacji o pozycji króla
-    if (board[m.x2][m.y2]->get_sign_raw() == 'K') {
+  /*  if (board[m.x2][m.y2]->get_sign_raw() == 'K') {
         
              king_pos[board[m.x2][m.y2]->get_color()][0] = m.x2;
              king_pos[board[m.x2][m.y2]->get_color()][1] = m.y2;
         
     }
-    
+   */ 
     if (add_to_history) {
         history.push_back(m) ;
         //std::cout<<is_in_check(m.c)<<"\n";
@@ -344,14 +393,14 @@ bool checkboard::revert_move_without_assert(move m, bool remove_last_move_from_h
          board[m.x1][m.y1] = sign_to_object(colored_pawn) ; 
      
     }
-    
+    /*
     if (board[m.x1][m.y1]->get_sign_raw() == 'K') {
         
              king_pos[board[m.x1][m.y1]->get_color()][0] = m.x1;
              king_pos[board[m.x1][m.y1]->get_color()][1] = m.y1;
         
     }
-    
+    */
     if (remove_last_move_from_history) {
         history.pop_back() ;
     }
@@ -492,16 +541,21 @@ bool checkboard::is_checkmate(figure::color who_moves){
 }
 
 bool checkboard::is_any_move_possible(figure::color& who_moves){
-    for (short int x1 = 7; x1 > -1; x1--) {       
-        for (short int x2 = 0; x2 < 8; x2++) {
-            for (short int y1 = 0; y1 < 8; y1++) {
+    
+    for (short int i = 0; i < 16; i++) {       
+        short int x1 = figures_position[who_moves][i][0];
+        short int y1 = figures_position[who_moves][i][1];
+        if (x1 > -1 && y1 > -1) {
+            for (short int x2 = 0; x2 < 8; x2++) {
                 for (short int y2 = 0; y2 < 8; y2++) {
                     if (is_move_possible(x1,x2,y1,y2,who_moves, 'H').is_valid ) {
                             return true;
                     }             
                 }
-            }    
+            }   
         }
+  
+       
     } 
     return false;
 }
@@ -510,7 +564,7 @@ bool checkboard::is_in_check(figure::color& who_moves){
    
     figure::color who_is_trying_to_check = who_moves == figure::black ? figure::white : figure::black;
      
-    return is_under_attack_by_any(king_pos[who_moves][0], king_pos[who_moves][1],  who_is_trying_to_check);
+    return is_under_attack_by_any(*king_pos[who_moves][0], *king_pos[who_moves][1],  who_is_trying_to_check);
 
 }
 
@@ -555,4 +609,19 @@ bool checkboard::will_be_in_check(move m, bool opposite_player) {
     will_be = is_in_check(c);
     revert_move_without_assert(m, false);
     return will_be;
+}
+
+void checkboard::update_figures_position(short int coordinates[], short int  x, short int  y) {
+    for (short int c = 0; c<2; c++) {
+        for (short int i = 0; i<16; i++) {
+            if (figures_position[c][i][0] == coordinates[0] && 
+                    figures_position[c][i][1] == coordinates[1]  ) {
+               figures_position[c][i][0] = x;
+               figures_position[c][i][1] = y;
+               return;
+            }
+           
+        }
+    }
+  
 }

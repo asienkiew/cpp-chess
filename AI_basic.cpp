@@ -11,6 +11,7 @@
 #include "figure.h"
 #include <vector>
 #include <cstdlib>
+#include <ctime>
 
 AI_basic::AI_basic(figure::color c):AI(c) {
 }
@@ -29,10 +30,13 @@ void AI_basic::select_move(checkboard & check){
     std::vector <move> safe_moves;
     std::vector < move >::iterator it;
     
-     for (short int x1 = 7; x1 > -1; x1--) {  
-        for (short int x2 = 0; x2 < 8; x2++) {
-            for (short int y1 = 0; y1 < 8; y1++) {
+    for (short int i = 0; i < 16; i++) {       
+        short int x1 = check.figures_position[who][i][0];
+        short int y1 = check.figures_position[who][i][1];
+        if (x1 > -1 && y1 > -1) {
+            for (short int x2 = 0; x2 < 8; x2++) {
                 for (short int y2 = 0; y2 < 8; y2++) {
+                    
                     move m = check.is_move_possible(x1, x2, y1, y2, who, 'H');
                     if (m.is_valid ) {
                        // check.print();
@@ -42,8 +46,11 @@ void AI_basic::select_move(checkboard & check){
             }           
         }   
     }
-    /*
-    for (int i = 0 ; i<10000; i++) {
+    std::clock_t t1 = std::clock();
+
+
+
+    for (int i = 0 ; i<100000; i++) {
      for (short int x1 = 7; x1 > -1; x1--) {  
         for (short int x2 = 0; x2 < 8; x2++) {
             for (short int y1 = 0; y1 < 8; y1++) {
@@ -55,8 +62,26 @@ void AI_basic::select_move(checkboard & check){
         }   
     }
 }
-    */
-    move last_move = check.history.back();
+    std::clock_t t2 = std::clock();
+        for (int i = 0 ; i<100000; i++) {
+ for (short int i = 0; i < 16; i++) {       
+        short int x1 = check.figures_position[who][i][0];
+        short int y1 = check.figures_position[who][i][1];
+        if (x1 > -1 && y1 > -1) {
+            for (short int x2 = 0; x2 < 8; x2++) {
+                for (short int y2 = 0; y2 < 8; y2++) {
+                    
+                    move m = check.is_move_possible(x1, x2, y1, y2, who, 'H');
+                 
+                }            
+            }           
+        }   
+    }
+}
+    std::clock_t t3 = std::clock();
+     std::cout<<double(t2 - t1) / CLOCKS_PER_SEC<<" "<<double(t3 - t2) / CLOCKS_PER_SEC;
+    
+     move last_move = check.history.back();
     std::cout<<"\nPossible moves:\n";
     
    it = possible_moves.begin(); 
