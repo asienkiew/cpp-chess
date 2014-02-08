@@ -27,7 +27,8 @@
 checkboard::checkboard() {
     is_castling_possible[figure::black] = true;    
     is_castling_possible[figure::white] = true;
-    end_with = in_progress;
+    status = in_progress;
+    who_is_next = figure::white;
     for (short int y=7; y>-1; y--) {
 
         for (short int x=0; x<8; x++) {
@@ -259,13 +260,13 @@ bool checkboard::move_without_assert(move m, bool add_to_history){
     short int pos2[2] = {m.x2, m.y2}; 
 
     if (board[m.x2][m.y2]->get_sign_raw() != '.') {
-        
+        figure::color opposite_player = board[m.x2][m.y2]->get_color();
         delete board[m.x2][m.y2];
         board[m.x2][m.y2] = board[m.x1][m.y1];
         
         board[m.x1][m.y1] = new empty(figure::none);
         
-        update_figures_position(pos2, -1, -1) ;
+        update_figures_position(pos2, opposite_player, -1, -1) ;
   
         
         
@@ -276,7 +277,7 @@ bool checkboard::move_without_assert(move m, bool add_to_history){
         board[m.x1][m.y1] = tmp;       
     }
     
-    update_figures_position(pos1, m.x2, m.y2) ;
+    update_figures_position(pos1, m.c, m.x2, m.y2) ;
     
     //roszada
     if (m.is_castling) {
@@ -290,18 +291,19 @@ bool checkboard::move_without_assert(move m, bool add_to_history){
        board[rook_x1][m.y1] = tmp; 
        
        short int rook_pos[2] = {rook_x1, m.y1}; 
-       update_figures_position(rook_pos, rook_x2, m.y2) ;
+       update_figures_position(rook_pos, m.c, rook_x2, m.y2) ;
   
        
     }
     //en passant
     if (m.is_enpassant) {
+        figure::color opposite_player = board[m.x2][m.y2]->get_color();
         delete board[m.x2][m.y1];
         board[m.x2][m.y1] = new empty(figure::none); 
         
             
          short int pawn_pos[2] = {m.x2, m.y1}; 
-         update_figures_position(pawn_pos, -1, -1) ;
+         update_figures_position(pawn_pos, opposite_player, -1, -1) ;
     }
     
     // promocja
@@ -319,29 +321,23 @@ bool checkboard::move_without_assert(move m, bool add_to_history){
      
     }
     
-    //aktualizacja informacji o pozycji króla
-  /*  if (board[m.x2][m.y2]->get_sign_raw() == 'K') {
-        
-             king_pos[board[m.x2][m.y2]->get_color()][0] = m.x2;
-             king_pos[board[m.x2][m.y2]->get_color()][1] = m.y2;
-        
-    }
-   */ 
     if (add_to_history) {
         history.push_back(m) ;
         //std::cout<<is_in_check(m.c)<<"\n";
         std::cout<<m<<"\n";
+        who_is_next = m.c == figure::black ? figure::white : figure::black;
+        update_status();
     }
 
     return true;
 }
 
-bool checkboard::put_figure(short int& x, short int& y, figure::color & color, char& ch) {
-
-    return true;
-}
 bool checkboard::revert_move_without_assert(move m, bool remove_last_move_from_history){
-   
+    
+    short int pos1[2] = {m.x1, m.y1}; 
+    short int pos2[2] = {m.x2, m.y2}; 
+    short int pos_null[2] = {-1,-1};
+    
     figure::color opposite_player = m.c == figure::black ? figure::white : figure::black;
     char colored_sign;
     if (m.which_was_captured != '.') {
@@ -358,6 +354,7 @@ bool checkboard::revert_move_without_assert(move m, bool remove_last_move_from_h
        
         
         board[m.x2][m.y2] = sign_to_object(colored_sign) ;     
+        update_figures_position(pos_null, opposite_player, m.x2, m.y2) ;
 
     } else {     
         figure * tmp = board[m.x2][m.y2];
@@ -366,7 +363,7 @@ bool checkboard::revert_move_without_assert(move m, bool remove_last_move_from_h
         board[m.x1][m.y1] = tmp;  
   
     }
-    
+     update_figures_position(pos2, m.c, m.x1, m.y1) ;
     //roszada
     if (m.is_castling) {
        short int rook_x1 = m.x2 > m.x1 ? 7 : 0; 
@@ -377,6 +374,10 @@ bool checkboard::revert_move_without_assert(move m, bool remove_last_move_from_h
        board[rook_x2][m.y2] = board[rook_x1][m.y1];
               
        board[rook_x1][m.y1] = tmp; 
+       
+           
+       short int rook_pos[2] = {rook_x2, m.y2}; 
+       update_figures_position(rook_pos, m.c, rook_x1, m.y1) ;
     }
         //en passant
     char colored_pawn =  m.c == figure::white ? 'P' : 'p';
@@ -385,6 +386,8 @@ bool checkboard::revert_move_without_assert(move m, bool remove_last_move_from_h
          
         delete board[m.x2][m.y1];
         board[m.x2][m.y1] = sign_to_object(colored_opposite_pawn); 
+        update_figures_position(pos_null, opposite_player, m.x2, m.y1) ;
+        
     }
     //promocja
     if (m.is_promotion) {
@@ -393,16 +396,11 @@ bool checkboard::revert_move_without_assert(move m, bool remove_last_move_from_h
          board[m.x1][m.y1] = sign_to_object(colored_pawn) ; 
      
     }
-    /*
-    if (board[m.x1][m.y1]->get_sign_raw() == 'K') {
-        
-             king_pos[board[m.x1][m.y1]->get_color()][0] = m.x1;
-             king_pos[board[m.x1][m.y1]->get_color()][1] = m.y1;
-        
-    }
-    */
+
     if (remove_last_move_from_history) {
         history.pop_back() ;
+        who_is_next = m.c;
+        status = in_progress;
     }
 
     return true;
@@ -454,9 +452,16 @@ bool checkboard::check_whether_castling_is_possible(bool right_side, figure::col
 
 move checkboard::is_move_possible(short int& x1, short int& x2,short int& y1,short int& y2, figure::color& who_moves, char promote_to) {
     
+    
     char sign_from = board[x1][y1]->get_sign_raw();
     char sign_to = board[x2][y2]->get_sign_raw();
     move m(x1, x2, y1, y2, who_moves,sign_from, sign_to, promote_to);
+    
+    if (who_moves != who_is_next) {
+        m.is_valid = false;
+        return m;
+    }
+
     
     // to też sprawdza czy na tym polu jest jakakolwiek figura
     if (who_moves != board[x1][y1]->get_color() ) {
@@ -528,6 +533,22 @@ move checkboard::is_move_possible(short int& x1, short int& x2,short int& y1,sho
      return m;
 }
 
+void checkboard::update_status() {
+    bool is_any_move_possible_var = is_any_move_possible(who_is_next);
+    bool is_in_check_var = is_in_check(who_is_next);
+    if (!is_any_move_possible_var) {
+        if (is_in_check_var) {
+            if (who_is_next == figure::black) {
+                status = white_won;
+            } else {
+                status = black_won;
+            }
+        } else {
+            status = draw;
+        }
+    }
+    
+}
 
 bool checkboard::is_stalemate(figure::color who_moves) {
     if (!is_any_move_possible(who_moves) && !is_in_check(who_moves)) {
@@ -570,8 +591,10 @@ bool checkboard::is_in_check(figure::color& who_moves){
 
 bool checkboard::is_under_attack_by_any(short int & x, short int & y, figure::color& who_is_trying_to_attack){
     
-    for (short int x1 = 7; x1 > -1; x1--) {       
-        for (short int y1 = 0; y1 < 8; y1++) {
+    for (short int i = 0; i < 16; i++) {       
+        short int x1 = figures_position[who_is_trying_to_attack][i][0];
+        short int y1 = figures_position[who_is_trying_to_attack][i][1];
+        if (x1 > -1 && y1 > -1) {
             if (is_under_attack_by_given(x1, x, y1, y, who_is_trying_to_attack)) {
                 return true;
             }            
@@ -611,8 +634,8 @@ bool checkboard::will_be_in_check(move m, bool opposite_player) {
     return will_be;
 }
 
-void checkboard::update_figures_position(short int coordinates[], short int  x, short int  y) {
-    for (short int c = 0; c<2; c++) {
+void checkboard::update_figures_position(short int coordinates[], figure::color c, short int  x, short int  y) {
+    
         for (short int i = 0; i<16; i++) {
             if (figures_position[c][i][0] == coordinates[0] && 
                     figures_position[c][i][1] == coordinates[1]  ) {
@@ -622,6 +645,6 @@ void checkboard::update_figures_position(short int coordinates[], short int  x, 
             }
            
         }
-    }
+   
   
 }

@@ -12,7 +12,7 @@
 
 class AI {
 public:
-    figure::color who;
+    figure::color who, opposite;
     void select_move(checkboard & check);
     AI(figure::color c);
     AI(const AI& orig);

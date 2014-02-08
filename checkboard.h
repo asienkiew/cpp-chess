@@ -22,11 +22,12 @@
 class checkboard {
     friend class AI;
     friend class AI_basic;
+    friend class AI_tree;
 public:
     figure *board[8][8];
-    
-    enum status {draw, white_won, black_won, in_progress};
-    status end_with;
+    figure::color who_is_next;
+    enum STATUS {draw, white_won, black_won, in_progress};
+    STATUS status;
     void load_from_file(std::string &);
     void save_to_file(std::string &) ;  
     void print() ; 
@@ -48,9 +49,9 @@ private:
 
     short int figures_position[2][16][2]; //[kolor][16figur][x,y] [p,p,p,p,p,p,p,p,g,g,s,s,w,w,h,k]
  
-    void update_figures_position(short int coordinates[], short int ,short int );
+    void update_figures_position(short int coordinates[], figure::color , short int ,short int );
     bool move_without_assert(move, bool);
-    bool put_figure(short int &, short int & ,figure::color &, char &);
+ 
     bool revert_move_without_assert(move, bool);
     std::vector< move > history;
     short int * to_table(std::string );
@@ -61,6 +62,7 @@ private:
     bool is_under_attack_by_given(short int &,short int &,short int &,short int &, figure::color &);
     bool is_under_attack_by_any(short int &, short int &, figure::color&);
     bool will_be_in_check(move, bool opposite_player = false);
+    void update_status();
 };
 
 #endif	/* CHECKBOARD_H */
