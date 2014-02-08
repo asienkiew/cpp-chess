@@ -12,10 +12,6 @@
 
 
 #include "checkboard.h"
-#include "queen.h"
-#include "bishop.h"
-#include "rook.h"
-#include "king.h"
 #include "figure.h"
 #include "AI.h"
 #include "AI_basic.h"
@@ -25,7 +21,14 @@
 int main(int argc, char** argv) {
 
     checkboard chec;
-
+    if (argc< 2) {
+        std::cerr<<"No .chess file\n";
+        return 0;
+    }
+     if (access( argv[1], F_OK ) == -1) {
+         std::cerr<<"Bad file\n";
+         return 0;
+     } 
      std::string s = argv[1];
      chec.load_from_file(s);
      chec.print();
