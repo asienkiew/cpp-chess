@@ -11,12 +11,10 @@
 #include "checkboard.h"
 
 class AI_basic : public AI {
-public:
+public:    
+    void select_move();
+    AI_basic(figure::color c, checkboard *);
     
-    void select_move(checkboard & check);
-    AI_basic(figure::color c);
-   
-    virtual ~AI_basic();
 private:
 
 };

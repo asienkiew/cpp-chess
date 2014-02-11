@@ -20,7 +20,7 @@
 
 int main(int argc, char** argv) {
 
-    checkboard chec;
+    checkboard * chec = new checkboard();
     if (argc< 2) {
         std::cerr<<"No .chess file\n";
         return 0;
@@ -30,19 +30,20 @@ int main(int argc, char** argv) {
          return 0;
      } 
      std::string s = argv[1];
-     chec.load_from_file(s);
-     chec.print();
+     chec->load_from_file(s);
+     chec->print();
+     //checkboard ch(chec);
+     //ch.print();
 
-     AI_tree ai_b(figure::black);
+     AI_tree ai_b(figure::black, chec);
     //AI ai_w(figure::white);
      boost::regex rgx("^[a-h][1-8][a-h]([1-8]|8[whgs])$");
      
      bool is_move_ok ;
      bool is_command_ok;
-  
+
      
-     
-     while (chec.status == chec.in_progress) {
+     while (chec->status == chec->in_progress) {
 
          do {
              is_move_ok = true;
@@ -55,28 +56,28 @@ int main(int argc, char** argv) {
                  std::cout<<"Nieprawidłowy format komendy\n";
                  is_command_ok = false;
              } else {
-                 is_move_ok = chec.move_from_string(command, figure::white); 
+                 is_move_ok = chec->move_from_string(command, figure::white); 
                  if (!is_move_ok) {
                      std::cout<<"Niedozwolony ruch\n";
                  } 
              }
 
          } while (!is_move_ok || !is_command_ok );
-         chec.print();
-         if (chec.status == chec.in_progress) {
+         chec->print();
+         if (chec->status == chec->in_progress) {
              
-             ai_b.select_move(chec);
+             chec->move_without_assert(ai_b.select_move(), true);
 
-             chec.print();
+             chec->print();
         
          }
      }
      
-     if (chec.status == chec.black_won) {
+     if (chec->status == chec->black_won) {
           std::cout<<"\n***********************\n* Zwycięstwo czarnych *\n***********************\n"; 
-     } else if (chec.status == chec.white_won) {
+     } else if (chec->status == chec->white_won) {
           std::cout<<"\n**********************\n* Zwycięstwo białych *\n**********************\n";  
-     } else if (chec.status == chec.draw) {
+     } else if (chec->status == chec->draw) {
           std::cout<<"\n**********************\n*******  Remis  ******\n**********************\n"; 
      } else {
          throw "Bad status";

@@ -32,7 +32,8 @@ public:
     void save_to_file(std::string &) ;  
     void print() ; 
     checkboard();
-    //checkboard(const checkboard& orig);
+    checkboard(const checkboard& );
+    checkboard& operator= (const checkboard& );
     virtual ~checkboard();
     bool move_from_string(std::string , figure::color );
     bool move_from_raw_coordinates(short int, short int, short int, short int, figure::color, char promote_to = 'H');
@@ -43,18 +44,21 @@ public:
     bool is_any_move_possible(figure::color&);
     bool is_in_check(figure::color&);
     
+    
+    //do poprawy (powinno być private)
+    bool move_without_assert(move, bool);
+    
 private:
     bool is_castling_possible[2];
     short int * king_pos[2][2];
 
-    short int figures_position[2][16][2]; //[kolor][16figur][x,y] [p,p,p,p,p,p,p,p,g,g,s,s,w,w,h,k]
+    short int figures_position[2][16][2]; //[kolor][16figur][x,y] [inne niż k x 15,k]
  
     void update_figures_position(short int coordinates[], figure::color , short int ,short int );
-    bool move_without_assert(move, bool);
+    
  
     bool revert_move_without_assert(move, bool);
     std::vector< move > history;
-    short int * to_table(std::string );
    
     figure * sign_to_object(char sign); 
     bool is_another_figure_between(short int,short int,short int,short int);
@@ -63,6 +67,7 @@ private:
     bool is_under_attack_by_any(short int &, short int &, figure::color&);
     bool will_be_in_check(move, bool opposite_player = false);
     void update_status();
+    std::string serialize();
 };
 
 #endif	/* CHECKBOARD_H */

@@ -95,12 +95,14 @@
       </toolsSet>
       <compileType>
         <ccTool>
-          <standard>4</standard>
+          <developmentMode>6</developmentMode>
+          <architecture>2</architecture>
           <commandlineTool>g++</commandlineTool>
           <incDir>
             <pElem>../../boost_1_55_0</pElem>
           </incDir>
           <commandLine>-L../../boost_1_55_0/stage/lib</commandLine>
+          <warningLevel>2</warningLevel>
         </ccTool>
         <linkerTool>
           <linkerAddLib>

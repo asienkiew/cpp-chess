@@ -9,16 +9,19 @@
 #define	AI_H
 #include "checkboard.h"
 #include "figure.h"
+#include <vector>
+#include "move.h"
 
 class AI {
 public:
     figure::color who, opposite;
-    void select_move(checkboard & check);
-    AI(figure::color c);
-    AI(const AI& orig);
-    virtual ~AI();
+    checkboard * check;
+    move select_move();
+    AI(figure::color &, checkboard *);
+
+    std::vector <move> get_possible_moves(checkboard & check);
 private:
- 
+
 };
 
 #endif	/* AI_H */

@@ -13,16 +13,14 @@
 #include <cstdlib>
 #include <ctime>
 
-AI_basic::AI_basic(figure::color c):AI(c) {
+AI_basic::AI_basic(figure::color c, checkboard * check):AI(c, check) {
 }
 
 
-
-AI_basic::~AI_basic() {
-}
-
-void AI_basic::select_move(checkboard & check){ 
- srand (time(NULL));
+void AI_basic::select_move(){ 
+    srand (time(NULL));
+    
+    checkboard check_cp = *check;
     std::vector <move> possible_moves;
     std::vector <move> checked_moves;
     std::vector <move> capture_attacker_moves; 
@@ -31,15 +29,15 @@ void AI_basic::select_move(checkboard & check){
     std::vector < move >::iterator it;
      std::clock_t t1 = std::clock();
     for (short int i = 0; i < 16; i++) {       
-        short int x1 = check.figures_position[who][i][0];
-        short int y1 = check.figures_position[who][i][1];
+        short int x1 = check_cp.figures_position[who][i][0];
+        short int y1 = check_cp.figures_position[who][i][1];
         if (x1 > -1 && y1 > -1) {
             for (short int x2 = 0; x2 < 8; x2++) {
                 for (short int y2 = 0; y2 < 8; y2++) {
                     
-                    move m = check.is_move_possible(x1, x2, y1, y2, who, 'H');
+                    move m = check_cp.is_move_possible(x1, x2, y1, y2, who, 'H');
                     if (m.is_valid ) {
-                       // check.print();
+                       // check_cp.print();
                         possible_moves.push_back(m);
                     }             
                 }            
@@ -57,7 +55,7 @@ void AI_basic::select_move(checkboard & check){
         for (short int x2 = 0; x2 < 8; x2++) {
             for (short int y1 = 0; y1 < 8; y1++) {
                 for (short int y2 = 0; y2 < 8; y2++) {
-                    move m = check.is_move_possible(x1, x2, y1, y2, who, 'H');
+                    move m = check_cp.is_move_possible(x1, x2, y1, y2, who, 'H');
         
                 }            
             }           
@@ -67,13 +65,13 @@ void AI_basic::select_move(checkboard & check){
   
         for (int i = 0 ; i<10000; i++) {
  for (short int i = 0; i < 16; i++) {       
-        short int x1 = check.figures_position[who][i][0];
-        short int y1 = check.figures_position[who][i][1];
+        short int x1 = check_cp.figures_position[who][i][0];
+        short int y1 = check_cp.figures_position[who][i][1];
         if (x1 > -1 && y1 > -1) {
             for (short int x2 = 0; x2 < 8; x2++) {
                 for (short int y2 = 0; y2 < 8; y2++) {
                     
-                    move m = check.is_move_possible(x1, x2, y1, y2, who, 'H');
+                    move m = check_cp.is_move_possible(x1, x2, y1, y2, who, 'H');
                 
                 }            
             }           
@@ -85,7 +83,7 @@ void AI_basic::select_move(checkboard & check){
     std::cout.precision(15);
      std::cout<<std::fixed<<double(t2 - t1) / CLOCKS_PER_SEC<<" "<<double(t3 - t2) / CLOCKS_PER_SEC;
     
-     move last_move = check.history.back();
+     move last_move = check_cp.history.back();
     std::cout<<"\nPossible moves:\n";
     
    it = possible_moves.begin(); 
@@ -95,11 +93,11 @@ void AI_basic::select_move(checkboard & check){
    
       it = possible_moves.begin(); 
    for(; it != possible_moves.end(); it++ ){
-       check.move_without_assert(*it, false) ;
-       if (check.is_in_check(last_move.c) && !check.is_under_attack_by_any(it->x2, it->y2, last_move.c) && check.history[check.history.size()-2].x2 !=it->x1 && check.history[check.history.size()-2].y2 !=it->y1 ) {
+       check_cp.move_without_assert(*it, false) ;
+       if (check_cp.is_in_check(last_move.c) && !check_cp.is_under_attack_by_any(it->x2, it->y2, last_move.c) && check_cp.history[check_cp.history.size()-2].x2 !=it->x1 && check_cp.history[check_cp.history.size()-2].y2 !=it->y1 ) {
          checked_moves.push_back(*it);  
        }
-       check.revert_move_without_assert(*it, false) ;
+       check_cp.revert_move_without_assert(*it, false) ;
 
        
    } 
@@ -129,7 +127,7 @@ void AI_basic::select_move(checkboard & check){
                it = possible_moves.begin(); 
    for(; it != possible_moves.end(); it++ ){
       
-       if ( !check.is_under_attack_by_any(it->x2, it->y2, last_move.c) && it->which_was_captured !='.') {
+       if ( !check_cp.is_under_attack_by_any(it->x2, it->y2, last_move.c) && it->which_was_captured !='.') {
          safe_captures_moves.push_back(*it);  
        }
        
@@ -143,11 +141,11 @@ void AI_basic::select_move(checkboard & check){
             
                it = possible_moves.begin(); 
    for(; it != possible_moves.end(); it++ ){
-      check.move_without_assert(*it, false) ;
-       if ( check.is_under_attack_by_any((*it).x2, (*it).y2, who) /*|| ! check.is_under_attack_by_any((*it).x2, (*it).y2, last_move.c)*/) {
+      check_cp.move_without_assert(*it, false) ;
+       if ( check_cp.is_under_attack_by_any((*it).x2, (*it).y2, who) /*|| ! check_cp.is_under_attack_by_any((*it).x2, (*it).y2, last_move.c)*/) {
          safe_moves.push_back(*it);  
        }
-       check.revert_move_without_assert(*it, false) ;
+       check_cp.revert_move_without_assert(*it, false) ;
        
    } 
       std::cout<<"\nsafe_moves:\n";
@@ -159,24 +157,24 @@ void AI_basic::select_move(checkboard & check){
     std::cout<<"***\n"; 
  
    if    (safe_captures_moves.size() > 0 ) {
-       check.move_without_assert(safe_captures_moves[rand() % safe_captures_moves.size()], true);
+       check_cp.move_without_assert(safe_captures_moves[rand() % safe_captures_moves.size()], true);
        
        return;
    }   else if (capture_attacker_moves.size() > 0 ) {
-       check.move_without_assert(capture_attacker_moves[rand() % capture_attacker_moves.size()], true);
+       check_cp.move_without_assert(capture_attacker_moves[rand() % capture_attacker_moves.size()], true);
        return;
     }   else if (checked_moves.size() > 0 ) {
      
-        check.move_without_assert(checked_moves[rand() % checked_moves.size()], true) ;
+        check_cp.move_without_assert(checked_moves[rand() % checked_moves.size()], true) ;
       return;
    } else if  (safe_moves.size() > 0) {
    
-       check.move_without_assert(safe_moves[rand() % safe_moves.size()], true);
+       check_cp.move_without_assert(safe_moves[rand() % safe_moves.size()], true);
        return;
        
    } else {
       
-       check.move_without_assert(possible_moves[rand() % possible_moves.size()], true) ;
+       check_cp.move_without_assert(possible_moves[rand() % possible_moves.size()], true) ;
        return;
    }
 }

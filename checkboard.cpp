@@ -33,7 +33,6 @@ checkboard::checkboard() {
 
         for (short int x=0; x<8; x++) {
               empty * p      = new empty(figure::none); 
-             //std::cout<<p->get_sign();
               board[x][y]= p;
              
         }
@@ -62,7 +61,69 @@ checkboard::~checkboard() {
     }
   
 }
+checkboard::checkboard(const checkboard& orig){
+      who_is_next = orig.who_is_next;
+    status = orig.status;
+    history = orig.history;
+    is_castling_possible[0] = orig.is_castling_possible[0];
+    is_castling_possible[1] = orig.is_castling_possible[1];
+    
 
+
+    for (short int i=0; i<2; i++) {
+        for (short int j=0; j<16; j++) {
+             for (short int k=0; k<2; k++) {
+                 figures_position[i][j][k] = orig.figures_position[i][j][k];
+             }  
+        }
+    } 
+    king_pos[0][1] = & figures_position[0][15][1];
+    king_pos[1][1] = & figures_position[1][15][1];
+    king_pos[0][0] = & figures_position[0][15][0];
+    king_pos[1][0] = & figures_position[1][15][0];
+        
+    for (short int y=7; y>-1; y--) {
+        for (short int x=0; x<8; x++) {
+   
+            board[x][y]= sign_to_object(orig.board[x][y]->get_sign()); 
+        }
+    }
+    
+   // return *this;
+   // *this = orig;
+  
+
+}
+checkboard& checkboard::operator= (const checkboard& orig ){
+    who_is_next = orig.who_is_next;
+    status = orig.status;
+    history = orig.history;
+    is_castling_possible[0] = orig.is_castling_possible[0];
+    is_castling_possible[1] = orig.is_castling_possible[1];
+    
+
+
+    for (short int i=0; i<2; i++) {
+        for (short int j=0; j<16; j++) {
+             for (short int k=0; k<2; k++) {
+                 figures_position[i][j][k] = orig.figures_position[i][j][k];
+             }  
+        }
+    } 
+    king_pos[0][1] = & figures_position[0][15][1];
+    king_pos[1][1] = & figures_position[1][15][1];
+    king_pos[0][0] = & figures_position[0][15][0];
+    king_pos[1][0] = & figures_position[1][15][0];
+        
+    for (short int y=7; y>-1; y--) {
+        for (short int x=0; x<8; x++) {
+           board[x][y]= sign_to_object(orig.board[x][y]->get_sign()); 
+        }
+    }
+    
+    return *this;
+    
+}
 void checkboard::load_from_file(std::string& file) {
     
     std::ifstream  f(file.c_str());
@@ -141,6 +202,9 @@ void checkboard::print() {
 
 
 bool checkboard::is_another_figure_between(short int  x1, short int  x2, short int  y1, short int  y2) {
+   // if (std::abs(y1 - y2) < 2 && std::abs(x1 - x2) < 2  ) {
+  //      return false;
+ //   }
     if (x1 == x2){
        for (short int y = std::min(y1, y2) + 1; y < std::max(y1, y2); y++ ) {
            if (board[x1][y]->get_sign() != '.') {
@@ -168,15 +232,6 @@ bool checkboard::is_another_figure_between(short int  x1, short int  x2, short i
 }
 
 
-short int * checkboard::to_table(std::string s){
-   short int t[4] ;
-   t[0] = int(s[0]) - 97;
-   t[1] = int(s[1]) - 49;
-   t[2] = int(s[2]) - 97;
-   t[3] =  int(s[3]) - 49;
-   return t;
-}
-
 bool checkboard::move_from_raw_coordinates(short int x1, short int x2, short int y1, short int y2, figure::color who_moves, char promote_to ) {
     
     move m = is_move_possible(x1,x2,y1,y2,who_moves, promote_to);
@@ -191,11 +246,12 @@ bool checkboard::move_from_raw_coordinates(short int x1, short int x2, short int
 bool checkboard::move_from_string(std::string s, figure::color who_moves) {
 
     
-    short int *table = to_table(s);
-    short int x1 = table[0];
-    short int x2 = table[2];
-    short int y1 = table[1];
-    short int y2 = table[3];   
+  
+   short int x1 = int(s[0]) - 97;
+   short int y1 = int(s[1]) - 49;
+   short int x2 = int(s[2]) - 97;
+   short int y2 = int(s[3]) - 49;
+     
      
     if (s.length() == 5) {
        return move_from_raw_coordinates(x1, x2, y1, y2, who_moves, toupper(s[4]));  
@@ -252,6 +308,7 @@ figure * checkboard::sign_to_object(char sign/*, figure::color c*/) {
             throw "BadSign";
             break;           
     } 
+   return f;
     
 }
 bool checkboard::move_without_assert(move m, bool add_to_history){
@@ -324,8 +381,9 @@ bool checkboard::move_without_assert(move m, bool add_to_history){
     if (add_to_history) {
         history.push_back(m) ;
         //std::cout<<is_in_check(m.c)<<"\n";
-        std::cout<<m<<"\n";
+     
         who_is_next = m.c == figure::black ? figure::white : figure::black;
+    
         update_status();
     }
 
@@ -554,11 +612,13 @@ bool checkboard::is_stalemate(figure::color who_moves) {
     if (!is_any_move_possible(who_moves) && !is_in_check(who_moves)) {
         return true;
     }
+    return false;
 }
 bool checkboard::is_checkmate(figure::color who_moves){
     if (!is_any_move_possible(who_moves) && is_in_check(who_moves)) {
         return true;
     }
+    return false;
 }
 
 bool checkboard::is_any_move_possible(figure::color& who_moves){
@@ -647,4 +707,16 @@ void checkboard::update_figures_position(short int coordinates[], figure::color 
         }
    
   
+}
+
+std::string checkboard::serialize() {
+    std::string s;
+    for (short int y=7; y>-1; y--) {
+  
+        
+        for (short int x=0; x<8; x++) {
+                  s += board[x][y]->get_sign();
+         } 
+    }  
+    return s;
 }
