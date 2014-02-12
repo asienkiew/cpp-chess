@@ -14,6 +14,8 @@
 #include <ctime>
   #include <utility>                   // for std::pair
 #include <algorithm>
+      #include <iostream>
+#include <fstream>
 
   #include <boost/graph/graph_traits.hpp>
   #include <boost/graph/adjacency_list.hpp>
@@ -28,14 +30,14 @@ AI_tree::AI_tree(figure::color c, checkboard * check):AI(c, check) {
 
 move AI_tree::select_move() {
  
-   
+    move chosen_move;
     int_pair empty_pair = std::make_pair(SHORT_MAX_INT,SHORT_MAX_INT); // ma to odpowiadać za NULL
     
     //std::cout<<SHORT_MAX_INT;
     
      srand (time(NULL));
  
-    // checkboard check_cp(*check);
+   checkboard check_cp(check);
      //check->print();
      
     // check_cp.print();
@@ -44,7 +46,7 @@ move AI_tree::select_move() {
     
     vertex_t root = boost::add_vertex(empty_pair,g); //root
     int zero = 0;
-     fill_possible_moves(g, root, *check,zero);
+     fill_possible_moves(g, root, check_cp,zero, MAX_DEPTH);
     //boost::write_graphviz(std::cout, g);
      
     // typedef boost::graph_traits<graph>::vertex_iterator vertex_iter;
@@ -55,125 +57,92 @@ move AI_tree::select_move() {
     // std::cout <<g[*vp.first].first <<  " ";
    // }
       out_edge_it out_i, out_end;
-      edge_t e;
+      edge_t e, f;
       for (boost::tie(out_i, out_end) = out_edges(root, g); 
            out_i != out_end; ++out_i) {
         e = *out_i;
          //   std::cout<<"\n"<<g[root].first<<"\n";
-           // std::cout<<g[e];
+            std::cout<<"\n"<<g[e];
         if ( g[boost::target(e, g)].first == g[root].first ) {
             std::cout<<"\n"<<g[root].first<<"\n";
-            std::cout<<g[e];
-            return g[e]; 
+            //std::cout<<g[e];
+            chosen_move = g[e];
+            
+             
         }
         
       }
-    
+/*
+
+  std::ofstream myfile;
+  myfile.open ("g.txt");
+      boost::write_graphviz(myfile, g);
+      g.clear();
+     std::cout<<"\n";*/
+    return chosen_move;
     
      std::clock_t t1 = std::clock();
          
     
- 
-    
-  //  vertex v1(check.history.back());
-   // vertex v2( possible_moves[0]); 
-    // add_edge(check.history.back(), possible_moves[0], g);
-    // boost::add_vertex(g,v1);
-  /*  for(it = possible_moves.begin(); it != possible_moves.end(); ++it) {
-      vertex_t v = boost::add_vertex(empty_pair,g);
-      boost::tie(e,b) = boost::add_edge(root,v,g);
-      g[e] = *it;
-    }
-    */
-        // ...
-/*
-   // get the property map for vertex indices
-    typedef boost::property_map<Graph, boost::vertex_index_t>::type IndexMap;
-    IndexMap index = boost::get(boost::vertex_index, g);
-    
-    
-    std::cout << "vertices(g) = ";
-    typedef boost::graph_traits<Graph>::vertex_iterator vertex_iter;
-    std::pair<vertex_iter, vertex_iter> vp;
-    for (vp = boost::vertices(g); vp.first != vp.second; ++vp.first) {
-       
-        check.move_without_assert(g[*vp.first], true);
-        std::vector<move> possible_moves = get_possible_moves(check); 
-      for(it = possible_moves.begin(); it != possible_moves.end(); ++it) {
-      vertex_t v = boost::add_vertex(*it,g);
-      boost::tie(e,b) = boost::add_edge(*vp.first,v,g);
-      
-     // g[e] = *it;
-    }
-        check.revert_move_without_assert(g[*vp.first], true);
-      
-    //std::cout <<g[*vp.first] <<  " ";
-    //std::cout << std::endl;
-    // ...
-    }
-    std::cout << "\n-- graphviz output START --" << std::endl;
-    
-    std::cout << "\n-- graphviz output END --" << std::endl;
- */
-     //check.move_without_assert(possible_moves[0], true);
-//    boost::write_graphviz(std::cout, g);
-    
 }
 
-void AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & check, int  parent_depth){
+void AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & check, int  parent_depth, int max_depth){
     static int counter = 0;
     
     const static int_pair empty_pair = std::make_pair(SHORT_MAX_INT,SHORT_MAX_INT); // ma to odpowiadać za NULL
     std::vector<move> possible_moves = get_possible_moves(check);
-    //check.print();
+     
+
     std::vector < move >::iterator it;
     edge_t e; bool b;
     int current_depth = parent_depth + 1;
-   
+    if (parent_depth == 0) {
+        counter =0;
+    } 
+    //if (parent_depth > max_depth) {
+   //     std::cout<< parent_depth<<"%";
+   // }
     for(it = possible_moves.begin(); it != possible_moves.end(); ++it) {
         vertex_t current_v = boost::add_vertex(empty_pair,g);
         boost::tie(e,b) = boost::add_edge(parent_v,current_v,g);
         g[e] = *it;
         counter++;
-        if(current_depth  >= MAX_DEPTH) {
+        //std::cout<<it->which_was_captured;
+        if((current_depth  >= max_depth && it->which_was_captured == '.') || 
+                ( current_depth  >= max_depth +2 )) {
             short int score  = get_score(check);
             g[current_v].first = g[current_v].second = score;
-            //std::cout<<g[current_v].first<<"*\n";
-           
+
             continue;
         }
         check.move_without_assert(*it, true);
         
-        fill_possible_moves(g, current_v, check,current_depth);
+        fill_possible_moves(g, current_v, check,current_depth, max_depth);
         check.revert_move_without_assert(*it, true);
     }
+    short int max, min;
+    min = SHORT_MAX_INT - 1;
+    max = -min;
+    out_edge_it out_i, out_end;
 
-    
-     
-            
-            short int max, min;
-            min = SHORT_MAX_INT - 1;
-            max = -min;
-            out_edge_it out_i, out_end;
-            
-            for (boost::tie(out_i, out_end) = out_edges(parent_v, g); 
-                          out_i != out_end; ++out_i) {
-                e = *out_i;
+    for (boost::tie(out_i, out_end) = out_edges(parent_v, g); 
+                  out_i != out_end; ++out_i) {
+        e = *out_i;
 
-                if ( g[boost::target(e, g)].first < min ) {
-                   min = g[boost::target(e, g)].first;
-                }
-                  if ( g[boost::target(e, g)].first > max ) {
-                   max = g[boost::target(e, g)].first;
-                }
-            }
-            if (current_depth % 2 == 1) { //ja
-               g[parent_v].first = max;  
-               //std::cout<<"max:"<<max<<"*\n";
-            } else {  // przeciwnik
-               g[parent_v].first = min; 
-               //  std::cout<<"min:"<<min<<"*\n";
-            }
+        if ( g[boost::target(e, g)].first < min ) {
+           min = g[boost::target(e, g)].first;
+        }
+          if ( g[boost::target(e, g)].first > max ) {
+           max = g[boost::target(e, g)].first;
+        }
+    }
+    if (current_depth % 2 == 1) { //ja
+       g[parent_v].first = max;  
+       //std::cout<<"max:"<<max<<"*\n";
+    } else {  // przeciwnik
+       g[parent_v].first = min; 
+       //  std::cout<<"min:"<<min<<"*\n";
+    }
             
       
 
@@ -185,12 +154,14 @@ void AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & c
 int AI_tree::evaluation_function(checkboard & check, figure::color player) {
     
     int score = 0;
-    for (short int i = 0; i< 16; i++) {
-        short int x = check.figures_position[player][i][0];
-        short int y = check.figures_position[player][i][1];
-        if (x < 0 || y < 0) {
-            continue;
-        }
+    typedef std::pair<short int, short int> int_pair; 
+     std::vector < int_pair >::iterator it_pair;
+
+     
+    for (it_pair = check.figures_position[player].begin(); it_pair != check.figures_position[player].end(); ++it_pair) {       
+        short int x = it_pair->first;
+        short int y = it_pair->second;
+
         char sign = check.board[x][y]->get_sign_raw();
   
         switch(sign) {
@@ -234,9 +205,17 @@ int AI_tree::evaluation_function(checkboard & check, figure::color player) {
                     score += P_TABLE_BLACK[x][y]; 
                 }
                 break; 
+            case 'K':
+               
+                if (player == figure::white) {
+                    score += K_TABLE_WHITE_MIDDLEGAME[x][y];
+                } else {
+                    score += K_TABLE_BLACK_MIDDLEGAME[x][y]; 
+                }
+                break;                 
         }
     }
-    
+   
     return score;
     
    
@@ -368,4 +347,24 @@ const int AI_tree::P_TABLE_BLACK[8][8] = {
     {0, 50, 20, 10,  0,-10, 10,  0},
     {0, 50, 10,  5,  0, -5, 10,  0},
     {0, 50, 10,  5,  0,  5,  0,  0}
+};
+const int AI_tree::K_TABLE_WHITE_MIDDLEGAME[8][8] = {
+    { 20, 20,-10,-20,-30,-30,-30,-30},
+    { 30, 20,-20,-30,-40,-40,-40,-40},
+    { 10,  0,-20,-30,-40,-40,-40,-40},
+    {  0,  0,-20,-40,-50,-50,-50,-50},
+    {  0,  0,-20,-40,-50,-50,-50,-50},
+    { 10,  0,-20,-30,-40,-40,-40,-40},
+    { 30, 20,-20,-30,-40,-40,-40,-40},
+    { 20, 20,-10,-20,-30,-30,-30,-30}
+};
+const int AI_tree::K_TABLE_BLACK_MIDDLEGAME[8][8] =  {
+    {-30,-30,-30,-30,-20,-10, 20, 20},
+    {-40,-40,-40,-40,-30,-20, 20, 30},
+    {-40,-40,-40,-40,-30,-20,  0, 10},
+    {-50,-50,-50,-50,-40,-20,  0,  0},
+    {-50,-50,-50,-50,-40,-20,  0,  0},
+    {-40,-40,-40,-40,-30,-20,  0, 10},
+    {-40,-40,-40,-40,-30,-20, 20, 30},
+    {-30,-30,-30,-30,-20,-10, 20, 20}        
 };

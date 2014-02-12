@@ -21,7 +21,7 @@ public:
 
     std::vector <move> get_possible_moves(checkboard & check);
 private:
-
+   typedef std::pair<short int, short int> int_pair; 
 };
 
 #endif	/* AI_H */

@@ -30,8 +30,9 @@
           <runcommandpicklistitem>"${OUTPUT_PATH}" black_win.chess</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" sample.chess</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" small.chess</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" bug.chess</runcommandpicklistitem>
         </runcommandpicklist>
-        <runcommand>"${OUTPUT_PATH}" small.chess</runcommand>
+        <runcommand>"${OUTPUT_PATH}" bug.chess</runcommand>
         <rundir></rundir>
         <buildfirst>true</buildfirst>
         <terminal-type>0</terminal-type>

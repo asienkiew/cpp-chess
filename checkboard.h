@@ -18,6 +18,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <utility>   
 
 class checkboard {
     friend class AI;
@@ -33,6 +34,7 @@ public:
     void print() ; 
     checkboard();
     checkboard(const checkboard& );
+    checkboard( checkboard *);
     checkboard& operator= (const checkboard& );
     virtual ~checkboard();
     bool move_from_string(std::string , figure::color );
@@ -49,12 +51,12 @@ public:
     bool move_without_assert(move, bool);
     
 private:
+    typedef std::pair<short int, short int> int_pair; 
     bool is_castling_possible[2];
-    short int * king_pos[2][2];
-
-    short int figures_position[2][16][2]; //[kolor][16figur][x,y] [inne niż k x 15,k]
+    
+    std::vector <std::vector <int_pair > > figures_position;
  
-    void update_figures_position(short int coordinates[], figure::color , short int ,short int );
+    void update_figures_position(int_pair &, figure::color , int_pair );
     
  
     bool revert_move_without_assert(move, bool);

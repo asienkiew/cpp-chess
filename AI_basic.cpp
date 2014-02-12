@@ -26,23 +26,24 @@ void AI_basic::select_move(){
     std::vector <move> capture_attacker_moves; 
     std::vector <move> safe_captures_moves;
     std::vector <move> safe_moves;
+    std::vector < int_pair >::iterator it_pair;
     std::vector < move >::iterator it;
      std::clock_t t1 = std::clock();
-    for (short int i = 0; i < 16; i++) {       
-        short int x1 = check_cp.figures_position[who][i][0];
-        short int y1 = check_cp.figures_position[who][i][1];
-        if (x1 > -1 && y1 > -1) {
-            for (short int x2 = 0; x2 < 8; x2++) {
-                for (short int y2 = 0; y2 < 8; y2++) {
-                    
-                    move m = check_cp.is_move_possible(x1, x2, y1, y2, who, 'H');
-                    if (m.is_valid ) {
-                       // check_cp.print();
-                        possible_moves.push_back(m);
-                    }             
-                }            
-            }           
-        }   
+     
+    for (it_pair = check_cp.figures_position[who].begin(); it_pair != check_cp.figures_position[who].end(); ++it_pair) {       
+        short int x1 = it_pair->first;
+        short int y1 = it_pair->second;
+        for (short int x2 = 0; x2 < 8; x2++) {
+            for (short int y2 = 0; y2 < 8; y2++) {
+
+                move m = check_cp.is_move_possible(x1, x2, y1, y2, who, 'H');
+                if (m.is_valid ) {
+                   // check_cp.print();
+                    possible_moves.push_back(m);
+                }             
+            }            
+        }           
+   
     }
       std::clock_t t2 = std::clock();
     /*

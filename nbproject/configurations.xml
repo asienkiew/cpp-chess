@@ -107,7 +107,6 @@
         <linkerTool>
           <linkerAddLib>
             <pElem>../../boost_1_55_0/stage/lib</pElem>
-            <pElem>../../boost_1_55_0/libs</pElem>
           </linkerAddLib>
           <linkerDynSerch>
             <pElem>../../boost_1_55_0/stage/lib</pElem>

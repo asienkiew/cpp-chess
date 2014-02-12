@@ -73,7 +73,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L../../boost_1_55_0/stage/lib -L../../boost_1_55_0/libs -Wl,-rpath,../../boost_1_55_0/stage/lib -l boost_regex
+LDLIBSOPTIONS=-L../../boost_1_55_0/stage/lib -Wl,-rpath,../../boost_1_55_0/stage/lib -l boost_regex
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}

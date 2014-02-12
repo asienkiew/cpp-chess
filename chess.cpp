@@ -19,7 +19,9 @@
 
 
 int main(int argc, char** argv) {
-
+      try
+            {
+             
     checkboard * chec = new checkboard();
     if (argc< 2) {
         std::cerr<<"No .chess file\n";
@@ -82,6 +84,10 @@ int main(int argc, char** argv) {
      } else {
          throw "Bad status";
      }
-
+               }
+            catch(const char * w)
+            {
+                std::cout<<"Wyjatek: "<<w;
+            }
     return 0;
 }
