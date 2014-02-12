@@ -62,9 +62,9 @@ move AI_tree::select_move() {
            out_i != out_end; ++out_i) {
         e = *out_i;
          //   std::cout<<"\n"<<g[root].first<<"\n";
-            std::cout<<"\n"<<g[e];
+            //std::cout<<"\n"<<g[e];
         if ( g[boost::target(e, g)].first == g[root].first ) {
-            std::cout<<"\n"<<g[root].first<<"\n";
+            //std::cout<<"\n"<<g[root].first<<"\n";
             //std::cout<<g[e];
             chosen_move = g[e];
             
@@ -79,6 +79,7 @@ move AI_tree::select_move() {
       boost::write_graphviz(myfile, g);
       g.clear();
      std::cout<<"\n";*/
+       std::cout<<chosen_move<<"\n";
     return chosen_move;
     
      std::clock_t t1 = std::clock();
@@ -109,7 +110,7 @@ void AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & c
         counter++;
         //std::cout<<it->which_was_captured;
         if((current_depth  >= max_depth && it->which_was_captured == '.') || 
-                ( current_depth  >= max_depth +2 )) {
+                ( current_depth  >= max_depth +1 )) {
             short int score  = get_score(check);
             g[current_v].first = g[current_v].second = score;
 
