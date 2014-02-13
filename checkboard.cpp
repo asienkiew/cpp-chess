@@ -161,6 +161,7 @@ void checkboard::load_from_file(std::string& file) {
  
         }
     }
+    board_hash_map[serialize()] = 1;
   
 
   f.close();
@@ -734,6 +735,9 @@ std::string checkboard::serialize() {
         for (short int x=0; x<8; x++) {
                   s += board[x][y]->get_sign();
          } 
-    }  
+    } 
+    s+= who_is_next;
+    s+= is_castling_possible[0];
+    s+= is_castling_possible[1];
     return s;
 }

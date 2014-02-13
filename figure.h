@@ -23,7 +23,7 @@ public:
     virtual ~figure();
     char get_sign();
     char get_sign_raw();
-    virtual bool can_move(short int x1, short int x2, short int y1, short int y2);
+    virtual bool can_move(short int x1, short int x2, short int y1, short int y2) = 0;
     virtual bool can_capture(short int x1, short int x2, short int y1, short int y2);
     virtual bool can_be_captured();
 protected:

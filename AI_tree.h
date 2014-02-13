@@ -49,8 +49,8 @@ private:
     typedef boost::graph_traits<graph>::edge_descriptor edge_t;
     typedef boost::graph_traits<graph>::out_edge_iterator out_edge_it;
     
-    static const int MAX_DEPTH = 4;
-    static const int SHORT_MAX_INT;
+    static const short int MAX_DEPTH = 3;
+    static const short int SHORT_MAX_INT;
      
     int evaluation_function(checkboard & check, figure::color);
     

@@ -12,7 +12,7 @@
 
 class AI_basic : public AI {
 public:    
-    void select_move();
+    move select_move();
     AI_basic(figure::color c, checkboard *);
     
 private:

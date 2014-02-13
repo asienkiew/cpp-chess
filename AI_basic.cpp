@@ -17,7 +17,7 @@ AI_basic::AI_basic(figure::color c, checkboard * check):AI(c, check) {
 }
 
 
-void AI_basic::select_move(){ 
+move AI_basic::select_move(){ 
     srand (time(NULL));
     
     checkboard check_cp = *check;
@@ -157,25 +157,15 @@ void AI_basic::select_move(){
       
     std::cout<<"***\n"; 
  
-   if    (safe_captures_moves.size() > 0 ) {
-       check_cp.move_without_assert(safe_captures_moves[rand() % safe_captures_moves.size()], true);
-       
-       return;
-   }   else if (capture_attacker_moves.size() > 0 ) {
-       check_cp.move_without_assert(capture_attacker_moves[rand() % capture_attacker_moves.size()], true);
-       return;
-    }   else if (checked_moves.size() > 0 ) {
-     
-        check_cp.move_without_assert(checked_moves[rand() % checked_moves.size()], true) ;
-      return;
-   } else if  (safe_moves.size() > 0) {
-   
-       check_cp.move_without_assert(safe_moves[rand() % safe_moves.size()], true);
-       return;
-       
+   if        (safe_captures_moves.size() > 0 ) {       
+      return safe_captures_moves[rand() % safe_captures_moves.size()];
+   } else if (capture_attacker_moves.size() > 0 ) {
+       return capture_attacker_moves[rand() % capture_attacker_moves.size()];
+   } else if (checked_moves.size() > 0 ) {
+      return checked_moves[rand() % checked_moves.size()];
+   } else if (safe_moves.size() > 0) {
+      return safe_moves[rand() % safe_moves.size()]; 
    } else {
-      
-       check_cp.move_without_assert(possible_moves[rand() % possible_moves.size()], true) ;
-       return;
+      return possible_moves[rand() % possible_moves.size()];
    }
 }

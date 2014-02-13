@@ -13,8 +13,6 @@ AI::AI(figure::color & c, checkboard * check):who(c), check(check) {
     opposite = c == figure::black ? figure::white : figure::black;
 }
 
-move AI::select_move(){      
-}
 
 std::vector <move> AI::get_possible_moves(checkboard& check) {
      

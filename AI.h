@@ -16,7 +16,7 @@ class AI {
 public:
     figure::color who, opposite;
     checkboard * check;
-    move select_move();
+    virtual move select_move() = 0;
     AI(figure::color &, checkboard *);
 
     std::vector <move> get_possible_moves(checkboard & check);
