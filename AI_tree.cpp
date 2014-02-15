@@ -61,8 +61,8 @@ move AI_tree::select_move() {
     short int max = - SHORT_MAX_INT + 1;
     for (boost::tie(out_i, out_end) = out_edges(root, g); out_i != out_end; ++out_i) {
        
-        // std::cout<<"\n"<<g[boost::target(e, g)].first<<"\n";
-        // std::cout<<"\n"<<g[e];
+        // std::cout<<"\n"<<g[boost::target(*out_i, g)].first<<"\n";
+        // std::cout<<"\n"<<g[*out_i];
         if ( g[boost::target(*out_i, g)].first > max) {
             max = g[boost::target(*out_i, g)].first;
             //std::cout<<g[e];
@@ -143,7 +143,7 @@ void AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & c
             max -=10;
         }
         if (max < (-SHORT_MAX_INT + 1 + 60)) {
-            max -=10;
+            max +=10;
         }  
         g[parent_v].first = max;  
         //std::cout<<"max:"<<max<<"*\n";
@@ -152,7 +152,7 @@ void AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & c
             min -=10;
         }
         if (min < (-SHORT_MAX_INT + 1 + 60)) {
-            min -=10;
+            min +=10;
         }  
         g[parent_v].first = min; 
        //  std::cout<<"min:"<<min<<"*\n";

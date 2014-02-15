@@ -19,6 +19,7 @@
 #include "knight.h"
 #include "empty.h"
 #include "move.h"
+#include <boost/lexical_cast.hpp>
 
 
 //checkboard::checkboard(const checkboard& orig) {
@@ -73,7 +74,7 @@ checkboard::checkboard(const checkboard& orig){
             board[x][y]= sign_to_object(orig.board[x][y]->get_sign()); 
         }
     }
-    
+    board_hash_map = orig.board_hash_map;
    // return *this;
    // *this = orig;
   
@@ -98,6 +99,7 @@ checkboard::checkboard(checkboard* orig) {
             board[x][y]= sign_to_object(orig->board[x][y]->get_sign()); 
         }
     }
+    board_hash_map = orig->board_hash_map;
     
    // return *this;
    // *this = orig;
@@ -123,7 +125,7 @@ checkboard& checkboard::operator= (const checkboard& orig ){
            board[x][y]= sign_to_object(orig.board[x][y]->get_sign()); 
         }
     }
-    
+    board_hash_map = orig.board_hash_map;
     return *this;
     
 }
@@ -355,7 +357,7 @@ bool checkboard::move_without_assert(move m, bool add_to_history){
        
        int_pair rook_pos = std::make_pair(rook_x1, m.y1); 
        update_figures_position(rook_pos, m.c, std::make_pair(rook_x2, m.y2)) ;
-  
+       is_castling_possible[m.c] = false;
        
     }
     //en passant
@@ -386,9 +388,15 @@ bool checkboard::move_without_assert(move m, bool add_to_history){
     
     if (add_to_history) {
         history.push_back(m) ;
-        //std::cout<<is_in_check(m.c)<<"\n";
-     
         who_is_next = m.c == figure::black ? figure::white : figure::black;
+        std::string hash = serialize();
+        if (board_hash_map.find(hash) != board_hash_map.end()) {
+          board_hash_map[hash]++;  
+        } else {
+          board_hash_map[hash] = 1;
+        }
+     
+        
     
         update_status();
     }
@@ -402,6 +410,8 @@ bool checkboard::revert_move_without_assert(move m, bool remove_last_move_from_h
     int_pair pos2 = std::make_pair(m.x2, m.y2); 
     int_pair pos_null = std::make_pair(-1,-1);
     
+    std::string hash = serialize();
+    //std::cout<<hash;
     figure::color opposite_player = m.c == figure::black ? figure::white : figure::black;
     char colored_sign;
     if (m.which_was_captured != '.') {
@@ -442,6 +452,7 @@ bool checkboard::revert_move_without_assert(move m, bool remove_last_move_from_h
            
        int_pair rook_pos = std::make_pair(rook_x2, m.y2); 
        update_figures_position(rook_pos, m.c, std::make_pair(rook_x1, m.y1)) ;
+       is_castling_possible[m.c] = true;
     }
         //en passant
     char colored_pawn =  m.c == figure::white ? 'P' : 'p';
@@ -464,6 +475,13 @@ bool checkboard::revert_move_without_assert(move m, bool remove_last_move_from_h
     if (remove_last_move_from_history) {
         history.pop_back() ;
         who_is_next = m.c;
+        
+        if (board_hash_map.find(hash) != board_hash_map.end()) {
+          board_hash_map[hash]--;  
+        } else {
+            throw "There was no such hash";
+        }
+        
         status = in_progress;
     }
 
@@ -612,7 +630,16 @@ void checkboard::update_status() {
         } else {
             status = draw;
         }
+    } else {
+        std::map<std::string, unsigned char>::iterator it;
+        for ( it = board_hash_map.begin(); it!=board_hash_map.end(); ++it) {
+            if (it->second == 3) {
+                status = draw;
+            }
+        }    
     }
+
+
     
 }
 
@@ -736,8 +763,8 @@ std::string checkboard::serialize() {
                   s += board[x][y]->get_sign();
          } 
     } 
-    s+= who_is_next;
-    s+= is_castling_possible[0];
-    s+= is_castling_possible[1];
+    s+= boost::lexical_cast<std::string>(who_is_next);
+    s+= boost::lexical_cast<std::string>(is_castling_possible[0]);
+    s+= boost::lexical_cast<std::string>(is_castling_possible[1]);
     return s;
 }
