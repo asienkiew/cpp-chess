@@ -94,7 +94,7 @@ void AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & c
 
     std::vector < move >::iterator it;
     edge_t e; bool b;
-    int current_depth = parent_depth + 1;
+    int current_depth = parent_depth + 2;
     if (parent_depth == 0) {
         counter = 0;
     } 
@@ -111,7 +111,7 @@ void AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & c
         counter++;
         //std::cout<<it->which_was_captured;
         if((current_depth  >= max_depth && it->which_was_captured == '.') || 
-                ( current_depth  >= max_depth +1 )) {
+                ( current_depth  >= max_depth +2 )) {
             short int score  = get_score(check);
             g[current_v].first = g[current_v].second = score;
 
