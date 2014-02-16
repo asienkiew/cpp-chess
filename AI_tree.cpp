@@ -12,14 +12,12 @@
 #include <map>
 #include <cstdlib>
 #include <ctime>
-  #include <utility>                   // for std::pair
+#include <utility>                   // for std::pair
 #include <algorithm>
-      #include <iostream>
+#include <iostream>
 #include <fstream>
-
-  #include <boost/graph/graph_traits.hpp>
-  #include <boost/graph/adjacency_list.hpp>
-
+#include <boost/graph/graph_traits.hpp>
+#include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/graphviz.hpp>
 
  
@@ -42,11 +40,13 @@ move AI_tree::select_move() {
      
     // check_cp.print();
      graph g;
-    
-    
+
     vertex_t root = boost::add_vertex(empty_pair,g); //root
     int zero = 0;
-     fill_possible_moves(g, root, check_cp,zero, MAX_DEPTH);
+      std::clock_t t1 = std::clock();
+     fill_possible_moves(g, root, check_cp,zero, MAX_DEPTH);  
+     std::clock_t t2 = std::clock();
+     
     //boost::write_graphviz(std::cout, g);
      
     // typedef boost::graph_traits<graph>::vertex_iterator vertex_iter;
@@ -61,7 +61,7 @@ move AI_tree::select_move() {
     short int max = - SHORT_MAX_INT + 1;
     for (boost::tie(out_i, out_end) = out_edges(root, g); out_i != out_end; ++out_i) {
        
-        // std::cout<<"\n"<<g[boost::target(*out_i, g)].first<<"\n";
+        // std::cout<<"\n"<<g[boost::target(*out_i, g)].first;
         // std::cout<<"\n"<<g[*out_i];
         if ( g[boost::target(*out_i, g)].first > max) {
             max = g[boost::target(*out_i, g)].first;
@@ -78,9 +78,12 @@ move AI_tree::select_move() {
       g.clear();
      std::cout<<"\n";*/
        std::cout<<chosen_move<<"\n";
+       
+    std::cout.precision(5);
+     std::cout<<std::fixed<<double(t2 - t1) / CLOCKS_PER_SEC;
     return chosen_move;
     
-    // std::clock_t t1 = std::clock();
+    //
          
     
 }
@@ -94,7 +97,7 @@ void AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & c
 
     std::vector < move >::iterator it;
     edge_t e; bool b;
-    int current_depth = parent_depth + 2;
+    int current_depth = parent_depth + 1;
     if (parent_depth == 0) {
         counter = 0;
     } 
@@ -111,7 +114,7 @@ void AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & c
         counter++;
         //std::cout<<it->which_was_captured;
         if((current_depth  >= max_depth && it->which_was_captured == '.') || 
-                ( current_depth  >= max_depth +2 )) {
+                ( current_depth  >= max_depth + 1 )) {
             short int score  = get_score(check);
             g[current_v].first = g[current_v].second = score;
 
@@ -122,7 +125,7 @@ void AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & c
         fill_possible_moves(g, current_v, check,current_depth, max_depth);
         check.revert_move_without_assert(*it, true);
     }
-    short int max, min, extremum;
+    short int max, min;
     min = SHORT_MAX_INT - 1;
     max = -min;
     
@@ -158,7 +161,6 @@ void AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & c
        //  std::cout<<"min:"<<min<<"*\n";
     }        
    
-
 
     if (parent_depth == 0 ) {
         std::cout<<counter<<"*";
@@ -257,7 +259,17 @@ int AI_tree::get_score(checkboard & check) {
        default:
            break; 
     }
-    return evaluation_function(check, who) - evaluation_function(check,opposite);
+    float multiplier;
+    move * last_move = & check.history.back();
+    if (check.history[check.history.size() - 1 - 2].is_opposite_to(*last_move) ) {
+        multiplier = 0.9;
+        
+    }
+    if (check.history[check.history.size() - 1 - 4] == (*last_move) ) {
+        multiplier *= 0.8;
+        //std::cout<<check.history[check.history.size() - 1 - 4]<<*last_move;
+    }
+    return (short int)(multiplier*(evaluation_function(check, who) - evaluation_function(check,opposite)));
 }
 
 const short int AI_tree::SHORT_MAX_INT =  std::numeric_limits<short int>::max();

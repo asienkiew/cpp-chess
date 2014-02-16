@@ -61,7 +61,6 @@ private:
  
     bool revert_move_without_assert(move, bool);
     std::vector< move > history;
-    std::map< std::string, unsigned char > board_hash_map;
     figure * sign_to_object(char sign); 
     bool is_another_figure_between(short int,short int,short int,short int);
     bool check_whether_castling_is_possible(bool, figure::color);

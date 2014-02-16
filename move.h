@@ -20,9 +20,11 @@ public:
     char which_was_captured;
     move();
     move(short int,short int,short int,short int, figure::color, char, char, char);
-
+    bool is_opposite_to(move &);
+    
     virtual ~move();
     friend std::ostream& operator<<(std::ostream&, move&);
+    friend bool operator== (move &, move &);
 private:
     
 

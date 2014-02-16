@@ -11,8 +11,11 @@
             <file>file:/home/sienio/NetBeansProjects/Chess/AI.h</file>
             <file>file:/home/sienio/NetBeansProjects/Chess/chess.cpp</file>
             <file>file:/home/sienio/NetBeansProjects/Chess/checkboard.h</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/move.h</file>
             <file>file:/home/sienio/NetBeansProjects/Chess/AI_tree.h</file>
-            <file>file:/home/sienio/NetBeansProjects/Chess/do_sprawdzenia.txt</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/AI_basic.h</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/AI_basic.cpp</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/move.cpp</file>
             <file>file:/home/sienio/NetBeansProjects/Chess/checkboard.cpp</file>
             <file>file:/home/sienio/NetBeansProjects/Chess/AI.cpp</file>
         </group>
