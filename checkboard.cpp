@@ -22,8 +22,21 @@
 #include <boost/lexical_cast.hpp>
 
 
-//checkboard::checkboard(const checkboard& orig) {
-//}
+
+
+empty checkboard::EMPTY = empty(figure::none);
+king checkboard::KING_B = king(figure::black);
+king checkboard::KING_W = king(figure::white);
+queen checkboard::QUEEN_B = queen(figure::black);
+queen checkboard::QUEEN_W = queen(figure::white);
+rook checkboard::ROOK_B =  rook(figure::black);
+rook checkboard::ROOK_W = rook(figure::white);
+pawn checkboard::PAWN_B = pawn(figure::black);
+pawn checkboard::PAWN_W = pawn(figure::white);
+knight checkboard::KNIGHT_B = knight(figure::black);
+knight checkboard::KNIGHT_W = knight(figure::white);
+bishop checkboard::BISHOP_B = bishop(figure::black);
+bishop checkboard::BISHOP_W = bishop(figure::white);    
 
 checkboard::checkboard() {
     srand (time(NULL));
@@ -31,11 +44,13 @@ checkboard::checkboard() {
     is_castling_possible[figure::white] = true;
     status = in_progress;
     who_is_next = figure::white;
+
+
+
     for (short int y=7; y>-1; y--) {
 
         for (short int x=0; x<8; x++) {
-              empty * p      = new empty(figure::none); 
-              board[x][y]= p;
+              board[x][y]= & EMPTY;
              
         }
     }
@@ -51,7 +66,7 @@ checkboard::~checkboard() {
        for (short int y=7; y>-1; y--) {
       
         for (short int x=0; x<8; x++) {
-            delete board[x][y];
+           // delete board[x][y];
         }
     }
   
@@ -66,13 +81,10 @@ checkboard::checkboard(const checkboard& orig){
 
     figures_position = orig.figures_position;
 
-        
+      
     for (short int y=7; y>-1; y--) {
-        for (short int x=0; x<8; x++) {
-                           empty * p      = new empty(figure::none); 
-              board[x][y]= p;
-             
-            board[x][y]= sign_to_object(orig.board[x][y]->get_sign()); 
+        for (short int x=0; x<8; x++) {             
+            board[x][y]= orig.board[x][y]; 
         }
     }
 
@@ -88,13 +100,10 @@ checkboard::checkboard(checkboard* orig) {
 
     figures_position = orig->figures_position;
 
-        
+    
     for (short int y=7; y>-1; y--) {
         for (short int x=0; x<8; x++) {
-                 empty * p      = new empty(figure::none); 
-              board[x][y]= p;
-             
-            board[x][y]= sign_to_object(orig->board[x][y]->get_sign()); 
+            board[x][y]= orig->board[x][y]; 
         }
     }
 
@@ -114,13 +123,11 @@ checkboard& checkboard::operator= (const checkboard& orig ){
 
     figures_position = orig.figures_position;
 
-        
+     
     for (short int y=7; y>-1; y--) {
         for (short int x=0; x<8; x++) {
-                          empty * p      = new empty(figure::none); 
-              board[x][y]= p;
              
-           board[x][y]= sign_to_object(orig.board[x][y]->get_sign()); 
+           board[x][y]= orig.board[x][y]; 
         }
     }
 
@@ -267,46 +274,46 @@ figure * checkboard::sign_to_object(char sign/*, figure::color c*/) {
     figure * f;
    switch(sign) {
        case '.':
-            f = new empty(figure::none);
+            f = & EMPTY;
             break;
         case 'k':
-            f = new king(figure::black);
+            f = &  KING_B;
             break;
         case 'K':
-            f = new  king(figure::white);
+            f = &  KING_W;
             break;
         case 'h':
-            f = new  queen(figure::black);
+            f = & QUEEN_B;
             break;
         case 'H':
-            f = new   queen(figure::white);
+            f = & QUEEN_W;
             break;
         case 'w':
-            f = new   rook(figure::black);
+            f = &  ROOK_B  ;
             break;
         case 'W':
-            f = new   rook(figure::white);          
+            f = & ROOK_W  ;          
             break;
         case 'p':
-            f = new   pawn(figure::black);
+            f = & PAWN_B   ;
             break;
         case 'P':
-            f = new   pawn(figure::white);          
+            f = & PAWN_W  ;          
             break;
         case 's':
-            f = new   knight(figure::black);
+            f = & KNIGHT_B  ;
             break;
         case 'S':
-            f = new   knight(figure::white);          
+            f = &  KNIGHT_W ;          
             break;
         case 'g':
-            f = new   bishop(figure::black);
+            f = & BISHOP_B ;
             break;
         case 'G':
-            f = new   bishop(figure::white);          
+            f = & BISHOP_W;          
             break;       
        case '*':
-            f = new   empty(figure::none);          
+            f = & EMPTY;         
             break;
         default:
             std::cerr<<sign;
@@ -324,10 +331,10 @@ bool checkboard::move_without_assert(move m, bool add_to_history){
 
     if (board[m.x2][m.y2]->get_sign_raw() != '.') {
         figure::color opposite_player = board[m.x2][m.y2]->get_color();
-        delete board[m.x2][m.y2];
+
         board[m.x2][m.y2] = board[m.x1][m.y1];
         
-        board[m.x1][m.y1] = new empty(figure::none);
+        board[m.x1][m.y1] = & EMPTY;
         
         update_figures_position(pos2, opposite_player, pos_null) ;
   
@@ -361,8 +368,8 @@ bool checkboard::move_without_assert(move m, bool add_to_history){
     //en passant
     if (m.is_enpassant) {
         figure::color opposite_player = board[m.x2][m.y1]->get_color();
-        delete board[m.x2][m.y1];
-        board[m.x2][m.y1] = new empty(figure::none); 
+
+        board[m.x2][m.y1] = & EMPTY; 
         
             
          int_pair pawn_pos = std::make_pair(m.x2, m.y1); 
@@ -378,7 +385,7 @@ bool checkboard::move_without_assert(move m, bool add_to_history){
             colored_promote_to = tolower(m.promote_to);  
          }
          
-         delete board[m.x2][m.y2];
+
          board[m.x2][m.y2] = sign_to_object(colored_promote_to) ; 
      
      
@@ -409,8 +416,7 @@ bool checkboard::revert_move_without_assert(move m, bool remove_last_move_from_h
             colored_sign = tolower(m.which_was_captured);  
         }
  
-        
-        delete board[m.x1][m.y1];
+
         board[m.x1][m.y1] = board[m.x2][m.y2];
        
         
@@ -446,7 +452,6 @@ bool checkboard::revert_move_without_assert(move m, bool remove_last_move_from_h
     char colored_opposite_pawn = m.c == figure::white ? 'p' : 'P'; 
     if (m.is_enpassant) {
          
-        delete board[m.x2][m.y1];
         board[m.x2][m.y1] = sign_to_object(colored_opposite_pawn); 
         update_figures_position(pos_null, opposite_player, std::make_pair(m.x2, m.y1)) ;
         
@@ -454,7 +459,6 @@ bool checkboard::revert_move_without_assert(move m, bool remove_last_move_from_h
     //promocja
     if (m.is_promotion) {
 
-         delete board[m.x1][m.y1];
          board[m.x1][m.y1] = sign_to_object(colored_pawn) ; 
      
     }

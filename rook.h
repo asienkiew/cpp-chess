@@ -14,7 +14,8 @@ public:
     
     
     rook(figure::color cc);
-    virtual bool can_move(short int x1, short int x2, short int y1, short int y2);
+    rook();
+    virtual bool can_move_raw(short int x1, short int x2, short int y1, short int y2);
     virtual ~rook();
 private:
 

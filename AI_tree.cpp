@@ -61,8 +61,8 @@ move AI_tree::select_move() {
     short int max = - SHORT_MAX_INT + 1;
     for (boost::tie(out_i, out_end) = out_edges(root, g); out_i != out_end; ++out_i) {
        
-        // std::cout<<"\n"<<g[boost::target(*out_i, g)].first;
-        // std::cout<<"\n"<<g[*out_i];
+        std::cout<<"\n"<<g[boost::target(*out_i, g)].first;
+         std::cout<<"\n"<<g[*out_i];
         if ( g[boost::target(*out_i, g)].first > max) {
             max = g[boost::target(*out_i, g)].first;
             //std::cout<<g[e];

@@ -13,10 +13,10 @@ class pawn : public figure {
 public:
    
     pawn(figure::color cc);
-
+    pawn();  
     virtual ~pawn();
-    bool can_move(short int x1, short int x2, short int y1, short int y2);
-    bool can_capture(short int x1, short int x2, short int y1, short int y2);
+    bool can_move_raw(short int x1, short int x2, short int y1, short int y2);
+    bool can_capture_raw(short int x1, short int x2, short int y1, short int y2);
     
 private:
     

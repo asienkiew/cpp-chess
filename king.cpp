@@ -11,12 +11,14 @@
 king::king(figure::color cc):figure(cc){ 
     sign = 'K';
     is_capturable = false;
-  
+     this->set_possible_moves_table();
+}
+king::king() {
+    
 }
 
 
-
-bool king::can_move(short int x1, short int x2, short int y1, short int y2) {
+bool king::can_move_raw(short int x1, short int x2, short int y1, short int y2) {
  
         if  (std::abs(x1 - x2) <= 1 && std::abs(y1 - y2) <= 1 && !(x1 == x2 && y1 == y2)) {
             return true;   
@@ -29,7 +31,7 @@ bool king::can_move(short int x1, short int x2, short int y1, short int y2) {
     return false;
 }
 
-bool king::can_capture(short int x1, short int x2, short int y1, short int y2 ) {
+bool king::can_capture_raw(short int x1, short int x2, short int y1, short int y2 ) {
     if  (std::abs(x1 - x2) <= 1 && std::abs(y1 - y2) <= 1 && !(x1 == x2 && y1 == y2)) {
             return true;  
     }

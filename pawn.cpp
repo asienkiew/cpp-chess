@@ -14,14 +14,16 @@
 
 pawn::pawn(figure::color cc):figure(cc){
     sign = 'P';
-    //set_possible_move_table();
+    this->set_possible_moves_table();
+}
+pawn::pawn() {
 }
 pawn::~pawn() {
 }
 
 
 
-bool pawn::can_move(short int x1, short int x2, short int y1, short int y2 ) {
+bool pawn::can_move_raw(short int x1, short int x2, short int y1, short int y2 ) {
     if (c == figure::black) {
         if ((x1 == x2 && y1 == y2 + 1 ) || //ruch 1 do przodu
            (y1 == 6 && y2 == 4 && x1 == x2)) // ruch 2 do przodu w pozycji początkowej
@@ -38,7 +40,7 @@ bool pawn::can_move(short int x1, short int x2, short int y1, short int y2 ) {
     return false;
 }
 
-bool pawn::can_capture(short int x1, short int x2, short int y1, short int y2 ) {
+bool pawn::can_capture_raw(short int x1, short int x2, short int y1, short int y2 ) {
     if (c == figure::black) {
         if (std::abs(x1 - x2) == 1 && y1 == y2 + 1) {
             return true;   

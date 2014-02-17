@@ -9,15 +9,21 @@
 #define	GAMEPLAY_H
 #include <string>
 #include <vector>
+#include "player.h"
+#include "figure.h"
+#include "checkboard.h"
 
 class gameplay {
 public:
     gameplay();
     gameplay(const gameplay& orig);
     virtual ~gameplay();
-    short int parse_command(std::string &);
+    void start();
+
 private:
+    checkboard * check;
     std::vector< std::string > history;
+    player * players[2];
 };
 
 #endif	/* GAMEPLAY_H */

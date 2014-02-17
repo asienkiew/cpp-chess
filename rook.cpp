@@ -9,13 +9,18 @@
 
 #include <cmath>
 
-rook::rook(figure::color cc):figure(cc){sign ='W';}
+rook::rook(figure::color cc):figure(cc){
+    sign ='W';
+    this->set_possible_moves_table();
+}
 
+rook::rook() {
+}
 
 rook::~rook() {
 }
 
-bool rook::can_move(short int x1, short int x2, short int y1, short int y2) {
+bool rook::can_move_raw(short int x1, short int x2, short int y1, short int y2) {
  
         if ( 
              (  

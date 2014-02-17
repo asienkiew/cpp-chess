@@ -19,7 +19,6 @@
       <itemPath>AI.h</itemPath>
       <itemPath>AI_basic.cpp</itemPath>
       <itemPath>AI_basic.h</itemPath>
-      <itemPath>AI_tree.cpp</itemPath>
       <itemPath>AI_tree.h</itemPath>
       <itemPath>bishop.h</itemPath>
       <itemPath>checkboard.h</itemPath>
@@ -41,6 +40,7 @@
                    displayName="Source Files"
                    projectFiles="true">
       <itemPath>AI.cpp</itemPath>
+      <itemPath>AI_tree.cpp</itemPath>
       <itemPath>bishop.cpp</itemPath>
       <itemPath>checkboard.cpp</itemPath>
       <itemPath>chess.cpp</itemPath>
@@ -51,6 +51,7 @@
       <itemPath>king.cpp</itemPath>
       <itemPath>knight.cpp</itemPath>
       <itemPath>pawn.cpp</itemPath>
+      <itemPath>player.cpp</itemPath>
       <itemPath>queen.cpp</itemPath>
       <itemPath>rook.cpp</itemPath>
     </logicalFolder>
@@ -81,6 +82,7 @@
                    kind="IMPORTANT_FILES_FOLDER">
       <itemPath>Makefile</itemPath>
     </logicalFolder>
+    <itemPath>player.h</itemPath>
   </logicalFolder>
   <sourceRootList>
     <Elem>.</Elem>
@@ -198,6 +200,10 @@
       <item path="pawn.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="pawn.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="player.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="player.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="queen.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -321,6 +327,10 @@
       <item path="pawn.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="pawn.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="player.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="player.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="queen.cpp" ex="false" tool="1" flavor2="0">
       </item>

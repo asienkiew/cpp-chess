@@ -8,13 +8,17 @@
 #include "queen.h"
 #include <cmath>
 
-queen::queen(figure::color cc):figure(cc){sign = 'H';}
+queen::queen(figure::color cc):figure(cc){
+    sign = 'H';
+    this->set_possible_moves_table();
+}
 
-
+queen::queen() {
+} 
 queen::~queen() {
 }
 
-bool queen::can_move(short int x1, short int x2, short int y1, short int y2 ) {
+bool queen::can_move_raw(short int x1, short int x2, short int y1, short int y2 ) {
  
         if ( 
              (  

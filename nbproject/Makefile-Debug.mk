@@ -48,6 +48,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/knight.o \
 	${OBJECTDIR}/move.o \
 	${OBJECTDIR}/pawn.o \
+	${OBJECTDIR}/player.o \
 	${OBJECTDIR}/queen.o \
 	${OBJECTDIR}/rook.o
 
@@ -147,6 +148,11 @@ ${OBJECTDIR}/pawn.o: pawn.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O3 -Wall -I../../boost_1_55_0 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/pawn.o pawn.cpp
+
+${OBJECTDIR}/player.o: player.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O3 -Wall -I../../boost_1_55_0 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/player.o player.cpp
 
 ${OBJECTDIR}/queen.o: queen.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -363,6 +369,19 @@ ${OBJECTDIR}/pawn_nomain.o: ${OBJECTDIR}/pawn.o pawn.cpp
 	    $(COMPILE.cc) -O3 -Wall -I../../boost_1_55_0 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/pawn_nomain.o pawn.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/pawn.o ${OBJECTDIR}/pawn_nomain.o;\
+	fi
+
+${OBJECTDIR}/player_nomain.o: ${OBJECTDIR}/player.o player.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/player.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O3 -Wall -I../../boost_1_55_0 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/player_nomain.o player.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/player.o ${OBJECTDIR}/player_nomain.o;\
 	fi
 
 ${OBJECTDIR}/queen_nomain.o: ${OBJECTDIR}/queen.o queen.cpp 
