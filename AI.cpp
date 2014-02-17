@@ -26,12 +26,13 @@ std::vector <move> AI::get_possible_moves(checkboard& check) {
 
 
     for (it_pair = check.figures_position[check.who_is_next].begin(); it_pair != check.figures_position[check.who_is_next].end(); ++it_pair) {       
-        short int x1 = it_pair->first;
-        short int y1 = it_pair->second;
+        unsigned char x1 = it_pair->first;
+        unsigned char y1 = it_pair->second;
         std::vector < int_pair > posible_move_for_figure = check.board[x1][y1]->get_possible_moves_for_figure(*it_pair);
         for (it_pair2 = posible_move_for_figure.begin(); it_pair2 != posible_move_for_figure.end(); ++it_pair2) {       
+            
             move m =  check.is_move_possible(x1, it_pair2->first, y1, it_pair2->second, check.who_is_next, 'H');
-
+            //std::cout<<m<<"\n";
             if (m.is_valid ) {
                 possible_moves.push_back(m);
               //  std::cout<<m<<"\n";

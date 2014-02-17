@@ -41,12 +41,12 @@ char figure::get_sign_raw() {
 
 void figure::set_possible_moves_table() {
     
-    for (short int x1 = 0; x1 < 8; x1++) {  
-        for (short int y1 = 0; y1 < 8; y1++) {
+    for (unsigned char x1 = 0; x1 < 8; x1++) {  
+        for (unsigned char y1 = 0; y1 < 8; y1++) {
             int_pair from = std::make_pair(x1, y1);
-            for (short int x2 = 0; x2 < 8; x2++) {
+            for (unsigned char x2 = 0; x2 < 8; x2++) {
 
-                for (short int y2 = 0; y2 < 8; y2++) {
+                for (unsigned char y2 = 0; y2 < 8; y2++) {
                     
 
                     int_pair to = std::make_pair(x2, y2);
@@ -76,11 +76,11 @@ void figure::set_possible_moves_table() {
         }   
     }
 }
-bool figure::can_capture_raw(short int x1, short int x2, short int y1, short int y2) {
+bool figure::can_capture_raw(unsigned char x1, unsigned char x2, unsigned char y1, unsigned char y2) {
     return this->can_move_raw(x1, x2, y1, y2);
 }
 
-bool figure::can_capture(short int x1, short int x2, short int y1, short int y2) {
+bool figure::can_capture(unsigned char x1, unsigned char x2, unsigned char y1, unsigned char y2) {
     int_pair from = std::make_pair(x1, y1);
     int_pair to = std::make_pair(x2, y2);
     
@@ -96,7 +96,7 @@ bool figure::can_capture(short int x1, short int x2, short int y1, short int y2)
     return false;
 }
 
-bool figure::can_move(short int x1, short int x2, short int y1, short int y2) {
+bool figure::can_move(unsigned char x1, unsigned char x2, unsigned char y1, unsigned char y2) {
     int_pair from = std::make_pair(x1, y1);
     int_pair to = std::make_pair(x2, y2);
     

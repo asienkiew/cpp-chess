@@ -42,8 +42,8 @@ public:
     checkboard& operator= (const checkboard& );
     virtual ~checkboard();
     bool move_from_string(std::string , figure::color );
-    bool move_from_raw_coordinates(short int, short int, short int, short int, figure::color, char promote_to = 'H');
-    move is_move_possible(short int&,short int&,short int&,short int&, figure::color&, char);
+    bool move_from_raw_coordinates(unsigned char, unsigned char, unsigned char, unsigned char, figure::color, char promote_to = 'H');
+    move is_move_possible(unsigned char&,unsigned char&,unsigned char&,unsigned char&, figure::color&, char);
     
     bool is_stalemate(figure::color);
     bool is_checkmate(figure::color);
@@ -63,7 +63,7 @@ private:
     static knight KNIGHT_B, KNIGHT_W;
     static bishop BISHOP_B, BISHOP_W;
 
-    typedef std::pair<short int, short int> int_pair; 
+    typedef std::pair<unsigned char, unsigned char> int_pair; 
     bool is_castling_possible[2];
     
     std::vector <std::vector <int_pair > > figures_position;
@@ -74,10 +74,10 @@ private:
     bool revert_move_without_assert(move, bool);
     std::vector< move > history;
     figure * sign_to_object(char sign); 
-    bool is_another_figure_between(short int,short int,short int,short int);
+    bool is_another_figure_between(unsigned char,unsigned char,unsigned char,unsigned char);
     bool check_whether_castling_is_possible(bool, figure::color);
-    bool is_under_attack_by_given(short int &,short int &,short int &,short int &, figure::color &);
-    bool is_under_attack_by_any(short int &, short int &, figure::color&);
+    bool is_under_attack_by_given(unsigned char &,unsigned char &,unsigned char &,unsigned char &, figure::color &);
+    bool is_under_attack_by_any(unsigned char &, unsigned char &, figure::color&);
     bool will_be_in_check(move, bool opposite_player = false);
     void update_status();
     std::string serialize();

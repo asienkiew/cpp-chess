@@ -12,14 +12,14 @@
 
 class move {
 public:
-    short int x1, x2, y1, y2;
+    unsigned char x1, x2, y1, y2;
     bool is_castling, is_enpassant, is_promotion, is_valid;
     char promote_to;
     figure::color c;
     char which_moved;
     char which_was_captured;
     move();
-    move(short int,short int,short int,short int, figure::color, char, char, char);
+    move(unsigned char,unsigned char,unsigned char,unsigned char, figure::color, char, char, char);
     bool is_opposite_to(move &);
     
     virtual ~move();

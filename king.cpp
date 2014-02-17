@@ -18,7 +18,7 @@ king::king() {
 }
 
 
-bool king::can_move_raw(short int x1, short int x2, short int y1, short int y2) {
+bool king::can_move_raw(unsigned char x1, unsigned char x2, unsigned char y1, unsigned char y2) {
  
         if  (std::abs(x1 - x2) <= 1 && std::abs(y1 - y2) <= 1 && !(x1 == x2 && y1 == y2)) {
             return true;   
@@ -31,7 +31,7 @@ bool king::can_move_raw(short int x1, short int x2, short int y1, short int y2) 
     return false;
 }
 
-bool king::can_capture_raw(short int x1, short int x2, short int y1, short int y2 ) {
+bool king::can_capture_raw(unsigned char x1, unsigned char x2, unsigned char y1, unsigned char y2 ) {
     if  (std::abs(x1 - x2) <= 1 && std::abs(y1 - y2) <= 1 && !(x1 == x2 && y1 == y2)) {
             return true;  
     }

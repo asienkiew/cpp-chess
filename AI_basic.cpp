@@ -31,10 +31,10 @@ move AI_basic::select_move(){
      std::clock_t t1 = std::clock();
      
     for (it_pair = check_cp.figures_position[who].begin(); it_pair != check_cp.figures_position[who].end(); ++it_pair) {       
-        short int x1 = it_pair->first;
-        short int y1 = it_pair->second;
-        for (short int x2 = 0; x2 < 8; x2++) {
-            for (short int y2 = 0; y2 < 8; y2++) {
+        unsigned char x1 = it_pair->first;
+        unsigned char y1 = it_pair->second;
+        for (unsigned char x2 = 0; x2 < 8; x2++) {
+            for (unsigned char y2 = 0; y2 < 8; y2++) {
 
                 move m = check_cp.is_move_possible(x1, x2, y1, y2, who, 'H');
                 if (m.is_valid ) {
@@ -52,10 +52,10 @@ move AI_basic::select_move(){
 
 
     for (int i = 0 ; i<10000; i++) {
-     for (short int x1 = 7; x1 > -1; x1--) {  
-        for (short int x2 = 0; x2 < 8; x2++) {
-            for (short int y1 = 0; y1 < 8; y1++) {
-                for (short int y2 = 0; y2 < 8; y2++) {
+     for (unsigned char x1 = 7; x1 > -1; x1--) {  
+        for (unsigned char x2 = 0; x2 < 8; x2++) {
+            for (unsigned char y1 = 0; y1 < 8; y1++) {
+                for (unsigned char y2 = 0; y2 < 8; y2++) {
                     move m = check_cp.is_move_possible(x1, x2, y1, y2, who, 'H');
         
                 }            
@@ -65,12 +65,12 @@ move AI_basic::select_move(){
 }
   
         for (int i = 0 ; i<10000; i++) {
- for (short int i = 0; i < 16; i++) {       
-        short int x1 = check_cp.figures_position[who][i][0];
-        short int y1 = check_cp.figures_position[who][i][1];
+ for (unsigned char i = 0; i < 16; i++) {       
+        unsigned char x1 = check_cp.figures_position[who][i][0];
+        unsigned char y1 = check_cp.figures_position[who][i][1];
         if (x1 > -1 && y1 > -1) {
-            for (short int x2 = 0; x2 < 8; x2++) {
-                for (short int y2 = 0; y2 < 8; y2++) {
+            for (unsigned char x2 = 0; x2 < 8; x2++) {
+                for (unsigned char y2 = 0; y2 < 8; y2++) {
                     
                     move m = check_cp.is_move_possible(x1, x2, y1, y2, who, 'H');
                 

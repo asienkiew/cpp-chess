@@ -170,13 +170,13 @@ void AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & c
 int AI_tree::evaluation_function(checkboard & check, figure::color player) {
     
     int score = 0;
-    typedef std::pair<short int, short int> int_pair; 
+    typedef std::pair<unsigned char, unsigned char> int_pair; 
      std::vector < int_pair >::iterator it_pair;
 
      
     for (it_pair = check.figures_position[player].begin(); it_pair != check.figures_position[player].end(); ++it_pair) {       
-        short int x = it_pair->first;
-        short int y = it_pair->second;
+        unsigned char x = it_pair->first;
+        unsigned char y = it_pair->second;
 
         char sign = check.board[x][y]->get_sign_raw();
   

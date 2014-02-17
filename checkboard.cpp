@@ -20,6 +20,7 @@
 #include "empty.h"
 #include "move.h"
 #include <boost/lexical_cast.hpp>
+#include <algorithm> 
 
 
 
@@ -47,9 +48,9 @@ checkboard::checkboard() {
 
 
 
-    for (short int y=7; y>-1; y--) {
+    for (unsigned char y=0; y<8; y++) {
 
-        for (short int x=0; x<8; x++) {
+        for (unsigned char x=0; x<8; x++) {
               board[x][y]= & EMPTY;
              
         }
@@ -63,9 +64,9 @@ checkboard::checkboard() {
 }
 
 checkboard::~checkboard() {
-       for (short int y=7; y>-1; y--) {
+       for (unsigned char y=0; y<8; y++) {
       
-        for (short int x=0; x<8; x++) {
+        for (unsigned char x=0; x<8; x++) {
            // delete board[x][y];
         }
     }
@@ -82,8 +83,8 @@ checkboard::checkboard(const checkboard& orig){
     figures_position = orig.figures_position;
 
       
-    for (short int y=7; y>-1; y--) {
-        for (short int x=0; x<8; x++) {             
+    for  (unsigned char y=0; y<8; y++) {
+        for (unsigned char x=0; x<8; x++) {             
             board[x][y]= orig.board[x][y]; 
         }
     }
@@ -101,8 +102,8 @@ checkboard::checkboard(checkboard* orig) {
     figures_position = orig->figures_position;
 
     
-    for (short int y=7; y>-1; y--) {
-        for (short int x=0; x<8; x++) {
+    for  (unsigned char y=0; y<8; y++) {
+        for (unsigned char x=0; x<8; x++) {
             board[x][y]= orig->board[x][y]; 
         }
     }
@@ -124,8 +125,8 @@ checkboard& checkboard::operator= (const checkboard& orig ){
     figures_position = orig.figures_position;
 
      
-    for (short int y=7; y>-1; y--) {
-        for (short int x=0; x<8; x++) {
+    for  (unsigned char y=0; y<8; y++) {
+        for (unsigned char x=0; x<8; x++) {
              
            board[x][y]= orig.board[x][y]; 
         }
@@ -139,13 +140,14 @@ void checkboard::load_from_file(std::string& file) {
     std::ifstream  f(file.c_str());
 
     std::string linia; 
-    short int non_king[2] = {0,0};
+    unsigned char non_king[2] = {0,0};
     int_pair coordinates;
-    for (short int y=7; y>-1; y--) {
+    for (signed char y=7; y>=0; y--) {
         std::getline(f,linia);
         
-        for (short int x=0; x<8; x++) {
+        for (unsigned char x=0; x<8; x++) {
             coordinates = std::make_pair (x,y);
+            std::cout<<linia[x];
             board[x][y] = sign_to_object(linia[x]);
             figure:: color  c = board[x][y]->get_color();
             
@@ -181,9 +183,9 @@ void checkboard::print() {
     
     std::cout<<"\n"<<"   a b c d e f g h\n";
 
-    for (short int y=7; y>-1; y--) {
+    for (signed char y=7; y>=0; y--) {
         std::cout<<"\n"<<y+1<<"  ";
-        for (short int x=0; x<8; x++) {
+        for (unsigned char x=0; x<8; x++) {
             if (board[x][y]->get_sign() == '.' ) {
                 if ( (x + y) % 2 == 0) {
                     std::cout<<"\033[35;1m"<<board[x][y]->get_sign()<<"\033[0m ";
@@ -209,26 +211,26 @@ void checkboard::print() {
 
 
 
-bool checkboard::is_another_figure_between(short int  x1, short int  x2, short int  y1, short int  y2) {
+bool checkboard::is_another_figure_between(unsigned char  x1, unsigned char  x2, unsigned char  y1, unsigned char  y2) {
    // if (std::abs(y1 - y2) < 2 && std::abs(x1 - x2) < 2  ) {
   //      return false;
  //   }
     if (x1 == x2){
-       for (short int y = std::min(y1, y2) + 1; y < std::max(y1, y2); y++ ) {
+       for (unsigned char y = std::min(y1, y2) + 1; y < std::max(y1, y2); y++ ) {
            if (board[x1][y]->get_sign() != '.') {
                return true;
            }
        } 
     } else if (y1 == y2){
-       for (short int x = std::min(x1, x2) + 1; x < std::max(x1, x2); x++ ) {
+       for (unsigned char x = std::min(x1, x2) + 1; x < std::max(x1, x2); x++ ) {
            if (board[x][y1]->get_sign() != '.') {
                return true;
            }
        }
     } else if (std::abs(x1 - x2) == std::abs(y1 - y2)) {
-        short int sign_x = (x2 > x1) ? 1 : -1;
-        short int sign_y = (y2 > y1) ? 1 : -1;
-        for (short int i =  1; i < std::abs(x1 - x2); i++ ) {
+        signed char sign_x = (x2 > x1) ? 1 : -1;
+        signed char sign_y = (y2 > y1) ? 1 : -1;
+        for (unsigned char i =  1; i < std::abs(x1 - x2); i++ ) {
             if (board[x1 + sign_x * i][y1 + sign_y * i]->get_sign() != '.') { 
                 return true;
             } 
@@ -240,7 +242,7 @@ bool checkboard::is_another_figure_between(short int  x1, short int  x2, short i
 }
 
 
-bool checkboard::move_from_raw_coordinates(short int x1, short int x2, short int y1, short int y2, figure::color who_moves, char promote_to ) {
+bool checkboard::move_from_raw_coordinates(unsigned char x1, unsigned char x2, unsigned char y1, unsigned char y2, figure::color who_moves, char promote_to ) {
     
     move m = is_move_possible(x1,x2,y1,y2,who_moves, promote_to);
     if(m.is_valid) {
@@ -255,10 +257,10 @@ bool checkboard::move_from_string(std::string s, figure::color who_moves) {
 
     
   
-   short int x1 = int(s[0]) - 97;
-   short int y1 = int(s[1]) - 49;
-   short int x2 = int(s[2]) - 97;
-   short int y2 = int(s[3]) - 49;
+   unsigned char x1 = int(s[0]) - 97;
+   unsigned char y1 = int(s[1]) - 49;
+   unsigned char x2 = int(s[2]) - 97;
+   unsigned char y2 = int(s[3]) - 49;
      
      
     if (s.length() == 5) {
@@ -327,7 +329,7 @@ bool checkboard::move_without_assert(move m, bool add_to_history){
  
     int_pair pos1 = std::make_pair(m.x1, m.y1); 
     int_pair pos2 = std::make_pair(m.x2, m.y2); 
-    int_pair pos_null = std::make_pair(-1,-1);
+    int_pair pos_null = std::make_pair(8,8);
 
     if (board[m.x2][m.y2]->get_sign_raw() != '.') {
         figure::color opposite_player = board[m.x2][m.y2]->get_color();
@@ -341,25 +343,21 @@ bool checkboard::move_without_assert(move m, bool add_to_history){
         
         
     } else {
-        figure * tmp = board[m.x2][m.y2];
-        board[m.x2][m.y2] = board[m.x1][m.y1];
-              
-        board[m.x1][m.y1] = tmp;       
+
+        std::swap (board[m.x2][m.y2], board[m.x1][m.y1]);
+                 
     }
     
     update_figures_position(pos1, m.c, std::make_pair(m.x2, m.y2)) ;
     
     //roszada
     if (m.is_castling) {
-       short int rook_x1 = m.x2 > m.x1 ? 7 : 0; 
-       short int rook_x2  = m.x2 > m.x1 ? 5 : 3;
+       unsigned char rook_x1 = m.x2 > m.x1 ? 7 : 0; 
+       unsigned char rook_x2  = m.x2 > m.x1 ? 5 : 3;
        //y1 powinno być y2
        
-       figure * tmp = board[rook_x2][m.y2];
-       board[rook_x2][m.y2] = board[rook_x1][m.y1];
-              
-       board[rook_x1][m.y1] = tmp; 
-       
+        std::swap (board[rook_x2][m.y2], board[rook_x1][m.y1]);
+
        int_pair rook_pos = std::make_pair(rook_x1, m.y1); 
        update_figures_position(rook_pos, m.c, std::make_pair(rook_x2, m.y2)) ;
        is_castling_possible[m.c] = false;
@@ -404,7 +402,7 @@ bool checkboard::revert_move_without_assert(move m, bool remove_last_move_from_h
     
     int_pair pos1 = std::make_pair(m.x1, m.y1); 
     int_pair pos2 = std::make_pair(m.x2, m.y2); 
-    int_pair pos_null = std::make_pair(-1,-1);
+    int_pair pos_null = std::make_pair(8,8);
     
     figure::color opposite_player = m.c == figure::black ? figure::white : figure::black;
     char colored_sign;
@@ -424,24 +422,18 @@ bool checkboard::revert_move_without_assert(move m, bool remove_last_move_from_h
         update_figures_position(pos_null, opposite_player, pos2) ;
 
     } else {     
-        figure * tmp = board[m.x2][m.y2];
-        board[m.x2][m.y2] = board[m.x1][m.y1];
-              
-        board[m.x1][m.y1] = tmp;  
+        std::swap(board[m.x2][m.y2], board[m.x1][m.y1]);
+
   
     }
      update_figures_position(pos2, m.c, pos1) ;
     //roszada
     if (m.is_castling) {
-       short int rook_x1 = m.x2 > m.x1 ? 7 : 0; 
-       short int rook_x2  = m.x2 > m.x1 ? 5 : 3;
-  
-       //swap
-       figure * tmp = board[rook_x2][m.y2];
-       board[rook_x2][m.y2] = board[rook_x1][m.y1];
-              
-       board[rook_x1][m.y1] = tmp; 
-       
+       unsigned char rook_x1 = m.x2 > m.x1 ? 7 : 0; 
+       unsigned char rook_x2  = m.x2 > m.x1 ? 5 : 3;
+
+       std::swap(board[rook_x2][m.y2], board[rook_x1][m.y1]);
+
            
        int_pair rook_pos = std::make_pair(rook_x2, m.y2); 
        update_figures_position(rook_pos, m.c, std::make_pair(rook_x1, m.y1)) ;
@@ -476,9 +468,9 @@ bool checkboard::check_whether_castling_is_possible(bool right_side, figure::col
         return false;
     }
     std::vector < move >::iterator it = history.begin();
-    short int rook_x = right_side ? 7 : 0;
-    short int rook_y = c == figure::black ? 7 : 0;
-    short int king_x = 4;
+    unsigned char rook_x = right_side ? 7 : 0;
+    unsigned char rook_y = c == figure::black ? 7 : 0;
+    unsigned char king_x = 4;
     
     //czy jest tam wieża
     if (board[rook_x][rook_y]->get_sign_raw() != 'W' || board[rook_x][rook_y]->get_color() != c) {
@@ -495,8 +487,8 @@ bool checkboard::check_whether_castling_is_possible(bool right_side, figure::col
 
     
     //czy nie ma nic pomiędzy   
-    for (short int i = 1; i <  std::abs(king_x - rook_x); i++) { 
-        short int x = king_x  - i + 2 * i * right_side;
+    for (unsigned char i = 1; i <  std::abs(king_x - rook_x); i++) { 
+        unsigned char x = king_x  - i + 2 * i * right_side;
         if ( board[x][rook_y]->get_sign_raw() != '.') {
             return false;            
         }
@@ -506,8 +498,8 @@ bool checkboard::check_whether_castling_is_possible(bool right_side, figure::col
     // szachowane
     figure::color opposite_color = c == figure::black ? figure::white : figure::black;
 
-    for (short int i = 0; i <  3; i++) { 
-        short int x = king_x  - i + 2 * i * right_side;
+    for (unsigned char i = 0; i <  3; i++) { 
+        unsigned char x = king_x  - i + 2 * i * right_side;
         if ( is_under_attack_by_any(x, rook_y, opposite_color)) {
             return false;            
         }
@@ -517,7 +509,7 @@ bool checkboard::check_whether_castling_is_possible(bool right_side, figure::col
 }
 
 
-move checkboard::is_move_possible(short int& x1, short int& x2,short int& y1,short int& y2, figure::color& who_moves, char promote_to) {
+move checkboard::is_move_possible(unsigned char& x1, unsigned char& x2,unsigned char& y1,unsigned char& y2, figure::color& who_moves, char promote_to) {
     
     
     char sign_from = board[x1][y1]->get_sign_raw();
@@ -670,10 +662,10 @@ bool checkboard::is_any_move_possible(figure::color& who_moves){
      
     for (it_pair = figures_position[who_moves].begin(); 
             it_pair != figures_position[who_moves].end(); ++it_pair) {       
-        short int x1 = it_pair->first;
-        short int y1 = it_pair->second;
-        for (short int x2 = 0; x2 < 8; x2++) {
-            for (short int y2 = 0; y2 < 8; y2++) {
+        unsigned char x1 = it_pair->first;
+        unsigned char y1 = it_pair->second;
+        for (unsigned char x2 = 0; x2 < 8; x2++) {
+            for (unsigned char y2 = 0; y2 < 8; y2++) {
                 if (is_move_possible(x1,x2,y1,y2,who_moves, 'H').is_valid ) {
                         return true;
                 }             
@@ -691,14 +683,14 @@ bool checkboard::is_in_check(figure::color& who_moves){
 
 }
 
-bool checkboard::is_under_attack_by_any(short int & x, short int & y, figure::color& who_is_trying_to_attack){
+bool checkboard::is_under_attack_by_any(unsigned char & x, unsigned char & y, figure::color& who_is_trying_to_attack){
     
     std::vector < int_pair >::iterator it_pair;
      
     for (it_pair = figures_position[who_is_trying_to_attack].begin(); 
             it_pair != figures_position[who_is_trying_to_attack].end(); ++it_pair) {       
-        short int x1 = it_pair->first;
-        short int y1 = it_pair->second;
+        unsigned char x1 = it_pair->first;
+        unsigned char y1 = it_pair->second;
         if (is_under_attack_by_given(x1, x, y1, y, who_is_trying_to_attack)) {
             return true;
         }            
@@ -707,7 +699,7 @@ bool checkboard::is_under_attack_by_any(short int & x, short int & y, figure::co
     return false;
 }
 
-bool checkboard::is_under_attack_by_given(short int& x1, short int& x2,short int& y1,short int& y2, figure::color& who_moves) {
+bool checkboard::is_under_attack_by_given(unsigned char& x1, unsigned char& x2,unsigned char& y1,unsigned char& y2, figure::color& who_moves) {
     
     if (who_moves != board[x1][y1]->get_color() ) {
         return false;
@@ -741,7 +733,7 @@ bool checkboard::will_be_in_check(move m, bool opposite_player) {
 void checkboard::update_figures_position(int_pair & old_pos, figure::color c, int_pair new_pos) {
     
     std::vector < int_pair >::iterator it;
-    if (old_pos.first == -1){
+    if (old_pos.first == 8){
         figures_position[c].push_back(new_pos);
         return;
     } 
@@ -749,7 +741,7 @@ void checkboard::update_figures_position(int_pair & old_pos, figure::color c, in
             it != figures_position[c].end(); ++it) {       
 
         if (*it == old_pos) {
-            if (new_pos.first == -1) {
+            if (new_pos.first == 8) {
                figures_position[c].erase(it); 
             } else {
                *it = new_pos;
@@ -767,10 +759,10 @@ std::string checkboard::serialize() {
     
  
     
-    for (short int y=7; y>-1; y--) {
+    for (unsigned char y=0; y<8; y++) {
   
         
-        for (short int x=0; x<8; x++) {
+        for (unsigned char x=0; x<8; x++) {
                   s += board[x][y]->get_sign();
          } 
     } 
