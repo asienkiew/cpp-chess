@@ -658,18 +658,19 @@ bool checkboard::is_checkmate(figure::color who_moves){
 
 bool checkboard::is_any_move_possible(figure::color& who_moves){
     
-    std::vector < int_pair >::iterator it_pair;
+    std::vector < int_pair >::iterator it_pair, it_pair2;
      
     for (it_pair = figures_position[who_moves].begin(); 
             it_pair != figures_position[who_moves].end(); ++it_pair) {       
         unsigned char x1 = it_pair->first;
         unsigned char y1 = it_pair->second;
-        for (unsigned char x2 = 0; x2 < 8; x2++) {
-            for (unsigned char y2 = 0; y2 < 8; y2++) {
-                if (is_move_possible(x1,x2,y1,y2,who_moves, 'H').is_valid ) {
+        std::vector < int_pair > posible_move_for_figure = board[x1][y1]->get_possible_moves_for_figure(*it_pair);
+        for (it_pair2 = posible_move_for_figure.begin(); it_pair2 != posible_move_for_figure.end(); ++it_pair2) {       
+              
+            if (is_move_possible(x1, it_pair2->first, y1, it_pair2->second,  who_moves, 'H').is_valid ) {
                         return true;
                 }             
-            }
+         
         }          
     } 
     return false;
