@@ -42,7 +42,8 @@ protected:
     std::vector< std::vector< std::vector<int_pair> > >possible_capture_moves;
         
     std::vector< std::vector< std::vector<int_pair> > >all_moves;
-
+    bool can_capture_bool_table[8][8][8][8];
+    bool can_move_bool_table[8][8][8][8];
     bool jump_over;
     bool is_capturable;
     color c;

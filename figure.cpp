@@ -60,8 +60,13 @@ void figure::set_possible_moves_table() {
                     std::vector<int_pair> empty_vector;
                     bool can_move_raw_var = this->can_move_raw(x1, x2, y1, y2);
                     bool can_capture_raw_var = this->can_capture_raw(x1, x2, y1, y2);
+                    
+                    can_capture_bool_table[x1][y1][x2][y2] = can_capture_raw_var;
+                    can_move_bool_table[x1][y1][x2][y2] = can_move_raw_var;
+                            
                     if (can_move_raw_var) {
                         possible_non_capture_moves[x1][y1].push_back(to);
+                         
                     }
                     if (can_capture_raw_var) {
 
@@ -81,34 +86,13 @@ bool figure::can_capture_raw(unsigned char x1, unsigned char x2, unsigned char y
 }
 
 bool figure::can_capture(unsigned char x1, unsigned char x2, unsigned char y1, unsigned char y2) {
-    int_pair from = std::make_pair(x1, y1);
-    int_pair to = std::make_pair(x2, y2);
-    
-    
-    std::vector<int_pair> vec = possible_capture_moves[x1][y1];
-    
-    for (it_pair = vec.begin(); it_pair != vec.end(); ++it_pair) {  
-        if (*it_pair == to) {
-            return true;
-        }
-        
-    }
-    return false;
+
+    return can_capture_bool_table[x1][y1][x2][y2];
 }
 
 bool figure::can_move(unsigned char x1, unsigned char x2, unsigned char y1, unsigned char y2) {
-    int_pair from = std::make_pair(x1, y1);
-    int_pair to = std::make_pair(x2, y2);
-    
-    std::vector<int_pair> vec = possible_non_capture_moves[x1][y1];
-    
-    for (it_pair = vec.begin(); it_pair != vec.end(); ++it_pair) {  
-        if (*it_pair == to) {
-            return true;
-        }
-        
-    }
-    return false;
+
+    return can_move_bool_table[x1][y1][x2][y2];
 }
 std::vector <figure::int_pair> & figure::get_possible_moves_for_figure(int_pair & p) {
     return this->all_moves[p.first][p.second];
