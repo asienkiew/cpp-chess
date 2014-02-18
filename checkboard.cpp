@@ -630,7 +630,7 @@ void checkboard::update_status() {
                if (*rit == before_last_move) {
                    before_last_moved_count++;
                }
-               if (before_last_moved_count == 3 && last_moved_count == 3) {
+               if (before_last_moved_count >= 3 && last_moved_count >= 3) {
                    status = draw; 
                    return;
                }

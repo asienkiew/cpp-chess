@@ -28,12 +28,13 @@
           <runcommandpicklistitem>"${OUTPUT_PATH}" promotion.chess</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}"</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" black_win.chess</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" sample.chess</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" small.chess</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" bug.chess</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" draw_bug.chess</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" sample.chess</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" draw_bug2.chess</runcommandpicklistitem>
         </runcommandpicklist>
-        <runcommand>"${OUTPUT_PATH}" draw_bug.chess</runcommand>
+        <runcommand>"${OUTPUT_PATH}" draw_bug2.chess</runcommand>
         <rundir></rundir>
         <buildfirst>true</buildfirst>
         <terminal-type>0</terminal-type>

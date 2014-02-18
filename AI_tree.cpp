@@ -64,8 +64,8 @@ move AI_tree::select_move() {
     short int max = - SHORT_MAX_INT + 1;
     for (boost::tie(out_i, out_end) = out_edges(root, g); out_i != out_end; ++out_i) {
        
-        // std::cout<<"\n"<<g[boost::target(*out_i, g)].first;
-        // std::cout<<"\n"<<g[*out_i];
+         std::cout<<"\n"<<g[boost::target(*out_i, g)].first;
+         std::cout<<" "<<g[*out_i];
         if ( g[boost::target(*out_i, g)].first > max) {
             max = g[boost::target(*out_i, g)].first;
             //std::cout<<g[e];
@@ -78,11 +78,12 @@ move AI_tree::select_move() {
   std::ofstream myfile;
   myfile.open ("g.txt");
       boost::write_graphviz(myfile, g);
-      g.clear();
-     std::cout<<"\n";*/
+     
+     */
+    std::cout<<"\n";
        std::cout<<chosen_move<<"\n";
-       
-    std::cout.precision(5);
+      g.clear();  
+    std::cout.precision(4);
      std::cout<<std::fixed<<double(t2 - t1) / CLOCKS_PER_SEC;
     return chosen_move;
     
@@ -100,14 +101,16 @@ void AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & c
 
     std::vector < move >::iterator it;
     edge_t e; bool b;
+    
+
+    
     int current_depth = parent_depth + 1;
     if (parent_depth == 0) {
         counter = 0;
     } 
 
     if (possible_moves.empty()) {
-        short int score  = get_score(check);
-        g[parent_v].first = g[parent_v].second = score;
+        g[parent_v].first = g[parent_v].second = get_score(check);
         return;
     }
     for(it = possible_moves.begin(); it != possible_moves.end(); ++it) {
@@ -118,8 +121,8 @@ void AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & c
         //std::cout<<it->which_was_captured;
         if((current_depth  >= max_depth && it->which_was_captured == '.') || 
                 ( current_depth  >= max_depth + 1 )) {
-            short int score  = get_score(check);
-            g[current_v].first = g[current_v].second = score;
+       
+            g[current_v].first = g[current_v].second = get_score(check);;
 
             continue;
         }
@@ -132,18 +135,30 @@ void AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & c
     min = SHORT_MAX_INT - 1;
     max = -min;
     
+    short int vertex_value;
+    
     out_edge_it out_i, out_end;
     
-    for (boost::tie(out_i, out_end) = out_edges(parent_v, g); out_i != out_end; ++out_i) {
-        short int vertex_value = g[boost::target(*out_i, g)].first;
-            
-        if ( vertex_value < min ) {
-            min = vertex_value;
+    if (current_depth % 2 == 1) {
+        for (boost::tie(out_i, out_end) = out_edges(parent_v, g); out_i != out_end; ++out_i) {
+            vertex_value = g[boost::target(*out_i, g)].first;
+            if ( vertex_value > max ) {
+                max = vertex_value;
+            }
         }
-        if ( vertex_value > max ) {
-            max = vertex_value;
-        }
-    }
+     } else {
+        for (boost::tie(out_i, out_end) = out_edges(parent_v, g); out_i != out_end; ++out_i) {
+            vertex_value = g[boost::target(*out_i, g)].first;
+            if ( vertex_value < min ) {
+                min = vertex_value;
+            }
+        }   
+     }
+    
+    //remove edge and vertex
+        
+    //boost::remove_edge(out_i, g);
+    // boost::remove_vertex(boost::target(*out_i, g), g);
     if (current_depth % 2 == 1) { //ja
         if (max > (SHORT_MAX_INT - 1 - 60) ) {
             max -=10;
@@ -161,6 +176,9 @@ void AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & c
             min +=10;
         }  
         g[parent_v].first = min; 
+        
+
+        
        //  std::cout<<"min:"<<min<<"*\n";
     }        
    
@@ -234,7 +252,7 @@ int AI_tree::evaluation_function(checkboard & check, figure::color player) {
                 break;                 
         }
     }
-   
+     //std::cout<<score<<" ";
     return score;
     
    
@@ -262,16 +280,27 @@ int AI_tree::get_score(checkboard & check) {
        default:
            break; 
     }
-    float multiplier;
+    float multiplier =1.0;
+   
     move * last_move = & check.history.back();
-    if (check.history[check.history.size() - 1 - 2].is_opposite_to(*last_move) ) {
-        multiplier = 0.9;
-        
+    if (check.history.size() > 2) {
+        if (check.history[check.history.size() - 1 - 2].is_opposite_to(*last_move) ) {
+            multiplier = 0.9;
+            if (check.history.size() > 4) {  
+                if (check.history[check.history.size() - 1 - 4] == (*last_move) ) {
+                    multiplier *= 0.8;
+                    if (check.history.size() > 6) {
+                        if (check.history[check.history.size() - 1 - 6].is_opposite_to(*last_move) ) {
+                            multiplier *= 0.8;
+                        }
+                    }                   
+                } 
+            }
+        }        
     }
-    if (check.history[check.history.size() - 1 - 4] == (*last_move) ) {
-        multiplier *= 0.8;
-        //std::cout<<check.history[check.history.size() - 1 - 4]<<*last_move;
-    }
+
+   
+
     return (short int)(multiplier*(evaluation_function(check, who) - evaluation_function(check,opposite)));
 }
 

@@ -21,6 +21,7 @@ std::vector <move> AI::get_possible_moves(checkboard& check) {
     possible_moves.clear();
     if (check.status != checkboard::in_progress) {
         possible_moves.clear();
+        return possible_moves;
     }
     std::vector < int_pair >::iterator it_pair, it_pair2;
 
@@ -32,9 +33,9 @@ std::vector <move> AI::get_possible_moves(checkboard& check) {
         for (it_pair2 = posible_move_for_figure.begin(); it_pair2 != posible_move_for_figure.end(); ++it_pair2) {       
             
             move m =  check.is_move_possible(x1, it_pair2->first, y1, it_pair2->second, check.who_is_next, 'H');
-            //std::cout<<m<<"\n";
-            if (m.is_valid ) {
-                possible_moves.push_back(m);
+            
+            if (m.is_valid ) {//std::cout<<m<<"\n";
+               possible_moves.push_back(m);
               //  std::cout<<m<<"\n";
             }                     
         }           
