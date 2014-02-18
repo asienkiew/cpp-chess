@@ -38,10 +38,10 @@ protected:
 
     std::vector < int_pair >::iterator it_pair;
     void set_possible_moves_table();
-    std::map <int_pair, std::vector<int_pair> > possible_non_capture_moves;
-    std::map <int_pair, std::vector<int_pair> > possible_capture_moves;
+    std::vector< std::vector< std::vector<int_pair> > >possible_non_capture_moves;
+    std::vector< std::vector< std::vector<int_pair> > >possible_capture_moves;
         
-    std::map <int_pair, std::vector<int_pair> > all_moves;
+    std::vector< std::vector< std::vector<int_pair> > >all_moves;
 
     bool jump_over;
     bool is_capturable;

@@ -7,6 +7,7 @@
 
 #include "figure.h"
 #include <ctype.h>
+#include <iostream>
 figure::figure() {
   
 }
@@ -40,8 +41,14 @@ char figure::get_sign_raw() {
 };
 
 void figure::set_possible_moves_table() {
-    
-    for (unsigned char x1 = 0; x1 < 8; x1++) {  
+    //std::cout<<"dups";
+       possible_non_capture_moves.resize(8);
+        possible_capture_moves.resize(8);
+        all_moves.resize(8);
+    for (unsigned char x1 = 0; x1 < 8; x1++) { 
+       possible_non_capture_moves[x1].resize(8);
+        possible_capture_moves[x1].resize(8);
+        all_moves[x1].resize(8);
         for (unsigned char y1 = 0; y1 < 8; y1++) {
             int_pair from = std::make_pair(x1, y1);
             for (unsigned char x2 = 0; x2 < 8; x2++) {
@@ -54,22 +61,15 @@ void figure::set_possible_moves_table() {
                     bool can_move_raw_var = this->can_move_raw(x1, x2, y1, y2);
                     bool can_capture_raw_var = this->can_capture_raw(x1, x2, y1, y2);
                     if (can_move_raw_var) {
-                        if (possible_non_capture_moves.find(from) == possible_non_capture_moves.end()) {
-                            possible_non_capture_moves[from] = empty_vector; 
-                        }
-                        possible_non_capture_moves[from].push_back(to);
+                        possible_non_capture_moves[x1][y1].push_back(to);
                     }
                     if (can_capture_raw_var) {
-                        if (possible_capture_moves.find(from) == possible_capture_moves.end()) {
-                            possible_capture_moves[from] = empty_vector; 
-                        }
-                        possible_capture_moves[from].push_back(to);
+
+                        possible_capture_moves[x1][y1].push_back(to);
                     }  
                     if (can_capture_raw_var || can_move_raw_var ) {
-                        if (all_moves.find(from) == all_moves.end()) {
-                            all_moves[from] = empty_vector; 
-                        }
-                        all_moves[from].push_back(to);    
+
+                        all_moves[x1][y1].push_back(to);    
                     }
                 }            
             }           
@@ -85,7 +85,7 @@ bool figure::can_capture(unsigned char x1, unsigned char x2, unsigned char y1, u
     int_pair to = std::make_pair(x2, y2);
     
     
-    std::vector<int_pair> vec = possible_capture_moves.at(from);
+    std::vector<int_pair> vec = possible_capture_moves[x1][y1];
     
     for (it_pair = vec.begin(); it_pair != vec.end(); ++it_pair) {  
         if (*it_pair == to) {
@@ -100,7 +100,7 @@ bool figure::can_move(unsigned char x1, unsigned char x2, unsigned char y1, unsi
     int_pair from = std::make_pair(x1, y1);
     int_pair to = std::make_pair(x2, y2);
     
-    std::vector<int_pair> vec = possible_non_capture_moves.at(from);
+    std::vector<int_pair> vec = possible_non_capture_moves[x1][y1];
     
     for (it_pair = vec.begin(); it_pair != vec.end(); ++it_pair) {  
         if (*it_pair == to) {
@@ -111,7 +111,7 @@ bool figure::can_move(unsigned char x1, unsigned char x2, unsigned char y1, unsi
     return false;
 }
 std::vector <figure::int_pair> & figure::get_possible_moves_for_figure(int_pair & p) {
-    return all_moves.find(p)->second;
+    return this->all_moves[p.first][p.second];
 }
  bool figure::can_jump_over(){
      return jump_over;

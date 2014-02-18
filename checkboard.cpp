@@ -147,7 +147,7 @@ void checkboard::load_from_file(std::string& file) {
         
         for (unsigned char x=0; x<8; x++) {
             coordinates = std::make_pair (x,y);
-            std::cout<<linia[x];
+            //std::cout<<linia[x];
             board[x][y] = sign_to_object(linia[x]);
             figure:: color  c = board[x][y]->get_color();
             

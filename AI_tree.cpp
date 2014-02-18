@@ -44,9 +44,12 @@ move AI_tree::select_move() {
     vertex_t root = boost::add_vertex(empty_pair,g); //root
     int zero = 0;
       std::clock_t t1 = std::clock();
+    //    for (int i = 0 ; i<1000000; i++) {
+    //      std::vector<move> possible_moves =  get_possible_moves(check_cp);
+     //   }
+     
      fill_possible_moves(g, root, check_cp,zero, MAX_DEPTH);  
      std::clock_t t2 = std::clock();
-     
     //boost::write_graphviz(std::cout, g);
      
     // typedef boost::graph_traits<graph>::vertex_iterator vertex_iter;
@@ -61,8 +64,8 @@ move AI_tree::select_move() {
     short int max = - SHORT_MAX_INT + 1;
     for (boost::tie(out_i, out_end) = out_edges(root, g); out_i != out_end; ++out_i) {
        
-        std::cout<<"\n"<<g[boost::target(*out_i, g)].first;
-         std::cout<<"\n"<<g[*out_i];
+        // std::cout<<"\n"<<g[boost::target(*out_i, g)].first;
+        // std::cout<<"\n"<<g[*out_i];
         if ( g[boost::target(*out_i, g)].first > max) {
             max = g[boost::target(*out_i, g)].first;
             //std::cout<<g[e];
