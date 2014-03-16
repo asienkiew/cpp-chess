@@ -44,6 +44,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/empty.o \
 	${OBJECTDIR}/figure.o \
 	${OBJECTDIR}/gameplay.o \
+	${OBJECTDIR}/human.o \
 	${OBJECTDIR}/king.o \
 	${OBJECTDIR}/knight.o \
 	${OBJECTDIR}/move.o \
@@ -128,6 +129,11 @@ ${OBJECTDIR}/gameplay.o: gameplay.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/gameplay.o gameplay.cpp
+
+${OBJECTDIR}/human.o: human.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/human.o human.cpp
 
 ${OBJECTDIR}/king.o: king.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -317,6 +323,19 @@ ${OBJECTDIR}/gameplay_nomain.o: ${OBJECTDIR}/gameplay.o gameplay.cpp
 	    $(COMPILE.cc) -O2 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/gameplay_nomain.o gameplay.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/gameplay.o ${OBJECTDIR}/gameplay_nomain.o;\
+	fi
+
+${OBJECTDIR}/human_nomain.o: ${OBJECTDIR}/human.o human.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/human.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/human_nomain.o human.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/human.o ${OBJECTDIR}/human_nomain.o;\
 	fi
 
 ${OBJECTDIR}/king_nomain.o: ${OBJECTDIR}/king.o king.cpp 

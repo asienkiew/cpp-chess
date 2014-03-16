@@ -12,13 +12,17 @@
 
 class move {
 public:
+        char which_was_captured;
     unsigned char x1, x2, y1, y2;
-    bool is_castling, is_enpassant, is_promotion, is_valid;
+
     char promote_to;
+    bool is_castling, is_enpassant, is_promotion, is_valid;
+    
     figure::color c;
     char which_moved;
-    char which_was_captured;
+
     move();
+    move(std::string, figure::color);
     move(unsigned char,unsigned char,unsigned char,unsigned char, figure::color, char, char, char);
     bool is_opposite_to(move &);
     

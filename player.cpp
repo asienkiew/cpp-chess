@@ -7,12 +7,16 @@
 
 #include "player.h"
 
-player::player() {
+player::player(figure::color c, checkboard * check):who(c), check(check) {
+     opposite = c == figure::black ? figure::white : figure::black;
 }
+
 
 player::player(const player& orig) {
 }
 
 player::~player() {
+    delete check;
+
 }
 

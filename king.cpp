@@ -26,7 +26,7 @@ bool king::can_move_raw(unsigned char x1, unsigned char x2, unsigned char y1, un
                 ((y1 == 0 && y2 == 0 && c == figure::white) || 
                  (y1 == 7 && y2 == 7 && c == figure::black)  ) ) { //roszada
             return true;  
-        }
+        } 
 
     return false;
 }

@@ -272,7 +272,7 @@ bool checkboard::move_from_string(std::string s, figure::color who_moves) {
 } 
 
 
-figure * checkboard::sign_to_object(char sign/*, figure::color c*/) {
+figure * checkboard::sign_to_object(char sign) {
     figure * f;
    switch(sign) {
        case '.':
@@ -318,7 +318,7 @@ figure * checkboard::sign_to_object(char sign/*, figure::color c*/) {
             f = & EMPTY;         
             break;
         default:
-            std::cerr<<sign;
+            std::cerr<<"^"<<sign<<"^";
             throw "BadSign:";
             break;           
     } 
@@ -381,6 +381,8 @@ bool checkboard::move_without_assert(move m, bool add_to_history){
             colored_promote_to = m.promote_to;    
          } else if (m.c == figure::black){
             colored_promote_to = tolower(m.promote_to);  
+         } else {
+             throw "m.c should be white or black";
          }
          
 
@@ -534,7 +536,7 @@ move checkboard::is_move_possible(unsigned char& x1, unsigned char& x2,unsigned 
           bool right_side  = x2 - x1 > 0;
           if (check_whether_castling_is_possible(right_side, who_moves)) {
               m.is_castling = true;
-           
+    
           } else {
             m.is_castling = false;
             m.is_valid = false;

@@ -9,6 +9,7 @@
 #include "AI.h"
 #include "checkboard.h"
 #include "figure.h"
+
 #include <vector>
 #include <cstdlib>
 #include <ctime>

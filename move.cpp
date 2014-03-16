@@ -11,6 +11,19 @@
 
 move::move() {
 }
+move::move(std::string s, figure::color who_moves) {
+    
+    
+  
+   x1 = int(s[0]) - 97;
+   y1 = int(s[1]) - 49;
+   x2 = int(s[2]) - 97;
+   y2 = int(s[3]) - 49;
+   c =  who_moves; 
+   promote_to = toupper(s[4]);
+
+}
+
 move::move(unsigned char x1, unsigned char x2,unsigned char y1,unsigned char y2, 
         figure::color c, char which_moved, char which_was_captured , char promote_to): 
             x1(x1), x2(x2), y1(y1), y2(y2), c(c), which_moved(which_moved), 

@@ -15,7 +15,7 @@
 
 class gameplay {
 public:
-    gameplay();
+    gameplay(char *, char *, std::string file = "sample.chess");
     gameplay(const gameplay& orig);
     virtual ~gameplay();
     void start();

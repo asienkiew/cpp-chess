@@ -7,10 +7,11 @@
 
 #include "AI.h"
 #include "figure.h"
+#include "player.h"
 
 
-AI::AI(figure::color & c, checkboard * check):who(c), check(check) {
-    opposite = c == figure::black ? figure::white : figure::black;
+AI::AI(figure::color  c, checkboard * check):player(c, check) {
+
 }
 
 

@@ -11,13 +11,14 @@
 #include "figure.h"
 #include <vector>
 #include "move.h"
+#include "player.h"
 
-class AI {
+class AI : public player {
 public:
-    figure::color who, opposite;
-    checkboard * check;
+    
+    
     virtual move select_move() = 0;
-    AI(figure::color &, checkboard *);
+    AI(figure::color, checkboard *);
 
     std::vector <move> get_possible_moves(checkboard & check);
 private:

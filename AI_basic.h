@@ -10,7 +10,7 @@
 #include "AI.h"
 #include "checkboard.h"
 
-class AI_basic : public AI {
+class AI_basic : private AI {
 public:    
     move select_move();
     AI_basic(figure::color c, checkboard *);

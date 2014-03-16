@@ -7,13 +7,21 @@
 
 #ifndef PLAYER_H
 #define	PLAYER_H
+#include "figure.h"
+#include "checkboard.h"
 
 class player {
-public:
+public: 
+    virtual ~player();
+    virtual move select_move() = 0;
+    
+protected:
+    player(figure::color , checkboard * check);
+    figure::color who, opposite;
+    checkboard * check;
     player();
     player(const player& orig);
-    virtual ~player();
-    virtual void make_move() = 0;
+
 private:
 
 };
