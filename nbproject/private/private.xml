@@ -7,14 +7,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/sienio/NetBeansProjects/Chess/AI.h</file>
             <file>file:/home/sienio/NetBeansProjects/Chess/chess.cpp</file>
             <file>file:/home/sienio/NetBeansProjects/Chess/figure.h</file>
             <file>file:/home/sienio/NetBeansProjects/Chess/move.h</file>
-            <file>file:/home/sienio/NetBeansProjects/Chess/AI_tree.h</file>
             <file>file:/home/sienio/NetBeansProjects/Chess/gameplay.cpp</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/AI_tree.h</file>
             <file>file:/home/sienio/NetBeansProjects/Chess/king.h</file>
-            <file>file:/home/sienio/NetBeansProjects/Chess/AI_basic.cpp</file>
             <file>file:/home/sienio/NetBeansProjects/Chess/move.cpp</file>
             <file>file:/home/sienio/NetBeansProjects/Chess/player.cpp</file>
             <file>file:/home/sienio/NetBeansProjects/Chess/AI_tree.cpp</file>
@@ -23,9 +21,8 @@
             <file>file:/home/sienio/NetBeansProjects/Chess/player.h</file>
             <file>file:/home/sienio/NetBeansProjects/Chess/human.cpp</file>
             <file>file:/home/sienio/NetBeansProjects/Chess/AI_basic.h</file>
-            <file>file:/home/sienio/NetBeansProjects/Chess/checkboard.cpp</file>
             <file>file:/home/sienio/NetBeansProjects/Chess/AI.cpp</file>
-            <file>file:/home/sienio/NetBeansProjects/Chess/gameplay.h</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/checkboard.cpp</file>
             <file>file:/home/sienio/NetBeansProjects/Chess/figure.cpp</file>
         </group>
     </open-files>

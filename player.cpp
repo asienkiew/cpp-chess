@@ -16,7 +16,7 @@ player::player(const player& orig) {
 }
 
 player::~player() {
-    delete check;
+    
 
 }
 
