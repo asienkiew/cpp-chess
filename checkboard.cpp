@@ -608,6 +608,10 @@ void checkboard::update_status() {
         } else {
             status = draw;
         }
+    // dwa króle
+    } else if (figures_position[figure::black].size() == 1 && figures_position[figure::white].size() ==  1) {
+        status = draw;
+        return;
     } else {
         if (history.size() >= 12) {
             move last_move = history.back();
@@ -640,6 +644,7 @@ void checkboard::update_status() {
 
         }
     }
+
 
 
     

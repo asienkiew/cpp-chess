@@ -20,8 +20,11 @@ move::move(std::string s, figure::color who_moves) {
    x2 = int(s[2]) - 97;
    y2 = int(s[3]) - 49;
    c =  who_moves; 
-   promote_to = toupper(s[4]);
-
+   if (s.size() == 4) {
+       promote_to = 'H'; 
+   } else {
+       promote_to = toupper(s[4]);    
+   }
 }
 
 move::move(unsigned char x1, unsigned char x2,unsigned char y1,unsigned char y2, 

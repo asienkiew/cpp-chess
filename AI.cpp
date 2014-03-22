@@ -26,7 +26,7 @@ std::vector <move> AI::get_possible_moves(checkboard& check) {
     }
     std::vector < int_pair >::iterator it_pair, it_pair2;
 
-
+    
     for (it_pair = check.figures_position[check.who_is_next].begin(); it_pair != check.figures_position[check.who_is_next].end(); ++it_pair) {       
         unsigned char x1 = it_pair->first;
         unsigned char y1 = it_pair->second;

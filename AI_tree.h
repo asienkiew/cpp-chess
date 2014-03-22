@@ -21,6 +21,8 @@ public:
     int get_score(checkboard & check);
     
 private:
+    bool is_endgame;
+    
     const static int H_VALUE = 900;
     const static int W_VALUE = 500;
     const static int G_VALUE = 330;
@@ -49,12 +51,18 @@ private:
     typedef boost::graph_traits<graph>::edge_descriptor edge_t;
     typedef boost::graph_traits<graph>::out_edge_iterator out_edge_it;
     
-    static const unsigned char MAX_DEPTH = 4;
+    unsigned char MAX_DEPTH;
+    unsigned char max_depth;
     static const short int SHORT_MAX_INT;
+    
      
     int evaluation_function(checkboard & check, figure::color);
+    int simple_evaluation_function(checkboard & check, figure::color);
+    int get_king_distance_modifier(checkboard & check);
+    int get_king_mobility(checkboard & check, figure::color);
     
-    void fill_possible_moves(graph & g, vertex_t & v,  checkboard & check, int  parent_depth, int);
+    void manage_is_end_game_flag();
+    void fill_possible_moves(graph & g, vertex_t & v,  checkboard & check, int  parent_depth);
 
     
 };
