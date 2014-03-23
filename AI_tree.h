@@ -16,7 +16,7 @@
 class AI_tree : public AI{
 public:
      move select_move();
-    AI_tree(figure::color c, checkboard *);
+    AI_tree(figure::color c, checkboard *, unsigned char, unsigned char );
  
     int get_score(checkboard & check);
     
@@ -52,7 +52,7 @@ private:
     typedef boost::graph_traits<graph>::out_edge_iterator out_edge_it;
     
     unsigned char MAX_DEPTH;
-    unsigned char max_depth;
+    unsigned char max_depth, add_depth;
     static const short int SHORT_MAX_INT;
     
      

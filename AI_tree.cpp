@@ -17,6 +17,9 @@
 #include <iostream>
 #include <fstream>
 #include <cmath> 
+#include <thread>
+#include <chrono>
+#include <mutex>
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/graphviz.hpp>
@@ -25,10 +28,11 @@ template <typename T> int sgn(T val) {
     return (T(0) < val) - (val < T(0));
 }
 
-AI_tree::AI_tree(figure::color c, checkboard * check):AI(c, check) {
+AI_tree::AI_tree(figure::color c, checkboard * check, unsigned char var1, unsigned char var2):AI(c, check) {
     is_endgame = false;
-    MAX_DEPTH = 4;
+    MAX_DEPTH = var1;
     max_depth = MAX_DEPTH;
+    add_depth = var2;
    
 }
 
@@ -49,22 +53,11 @@ move AI_tree::select_move() {
 
     vertex_t root = boost::add_vertex(empty_pair,g); //root
     int zero = 0;
-      std::clock_t t1 = std::clock();
-    //    for (int i = 0 ; i<1000000; i++) {
-    //      std::vector<move> possible_moves =  get_possible_moves(check_cp);
-     //   }
-     
-     fill_possible_moves(g, root, check_cp,zero);  
+    std::clock_t t1 = std::clock();
+
+     fill_possible_moves(g, root, check_cp,0);  
      std::clock_t t2 = std::clock();
-    //boost::write_graphviz(std::cout, g);
-     
-    // typedef boost::graph_traits<graph>::vertex_iterator vertex_iter;
-  //  std::pair<vertex_iter, vertex_iter> vp;
-    //for (vp = boost::vertices(g); vp.first != vp.second; ++vp.first) {
-       
-    
-    // std::cout <<g[*vp.first].first <<  " ";
-   // }
+
     out_edge_it out_i, out_end;
     edge_t e, f;
     short int max = - SHORT_MAX_INT + 1;
@@ -130,7 +123,7 @@ void AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & c
         counter++;
         //std::cout<<it->which_was_captured;
         if((current_depth  >= max_depth && it->which_was_captured == '.') || 
-                ( current_depth  >= max_depth + 1 )) {
+                ( current_depth  >= max_depth + add_depth )) {
        
             g[current_v].first = g[current_v].second = get_score(check);;
 
