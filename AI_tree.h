@@ -43,9 +43,9 @@ private:
     const static int K_TABLE_WHITE_ENDGAME[8][8];
     const static int K_TABLE_BLACK_ENDGAME[8][8];
      
-    typedef std::pair<int, int> int_pair;
+    typedef std::pair<int, int> long_int_pair;
     typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS, 
-            int_pair, move> graph;
+            long_int_pair, move> graph;
 
     typedef boost::graph_traits<graph>::vertex_descriptor vertex_t;
     typedef boost::graph_traits<graph>::edge_descriptor edge_t;
@@ -55,14 +55,14 @@ private:
     unsigned char max_depth, add_depth;
     static const short int SHORT_MAX_INT;
     
-     
+    long_int_pair empty_pair; 
     int evaluation_function(checkboard & check, figure::color);
     int simple_evaluation_function(checkboard & check, figure::color);
     int get_king_distance_modifier(checkboard & check);
     int get_king_mobility(checkboard & check, figure::color);
     
     void manage_is_end_game_flag();
-    void fill_possible_moves(graph & g, vertex_t & v,  checkboard & check, int  parent_depth);
+    int fill_possible_moves(graph & g, vertex_t & v,  checkboard & check, int  parent_depth);
 
     
 };

@@ -18,8 +18,10 @@
 #include <fstream>
 #include <cmath> 
 #include <thread>
-#include <chrono>
+
 #include <mutex>
+#include <future>
+//
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/graphviz.hpp>
@@ -33,57 +35,76 @@ AI_tree::AI_tree(figure::color c, checkboard * check, unsigned char var1, unsign
     MAX_DEPTH = var1;
     max_depth = MAX_DEPTH;
     add_depth = var2;
+
+    empty_pair = std::make_pair(SHORT_MAX_INT,SHORT_MAX_INT); // ma to odpowiadać za NULL 
    
 }
 
 move AI_tree::select_move() {
     manage_is_end_game_flag();
     move chosen_move;
-    int_pair empty_pair = std::make_pair(SHORT_MAX_INT,SHORT_MAX_INT); // ma to odpowiadać za NULL
-    
+
+
     //std::cout<<SHORT_MAX_INT;
     
      srand (time(NULL));
  
     checkboard check_cp(check);
-     //check->print();
-     
-    // check_cp.print();
-     graph g;
 
-    vertex_t root = boost::add_vertex(empty_pair,g); //root
-    int zero = 0;
+
     std::clock_t t1 = std::clock();
 
-     fill_possible_moves(g, root, check_cp,0);  
-     std::clock_t t2 = std::clock();
+    std::vector<move> possible_moves_0_level = get_possible_moves(check_cp);
+    std::map<move, std::future<int> > possible_moves_to_score_map;
+    std::vector < move >::iterator it;
+    std::vector < graph > g_vector;
+    std::vector < checkboard > check_vector;
+    std::vector < vertex_t > vertex_vector;
+    std::vector<std::future<int> >  futures;
+    
+   
 
-    out_edge_it out_i, out_end;
-    edge_t e, f;
-    short int max = - SHORT_MAX_INT + 1;
-    for (boost::tie(out_i, out_end) = out_edges(root, g); out_i != out_end; ++out_i) {
+    std::cout<<possible_moves_0_level.size();
+    int counter = 0;
+    for (it = possible_moves_0_level.begin(); it != possible_moves_0_level.end(); ++it) {
+       graph g;
+       vertex_t root = boost::add_vertex(empty_pair,g); //root
+      vertex_vector.push_back(root); 
+       g_vector.push_back(g);
        
-         std::cout<<"\n"<<g[boost::target(*out_i, g)].first;
-         std::cout<<" "<<g[*out_i];
-        if ( g[boost::target(*out_i, g)].first > max) {
-            max = g[boost::target(*out_i, g)].first;
+       checkboard check_cp(check);
+       
+       check_vector.push_back(check_cp);
+       check_vector[counter].move_without_assert(*it, true);
+       
+       futures.push_back(std::async(std::launch::async,&AI_tree::fill_possible_moves, this, std::ref(g_vector[counter]), std::ref(vertex_vector[counter]), std::ref(check_vector[counter]), 1));
+
+     futures[counter].wait();
+       counter++;
+       std::cout<<counter<<std::endl;
+    }
+     short int max = - SHORT_MAX_INT + 1;
+       std::cout<<"*"<<futures.size()<<"*"<<std::endl;
+    for (int i = 0; i < futures.size(); ++i) {
+        //futures[i].wait();
+         
+        int ae = futures[i].get();
+         std::cout<<"\n"<<possible_moves_0_level[i];
+         std::cout<<" "<<ae;
+        if ( ae > max) {
+            max = ae;
             //std::cout<<g[e];
-            chosen_move = g[*out_i];  
+            chosen_move = possible_moves_0_level[i];  
         }
         
     }
-/*
-
-  std::ofstream myfile;
-  myfile.open ("g.txt");
-      boost::write_graphviz(myfile, g);
-     
-     */
+    
+     std::clock_t t2 = std::clock();
     std::cout<<"\n";
-       std::cout<<chosen_move<<"\n";
-      g.clear();  
+    std::cout<<chosen_move<<"\n";
+    
     std::cout.precision(4);
-     std::cout<<std::fixed<<double(t2 - t1) / CLOCKS_PER_SEC;
+    std::cout<<std::fixed<<double(t2 - t1) / CLOCKS_PER_SEC;
     return chosen_move;
     
     //
@@ -91,11 +112,13 @@ move AI_tree::select_move() {
     
 }
 
-void AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & check, int  parent_depth){
-    static int counter = 0;
+int AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & checkb, int  parent_depth){
+
+    std::cout<<parent_depth;
+    int counter = 0;
     
-    const static int_pair empty_pair = std::make_pair(SHORT_MAX_INT,SHORT_MAX_INT); // ma to odpowiadać za NULL
-    std::vector<move> possible_moves = get_possible_moves(check);
+    
+    std::vector<move> possible_moves = get_possible_moves(checkb);
      
 
     std::vector < move >::iterator it;
@@ -109,8 +132,8 @@ void AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & c
     } 
 
     if (possible_moves.empty()) {
-        g[parent_v].first = g[parent_v].second = get_score(check);
-        return;
+        g[parent_v].first = g[parent_v].second = get_score(checkb);
+        return 0;
     }
    
 
@@ -125,14 +148,14 @@ void AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & c
         if((current_depth  >= max_depth && it->which_was_captured == '.') || 
                 ( current_depth  >= max_depth + add_depth )) {
        
-            g[current_v].first = g[current_v].second = get_score(check);;
+            g[current_v].first = g[current_v].second = get_score(checkb);;
 
             continue;
         }
-        check.move_without_assert(*it, true);
+        checkb.move_without_assert(*it, true);
         
-        fill_possible_moves(g, current_v, check,current_depth);
-        check.revert_move_without_assert(*it, true);
+        fill_possible_moves(g, current_v, checkb,current_depth);
+        checkb.revert_move_without_assert(*it, true);
     }
     
     short int max, min;
@@ -187,16 +210,26 @@ void AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & c
        //  std::cout<<"min:"<<min<<"*\n";
     }        
    
-
+    if (parent_depth == 1 ) {
+        short int min = SHORT_MAX_INT;
+        for (boost::tie(out_i, out_end) = out_edges(parent_v, g); out_i != out_end; ++out_i) {
+            if ( g[boost::target(*out_i, g)].first < min) {
+                min = g[boost::target(*out_i, g)].first;
+            }        
+        }
+        g.clear(); 
+        return min;
+    }
     if (parent_depth == 0 ) {
         std::cout<<counter<<"*";
     }
+    return 0;
 }
 
 int AI_tree::evaluation_function(checkboard & check, figure::color player) {
     
     int score = 0;
-    typedef std::pair<unsigned char, unsigned char> int_pair; 
+
      std::vector < int_pair >::iterator it_pair;
 
      
@@ -270,7 +303,6 @@ int AI_tree::evaluation_function(checkboard & check, figure::color player) {
 int AI_tree::simple_evaluation_function(checkboard & check, figure::color player) {
     
     int score = 0;
-    typedef std::pair<unsigned char, unsigned char> int_pair; 
      std::vector < int_pair >::iterator it_pair;
 
      
@@ -367,13 +399,13 @@ void AI_tree::manage_is_end_game_flag(){
       int s_w = simple_evaluation_function(*check, figure::white);
       int s_b = simple_evaluation_function(*check, figure::black);
       if (s_w < 600 && s_b < 600)  {
-          is_endgame = true;
+        //  is_endgame = true;
           max_depth = MAX_DEPTH + 2;
       } else if (s_w < 1200 && s_b < 1200) {
-          is_endgame = true;  
+        //  is_endgame = true;  
            max_depth = MAX_DEPTH + 1;
       } else {
-          is_endgame = false;  
+        //  is_endgame = false;  
            max_depth = MAX_DEPTH;
       }
 

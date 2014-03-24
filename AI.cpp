@@ -14,8 +14,7 @@ AI::AI(figure::color  c, checkboard * check):player(c, check) {
 
 }
 
-
-std::vector <move> AI::get_possible_moves(checkboard& check) {
+ std::vector <move> AI::get_possible_moves(checkboard& check) {
      
      
     std::vector< move > possible_moves;

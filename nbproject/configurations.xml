@@ -99,7 +99,6 @@
       </toolsSet>
       <compileType>
         <ccTool>
-          <developmentMode>6</developmentMode>
           <architecture>2</architecture>
           <commandlineTool>g++</commandlineTool>
           <incDir>
