@@ -18,7 +18,7 @@
 #include <fstream>
 #include <cmath> 
 #include <thread>
-
+#include <chrono>
 #include <mutex>
 #include <future>
 //
@@ -36,14 +36,14 @@ AI_tree::AI_tree(figure::color c, checkboard * check, unsigned char var1, unsign
     max_depth = MAX_DEPTH;
     add_depth = var2;
 
-    empty_pair = std::make_pair(SHORT_MAX_INT,SHORT_MAX_INT); // ma to odpowiadać za NULL 
+  
    
 }
 
 move AI_tree::select_move() {
     manage_is_end_game_flag();
     move chosen_move;
-
+    long_int_pair empty_pair = std::make_pair(SHORT_MAX_INT,SHORT_MAX_INT); // ma to odpowiadać za NULL 
 
     //std::cout<<SHORT_MAX_INT;
     
@@ -83,10 +83,11 @@ move AI_tree::select_move() {
        counter++;
        std::cout<<counter<<std::endl;
     }
-     short int max = - SHORT_MAX_INT + 1;
+     short int max = - SHORT_MAX_INT;
        std::cout<<"*"<<futures.size()<<"*"<<std::endl;
+      // std::this_thread::sleep_for(std::chrono::milliseconds(5000));
     for (int i = 0; i < futures.size(); ++i) {
-        //futures[i].wait();
+        futures[futures.size() - 1].wait();
          
         int ae = futures[i].get();
          std::cout<<"\n"<<possible_moves_0_level[i];
@@ -113,8 +114,8 @@ move AI_tree::select_move() {
 }
 
 int AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & checkb, int  parent_depth){
-
-    std::cout<<parent_depth;
+    long_int_pair empty_pair = std::make_pair(SHORT_MAX_INT,SHORT_MAX_INT); // ma to odpowiadać za NULL 
+   // std::cout<<parent_depth;
     int counter = 0;
     
     

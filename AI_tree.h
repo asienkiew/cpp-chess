@@ -55,7 +55,7 @@ private:
     unsigned char max_depth, add_depth;
     static const short int SHORT_MAX_INT;
     
-    long_int_pair empty_pair; 
+ 
     int evaluation_function(checkboard & check, figure::color);
     int simple_evaluation_function(checkboard & check, figure::color);
     int get_king_distance_modifier(checkboard & check);
