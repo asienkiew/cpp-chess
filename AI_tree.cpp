@@ -52,7 +52,7 @@ move AI_tree::select_move() {
      graph g;
 
     vertex_t root = boost::add_vertex(empty_pair,g); //root
-    int zero = 0;
+
     std::clock_t t1 = std::clock();
 
      fill_possible_moves(g, root, check_cp,0);  
