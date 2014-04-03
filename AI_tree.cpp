@@ -56,7 +56,7 @@ move AI_tree::select_move() {
     std::clock_t t1 = std::clock();
 
      fill_possible_moves(g, root, check_cp,0);  
-     std::clock_t t2 = std::clock();
+     
 
     out_edge_it out_i, out_end;
     edge_t e, f;
@@ -79,9 +79,11 @@ move AI_tree::select_move() {
       boost::write_graphviz(myfile, g);
      
      */
+      g.clear();  
+    std::clock_t t2 = std::clock();
     std::cout<<"\n";
        std::cout<<chosen_move<<"\n";
-      g.clear();  
+    
     std::cout.precision(4);
      std::cout<<std::fixed<<double(t2 - t1) / CLOCKS_PER_SEC;
     return chosen_move;
