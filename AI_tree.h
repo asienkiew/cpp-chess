@@ -63,7 +63,7 @@ private:
     
     void manage_is_end_game_flag();
     int fill_possible_moves(graph & g, vertex_t & v,  checkboard & check, int  parent_depth);
-
+    int get_value_for_move(move, checkboard);
     
 };
 
