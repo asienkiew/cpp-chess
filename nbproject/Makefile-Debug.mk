@@ -79,11 +79,10 @@ LDLIBSOPTIONS=-L../../boost_1_55_0/stage/lib -Wl,-rpath,../../boost_1_55_0/stage
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/chess
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk chess
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/chess: ${OBJECTFILES}
-	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	g++ -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/chess ${OBJECTFILES} ${LDLIBSOPTIONS}
+chess: ${OBJECTFILES}
+	g++ -o chess ${OBJECTFILES} ${LDLIBSOPTIONS}
 
 ${OBJECTDIR}/AI.o: AI.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -442,7 +441,7 @@ ${OBJECTDIR}/rook_nomain.o: ${OBJECTDIR}/rook.o rook.cpp
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/chess
+	${RM} chess
 
 # Subprojects
 .clean-subprojects:

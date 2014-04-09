@@ -175,6 +175,7 @@
           <warningLevel>2</warningLevel>
         </ccTool>
         <linkerTool>
+          <output>chess</output>
           <linkerAddLib>
             <pElem>../../boost_1_55_0/stage/lib</pElem>
           </linkerAddLib>
