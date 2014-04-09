@@ -55,13 +55,13 @@ public:
     bool move_without_assert(move, bool);
     
 private:
-    static empty EMPTY;
-    static  king KING_B, KING_W;
-    static queen QUEEN_B, QUEEN_W;
-    static rook  ROOK_B, ROOK_W;
-    static pawn  PAWN_B, PAWN_W;
-    static knight KNIGHT_B, KNIGHT_W;
-    static bishop BISHOP_B, BISHOP_W;
+     empty EMPTY;
+      king KING_B, KING_W;
+     queen QUEEN_B, QUEEN_W;
+     rook  ROOK_B, ROOK_W;
+     pawn  PAWN_B, PAWN_W;
+     knight KNIGHT_B, KNIGHT_W;
+     bishop BISHOP_B, BISHOP_W;
 
     typedef std::pair<unsigned char, unsigned char> int_pair; 
     bool is_castling_possible[2];

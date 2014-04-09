@@ -11,7 +11,7 @@
 #include <vector>
 #include <map>
 #include <cstdlib>
-#include <ctime>
+
 #include <utility>                   // for std::pair
 #include <algorithm>
 #include <iostream>
@@ -20,6 +20,8 @@
 #include <thread>
 #include <chrono>
 #include <mutex>
+#include <future>
+//
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/graphviz.hpp>
@@ -33,71 +35,77 @@ AI_tree::AI_tree(figure::color c, checkboard * check, unsigned char var1, unsign
     MAX_DEPTH = var1;
     max_depth = MAX_DEPTH;
     add_depth = var2;
+
+  
    
 }
 
 move AI_tree::select_move() {
     manage_is_end_game_flag();
     move chosen_move;
-    int_pair empty_pair = std::make_pair(SHORT_MAX_INT,SHORT_MAX_INT); // ma to odpowiadać za NULL
-    
-    //std::cout<<SHORT_MAX_INT;
-    
-     srand (time(NULL));
- 
+
     checkboard check_cp(check);
-     //check->print();
-     
-    // check_cp.print();
-     graph g;
 
-    vertex_t root = boost::add_vertex(empty_pair,g); //root
+    std::vector<move> possible_moves_0_level = get_possible_moves(check_cp);
+    std::map<move, std::future<int> > possible_moves_to_score_map;
+    std::vector < move >::iterator it;
+    std::vector<std::future<int> >  futures;
+    
+   unsigned number_of_threads = sysconf( _SC_NPROCESSORS_ONLN );
 
-    std::clock_t t1 = std::clock();
+   if (number_of_threads == 0) {
+       number_of_threads = 1;
+   }
 
-     fill_possible_moves(g, root, check_cp,0);  
-     
+    int counter = 0;
+    for (it = possible_moves_0_level.begin(); it != possible_moves_0_level.end(); ++it) {
+       if (counter >= number_of_threads && counter % number_of_threads == 0){
+          futures[counter - number_of_threads].wait();
+       }
+       futures.push_back(std::async(std::launch::async,&AI_tree::get_value_for_move, this, *it, check_cp));
+       counter++;
 
-    out_edge_it out_i, out_end;
-    edge_t e, f;
-    short int max = - SHORT_MAX_INT + 1;
-    for (boost::tie(out_i, out_end) = out_edges(root, g); out_i != out_end; ++out_i) {
-       
-         std::cout<<"\n"<<g[boost::target(*out_i, g)].first;
-         std::cout<<" "<<g[*out_i];
-        if ( g[boost::target(*out_i, g)].first > max) {
-            max = g[boost::target(*out_i, g)].first;
-            //std::cout<<g[e];
-            chosen_move = g[*out_i];  
+    }
+    
+    short int max = - SHORT_MAX_INT;
+    std::cout<<"*"<<futures.size()<<"*\n";
+
+    for (int i = 0; i < futures.size(); ++i) {
+        futures[i].wait();
+
+        int val = futures[i].get();
+         std::cout<<"\n"<<possible_moves_0_level[i];
+         std::cout<<" "<<val;
+        if ( val > max) {
+            max = val;
+            chosen_move = possible_moves_0_level[i];  
         }
         
     }
-/*
-
-  std::ofstream myfile;
-  myfile.open ("g.txt");
-      boost::write_graphviz(myfile, g);
-     
-     */
-      g.clear();  
-    std::clock_t t2 = std::clock();
+    
+    
     std::cout<<"\n";
-       std::cout<<chosen_move<<"\n";
-    
-    std::cout.precision(4);
-     std::cout<<std::fixed<<double(t2 - t1) / CLOCKS_PER_SEC;
+    std::cout<<chosen_move<<"\n";
+
     return chosen_move;
-    
-    //
-         
-    
 }
 
-void AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & check, int  parent_depth){
-    static int counter = 0;
+int AI_tree::get_value_for_move(move m, checkboard ch) {
+    long_int_pair empty_pair = std::make_pair(SHORT_MAX_INT,SHORT_MAX_INT); // ma to odpowiadać za NULL 
+    graph g;
+    vertex_t root = boost::add_vertex(empty_pair,g); //root
+    ch.move_without_assert(m, true);
+    int a = fill_possible_moves(g, root, ch, 1);
+    g.clear();
+    return a;
+}
+int AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & checkb, int  parent_depth){
+    long_int_pair empty_pair = std::make_pair(SHORT_MAX_INT,SHORT_MAX_INT); // ma to odpowiadać za NULL 
+   // std::cout<<parent_depth;
+    int counter = 0;
     
-    const static int_pair empty_pair = std::make_pair(SHORT_MAX_INT,SHORT_MAX_INT); // ma to odpowiadać za NULL
-    std::vector<move> possible_moves = get_possible_moves(check);
+    
+    std::vector<move> possible_moves = get_possible_moves(checkb);
      
 
     std::vector < move >::iterator it;
@@ -111,8 +119,8 @@ void AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & c
     } 
 
     if (possible_moves.empty()) {
-        g[parent_v].first = g[parent_v].second = get_score(check);
-        return;
+        g[parent_v].first = g[parent_v].second = get_score(checkb);
+        return g[parent_v].first;
     }
    
 
@@ -127,14 +135,14 @@ void AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & c
         if((current_depth  >= max_depth && it->which_was_captured == '.') || 
                 ( current_depth  >= max_depth + add_depth )) {
        
-            g[current_v].first = g[current_v].second = get_score(check);;
+            g[current_v].first = g[current_v].second = get_score(checkb);;
 
             continue;
         }
-        check.move_without_assert(*it, true);
+        checkb.move_without_assert(*it, true);
         
-        fill_possible_moves(g, current_v, check,current_depth);
-        check.revert_move_without_assert(*it, true);
+        fill_possible_moves(g, current_v, checkb,current_depth);
+        checkb.revert_move_without_assert(*it, true);
     }
     
     short int max, min;
@@ -189,16 +197,16 @@ void AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & c
        //  std::cout<<"min:"<<min<<"*\n";
     }        
    
-
-    if (parent_depth == 0 ) {
-        std::cout<<counter<<"*";
+    if (parent_depth == 1 ) {
+        return g[parent_v].first;
     }
+
 }
 
 int AI_tree::evaluation_function(checkboard & check, figure::color player) {
     
     int score = 0;
-    typedef std::pair<unsigned char, unsigned char> int_pair; 
+
      std::vector < int_pair >::iterator it_pair;
 
      
@@ -272,7 +280,6 @@ int AI_tree::evaluation_function(checkboard & check, figure::color player) {
 int AI_tree::simple_evaluation_function(checkboard & check, figure::color player) {
     
     int score = 0;
-    typedef std::pair<unsigned char, unsigned char> int_pair; 
      std::vector < int_pair >::iterator it_pair;
 
      

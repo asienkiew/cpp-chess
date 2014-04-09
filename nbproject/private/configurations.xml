@@ -24,7 +24,6 @@
       </nativedebugger>
       <runprofile version="9">
         <runcommandpicklist>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" enpassant.chess</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" promotion.chess</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}"</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" black_win.chess</runcommandpicklistitem>
@@ -34,8 +33,9 @@
           <runcommandpicklistitem>"${OUTPUT_PATH}" sample.chess</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" draw_bug2.chess</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" H H</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" C C</runcommandpicklistitem>
         </runcommandpicklist>
-        <runcommand>"${OUTPUT_PATH}" H H</runcommand>
+        <runcommand>"${OUTPUT_PATH}" C C</runcommand>
         <rundir></rundir>
         <buildfirst>true</buildfirst>
         <terminal-type>0</terminal-type>

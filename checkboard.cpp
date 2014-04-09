@@ -25,21 +25,22 @@
 
 
 
-empty checkboard::EMPTY = empty(figure::none);
-king checkboard::KING_B = king(figure::black);
-king checkboard::KING_W = king(figure::white);
-queen checkboard::QUEEN_B = queen(figure::black);
-queen checkboard::QUEEN_W = queen(figure::white);
-rook checkboard::ROOK_B =  rook(figure::black);
-rook checkboard::ROOK_W = rook(figure::white);
-pawn checkboard::PAWN_B = pawn(figure::black);
-pawn checkboard::PAWN_W = pawn(figure::white);
-knight checkboard::KNIGHT_B = knight(figure::black);
-knight checkboard::KNIGHT_W = knight(figure::white);
-bishop checkboard::BISHOP_B = bishop(figure::black);
-bishop checkboard::BISHOP_W = bishop(figure::white);    
-
 checkboard::checkboard() {
+    
+
+ EMPTY = empty(figure::none);
+ KING_B = king(figure::black);
+ KING_W = king(figure::white);
+ QUEEN_B = queen(figure::black);
+ QUEEN_W = queen(figure::white);
+ ROOK_B =  rook(figure::black);
+ ROOK_W = rook(figure::white);
+ PAWN_B = pawn(figure::black);
+ PAWN_W = pawn(figure::white);
+ KNIGHT_B = knight(figure::black);
+ KNIGHT_W = knight(figure::white);
+ BISHOP_B = bishop(figure::black);
+ BISHOP_W = bishop(figure::white);    
     srand (time(NULL));
     is_castling_possible[figure::black] = true;    
     is_castling_possible[figure::white] = true;
@@ -73,6 +74,21 @@ checkboard::~checkboard() {
   
 }
 checkboard::checkboard(const checkboard& orig){
+    
+
+ EMPTY = empty(figure::none);
+ KING_B = king(figure::black);
+ KING_W = king(figure::white);
+ QUEEN_B = queen(figure::black);
+ QUEEN_W = queen(figure::white);
+ ROOK_B =  rook(figure::black);
+ ROOK_W = rook(figure::white);
+ PAWN_B = pawn(figure::black);
+ PAWN_W = pawn(figure::white);
+ KNIGHT_B = knight(figure::black);
+ KNIGHT_W = knight(figure::white);
+ BISHOP_B = bishop(figure::black);
+ BISHOP_W = bishop(figure::white);    
       who_is_next = orig.who_is_next;
     status = orig.status;
     history = orig.history;
@@ -92,6 +108,21 @@ checkboard::checkboard(const checkboard& orig){
 
 }
 checkboard::checkboard(checkboard* orig) {
+    
+
+ EMPTY = empty(figure::none);
+ KING_B = king(figure::black);
+ KING_W = king(figure::white);
+ QUEEN_B = queen(figure::black);
+ QUEEN_W = queen(figure::white);
+ ROOK_B =  rook(figure::black);
+ ROOK_W = rook(figure::white);
+ PAWN_B = pawn(figure::black);
+ PAWN_W = pawn(figure::white);
+ KNIGHT_B = knight(figure::black);
+ KNIGHT_W = knight(figure::white);
+ BISHOP_B = bishop(figure::black);
+ BISHOP_W = bishop(figure::white);    
     who_is_next = orig->who_is_next;
     status = orig->status;
     history = orig->history;
@@ -114,6 +145,21 @@ checkboard::checkboard(checkboard* orig) {
       
 }
 checkboard& checkboard::operator= (const checkboard& orig ){
+    
+
+ EMPTY = empty(figure::none);
+ KING_B = king(figure::black);
+ KING_W = king(figure::white);
+ QUEEN_B = queen(figure::black);
+ QUEEN_W = queen(figure::white);
+ ROOK_B =  rook(figure::black);
+ ROOK_W = rook(figure::white);
+ PAWN_B = pawn(figure::black);
+ PAWN_W = pawn(figure::white);
+ KNIGHT_B = knight(figure::black);
+ KNIGHT_W = knight(figure::white);
+ BISHOP_B = bishop(figure::black);
+ BISHOP_W = bishop(figure::white);    
     who_is_next = orig.who_is_next;
     status = orig.status;
     history = orig.history;
