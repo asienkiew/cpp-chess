@@ -171,7 +171,7 @@
           <incDir>
             <pElem>../../boost_1_55_0</pElem>
           </incDir>
-          <commandLine>-L../../boost_1_55_0/stage/lib -std=c++0x</commandLine>
+          <commandLine>-std=c++0x</commandLine>
           <warningLevel>2</warningLevel>
         </ccTool>
         <linkerTool>

@@ -65,8 +65,8 @@ TESTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=-m64 -L../../boost_1_55_0/stage/lib -std=c++0x
-CXXFLAGS=-m64 -L../../boost_1_55_0/stage/lib -std=c++0x
+CCFLAGS=-m64 -std=c++0x
+CXXFLAGS=-m64 -std=c++0x
 
 # Fortran Compiler Flags
 FFLAGS=
