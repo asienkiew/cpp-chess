@@ -25,7 +25,7 @@ gameplay::gameplay(char * white_player_sign,  char * black_player_sign, std::str
     if (*black_player_sign == 'H') {
         players[figure::black] = new human(figure::black, check);
     } else if  (*black_player_sign == 'C') {
-        players[figure::black] = new AI_tree(figure::black, check, 4, 1);
+        players[figure::black] = new AI_tree(figure::black, check, 4, 2);
     } else {
         throw "Sign should be H or C";
     }
