@@ -16,6 +16,8 @@ human::~human() {
 }
 bool human::is_command_ok(std::string s) {
     bool is_ok = true;
+    //w funkcji jest implementacja ręczna regexpa ^[a-h][1-8][a-h]([1-8]|8[whgs])$
+    // żeby nie dołączać biblioteki boost::regex co powoduje więcej problemów przy kompilacji 
     if ( !(s.size() == 4 || s.size() == 5) ) {
         is_ok =false;
         return false;
