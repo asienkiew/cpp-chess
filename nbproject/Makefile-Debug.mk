@@ -65,8 +65,8 @@ TESTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=-m64 -std=c++0x
-CXXFLAGS=-m64 -std=c++0x
+CCFLAGS=-m64 -std=c++0x -pthread
+CXXFLAGS=-m64 -std=c++0x -pthread
 
 # Fortran Compiler Flags
 FFLAGS=
@@ -75,7 +75,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L../../boost_1_55_0/stage/lib -Wl,-rpath,../../boost_1_55_0/stage/lib -l boost_regex
+LDLIBSOPTIONS=-pthread
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}

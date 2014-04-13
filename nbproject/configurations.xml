@@ -171,20 +171,15 @@
           <incDir>
             <pElem>../../boost_1_55_0</pElem>
           </incDir>
-          <commandLine>-std=c++0x</commandLine>
+          <commandLine>-std=c++0x -pthread</commandLine>
+          <useLinkerLibraries>false</useLinkerLibraries>
           <warningLevel>2</warningLevel>
         </ccTool>
         <linkerTool>
           <output>chess</output>
-          <linkerAddLib>
-            <pElem>../../boost_1_55_0/stage/lib</pElem>
-          </linkerAddLib>
-          <linkerDynSerch>
-            <pElem>../../boost_1_55_0/stage/lib</pElem>
-          </linkerDynSerch>
           <commandlineTool>g++</commandlineTool>
           <linkerLibItems>
-            <linkerOptionItem>-l boost_regex</linkerOptionItem>
+            <linkerOptionItem>-pthread</linkerOptionItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
