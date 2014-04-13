@@ -38,7 +38,7 @@ public:
     void print() ; 
     checkboard();
     checkboard(const checkboard& );
-    checkboard( checkboard *);
+    checkboard(const  checkboard *);
     checkboard& operator= (const checkboard& );
     virtual ~checkboard();
     bool move_from_string(std::string , figure::color );

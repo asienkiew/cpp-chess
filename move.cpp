@@ -60,7 +60,43 @@ bool move::is_opposite_to(move& m ){
      os<<s<<":"<<m.which_moved<<"("<<(int)m.x1<<","<<(int)m.y1<<")->"<<m.which_was_captured<<"("<<(int)m.x2<<","<<(int)m.y2<<")"<<" "<<castling<<" "<<promotion<<" "<<enpassant;
      return os;
  }
+ std::string  move::extended() {
  
+     std::string s;
+     if (c == figure::black) {
+         s = "black";
+     } else {
+         s = "white";
+     }
+     s += ":";
+     s.push_back(char(x1 + 97));
+     s.push_back(char(y1 + 49)); 
+     s.push_back(char(x2 + 97));
+     s.push_back(char(y2 + 49));
+     s += "  ("; 
+     s += which_moved;  
+     s +=  "->"; 
+     s += which_was_captured; 
+     s +=  ") "; 
+     s += is_castling ? "castling" : "";
+     s += is_promotion ? "promotion" : "";
+     s += is_enpassant ? "enpassant" : "";
+     return s;
+     
+             
+              
+
+ }
+  std::string  move::raw() {
+      std::string s;
+      s.push_back(char(x1 + 97));
+      s.push_back(char(y1 + 49));
+      s.push_back(char(x2 + 97));
+      s.push_back(char(y2 + 49));
+      
+   
+     return s;
+ }
  bool operator ==(move& m1, move& m2){
      return (m1.c == m2.c &&
          m1.x1 == m2.x1 &&

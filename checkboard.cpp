@@ -65,12 +65,7 @@ checkboard::checkboard() {
 }
 
 checkboard::~checkboard() {
-       for (unsigned char y=0; y<8; y++) {
-      
-        for (unsigned char x=0; x<8; x++) {
-           // delete board[x][y];
-        }
-    }
+
   
 }
 checkboard::checkboard(const checkboard& orig){
@@ -107,7 +102,7 @@ checkboard::checkboard(const checkboard& orig){
 
 
 }
-checkboard::checkboard(checkboard* orig) {
+checkboard::checkboard(const checkboard* orig) {
     
 
  EMPTY = empty(figure::none);

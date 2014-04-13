@@ -25,6 +25,8 @@ public:
     move(std::string, figure::color);
     move(unsigned char,unsigned char,unsigned char,unsigned char, figure::color, char, char, char);
     bool is_opposite_to(move &);
+    std::string extended();
+    std::string raw();
     
     virtual ~move();
     friend std::ostream& operator<<(std::ostream&, move&);

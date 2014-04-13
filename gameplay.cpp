@@ -45,8 +45,8 @@ void gameplay::start() {
 
         move m = this->players[check->who_is_next]->select_move();
          clock_t t2 = clock();  
-        std::cout.precision(4);
-        std::cout<<std::fixed<<double(t2 - t1) / CLOCKS_PER_SEC;
+        //std::cout.precision(4);
+       // std::cout<<std::fixed<<double(t2 - t1) / CLOCKS_PER_SEC;
         check->move_without_assert(m, true);
         check->print();
     }

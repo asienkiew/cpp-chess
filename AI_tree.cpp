@@ -59,7 +59,7 @@ move AI_tree::select_move() {
 
     int counter = 0;
     for (it = possible_moves_0_level.begin(); it != possible_moves_0_level.end(); ++it) {
-       if (counter >= number_of_threads && counter % number_of_threads == 0){
+       if (counter >= number_of_threads && (counter % number_of_threads == 0 || counter % number_of_threads == 1 )){
           futures[counter - number_of_threads].wait();
        }
        futures.push_back(std::async(std::launch::async,&AI_tree::get_value_for_move, this, *it, check_cp));
@@ -68,14 +68,14 @@ move AI_tree::select_move() {
     }
     
     short int max = - SHORT_MAX_INT;
-    std::cout<<"*"<<futures.size()<<"*\n";
+    //std::cout<<"*"<<futures.size()<<"*\n";
 
     for (int i = 0; i < futures.size(); ++i) {
         futures[i].wait();
 
         int val = futures[i].get();
-         std::cout<<"\n"<<possible_moves_0_level[i];
-         std::cout<<" "<<val;
+        // std::cout<<"\n"<<possible_moves_0_level[i];
+        // std::cout<<" "<<val;
         if ( val > max) {
             max = val;
             chosen_move = possible_moves_0_level[i];  
@@ -84,8 +84,8 @@ move AI_tree::select_move() {
     }
     
     
-    std::cout<<"\n";
-    std::cout<<chosen_move<<"\n";
+    std::cout<<"Wybrany ruch to:\n";
+    std::cout<<chosen_move.raw()<<"\n";
 
     return chosen_move;
 }
