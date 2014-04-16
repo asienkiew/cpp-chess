@@ -19,7 +19,7 @@
 #include <cmath> 
 #include <thread>
 #include <chrono>
-#include <mutex>
+
 #include <future>
 //
 #include <boost/graph/graph_traits.hpp>
@@ -45,40 +45,46 @@ move AI_tree::select_move() {
     move chosen_move;
 
     checkboard check_cp(check);
+    
+    possible_moves_0_level_to_score_map.clear();
+    if (!possible_moves_0_level_stack.empty()){
+        throw "Error";
+    }
+    
 
     std::vector<move> possible_moves_0_level = get_possible_moves(check_cp);
-    std::map<move, std::future<int> > possible_moves_to_score_map;
+
     std::vector < move >::iterator it;
-    std::vector<std::future<int> >  futures;
+    std::vector<std::thread >  threads;
+    
+    possible_moves_0_level_stack = std::stack<move,std::vector<move> >  (possible_moves_0_level);
     
    unsigned number_of_threads = sysconf( _SC_NPROCESSORS_ONLN );
 
    if (number_of_threads == 0) {
        number_of_threads = 1;
    }
+   for (unsigned i = 0 ; i < number_of_threads ; i++) {
+       
+       threads.push_back(std::thread(&AI_tree::run_thread, this, check_cp, std::ref(possible_moves_0_level_to_score_map) , std::ref(possible_moves_0_level_stack)  )); 
+   }
+   for (unsigned i = 0 ; i < number_of_threads ; i++) {
+       threads[i].join();
+   }
+   
 
-    int counter = 0;
-    for (it = possible_moves_0_level.begin(); it != possible_moves_0_level.end(); ++it) {
-       if (counter >= number_of_threads && (counter % number_of_threads == 0 || counter % number_of_threads == 1 )){
-          futures[counter - number_of_threads].wait();
-       }
-       futures.push_back(std::async(std::launch::async,&AI_tree::get_value_for_move, this, *it, check_cp));
-       counter++;
-
-    }
     
     short int max = - SHORT_MAX_INT;
     //std::cout<<"*"<<futures.size()<<"*\n";
 
-    for (int i = 0; i < futures.size(); ++i) {
-        futures[i].wait();
+    for (unsigned i = 0; i < possible_moves_0_level_to_score_map.size(); ++i) {
 
-        int val = futures[i].get();
-        // std::cout<<"\n"<<possible_moves_0_level[i];
-        // std::cout<<" "<<val;
+
+        int val = possible_moves_0_level_to_score_map[i].second; 
+
         if ( val > max) {
             max = val;
-            chosen_move = possible_moves_0_level[i];  
+            chosen_move = possible_moves_0_level_to_score_map[i].first; 
         }
         
     }
@@ -88,6 +94,28 @@ move AI_tree::select_move() {
     std::cout<<chosen_move.raw()<<"\n";
 
     return chosen_move;
+}
+void AI_tree::run_thread(checkboard ch, std::vector<move_int_pair> & scores_map,  std::stack<move,std::vector<move> > & moves_stack) {
+    while (true) {
+        if (moves_stack.empty()) {
+            std::cout<<"empty";
+            return;
+        } else {
+            possible_moves_0_level_stack_mutex.lock();
+            move current_move = possible_moves_0_level_stack.top();
+            possible_moves_0_level_stack.pop();
+            possible_moves_0_level_stack_mutex.unlock();
+           
+            int current_value = get_value_for_move(current_move, ch);
+            
+            
+            possible_moves_0_level_to_score_map_mutex.lock();
+            possible_moves_0_level_to_score_map.push_back(std::make_pair(current_move, current_value));
+            possible_moves_0_level_to_score_map_mutex.unlock();
+            
+        }
+        
+    }
 }
 
 int AI_tree::get_value_for_move(move m, checkboard ch) {

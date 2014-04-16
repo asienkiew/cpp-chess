@@ -9,6 +9,10 @@
 #define	AI_TREE_H
 #include "AI.h"
 #include "checkboard.h"
+#include <mutex>
+#include <stack>
+#include <map>
+
 #include <utility>    
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
@@ -55,6 +59,13 @@ private:
     unsigned char max_depth, add_depth;
     static const short int SHORT_MAX_INT;
     
+    typedef std::pair<move, int> move_int_pair;
+    
+    std::vector<move_int_pair> possible_moves_0_level_to_score_map;
+    std::mutex possible_moves_0_level_to_score_map_mutex;
+
+    std::stack<move,std::vector<move> >   possible_moves_0_level_stack;
+    std::mutex possible_moves_0_level_stack_mutex;
  
     int evaluation_function(checkboard & check, figure::color);
     int simple_evaluation_function(checkboard & check, figure::color);
@@ -64,7 +75,7 @@ private:
     void manage_is_end_game_flag();
     int fill_possible_moves(graph & g, vertex_t & v,  checkboard & check, int  parent_depth);
     int get_value_for_move(move, checkboard);
-    
+    void run_thread(checkboard, std::vector<move_int_pair> &,  std::stack<move,std::vector<move> >  &);
 };
 
 
