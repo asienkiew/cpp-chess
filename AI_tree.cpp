@@ -77,14 +77,20 @@ move AI_tree::select_move() {
     short int max = - SHORT_MAX_INT;
     //std::cout<<"*"<<futures.size()<<"*\n";
 
-    for (unsigned i = 0; i < possible_moves_0_level_to_score_map.size(); ++i) {
-
-
-        int val = possible_moves_0_level_to_score_map[i].second; 
+    for (unsigned i = 0; i < possible_moves_0_level.size(); ++i) {
+        int val;
+        for (unsigned j = 0; j < possible_moves_0_level_to_score_map.size(); ++j) {
+            
+            if (possible_moves_0_level_to_score_map[j].first == possible_moves_0_level[i]) {
+                val = possible_moves_0_level_to_score_map[i].second;
+                break;
+            }
+        }
+         
 
         if ( val > max) {
             max = val;
-            chosen_move = possible_moves_0_level_to_score_map[i].first; 
+            chosen_move = possible_moves_0_level[i]; 
         }
         
     }
@@ -98,7 +104,7 @@ move AI_tree::select_move() {
 void AI_tree::run_thread(checkboard ch, std::vector<move_int_pair> & scores_map,  std::stack<move,std::vector<move> > & moves_stack) {
     while (true) {
         if (moves_stack.empty()) {
-            std::cout<<"empty";
+            //std::cout<<"empty";
             return;
         } else {
             possible_moves_0_level_stack_mutex.lock();
