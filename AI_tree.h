@@ -58,11 +58,11 @@ private:
     unsigned char MAX_DEPTH;
     unsigned char max_depth, add_depth;
     static const short int SHORT_MAX_INT;
+    int func_call_counter;
     
     typedef std::pair<move, int> move_int_pair;
     
     std::vector<move_int_pair> possible_moves_0_level_to_score_map;
-    std::mutex possible_moves_0_level_to_score_map_mutex;
 
     std::stack<move,std::vector<move> >   possible_moves_0_level_stack;
     std::mutex possible_moves_0_level_stack_mutex;
@@ -74,8 +74,8 @@ private:
     
     void manage_is_end_game_flag();
     int fill_possible_moves(graph & g, vertex_t & v,  checkboard & check, int  parent_depth);
-    int get_value_for_move(move, checkboard);
-    void run_thread(checkboard, std::vector<move_int_pair> &,  std::stack<move,std::vector<move> >  &);
+    int get_value_for_move(move);
+    void run_thread(std::vector<move_int_pair> &,  std::stack<move,std::vector<move> >  &);
 };
 
 

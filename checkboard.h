@@ -38,7 +38,7 @@ public:
     void print() ; 
     checkboard();
     checkboard(const checkboard& );
-    checkboard(const  checkboard *);
+
     checkboard& operator= (const checkboard& );
     virtual ~checkboard();
     bool move_from_string(std::string , figure::color );
@@ -62,6 +62,8 @@ private:
      pawn  PAWN_B, PAWN_W;
      knight KNIGHT_B, KNIGHT_W;
      bishop BISHOP_B, BISHOP_W;
+     
+     void set_figures();
 
     typedef std::pair<unsigned char, unsigned char> int_pair; 
     bool is_castling_possible[2];

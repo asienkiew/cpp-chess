@@ -22,12 +22,8 @@
 #include <boost/lexical_cast.hpp>
 #include <algorithm> 
 
-
-
-
-checkboard::checkboard() {
-    
-
+void checkboard::set_figures() {
+       
  EMPTY = empty(figure::none);
  KING_B = king(figure::black);
  KING_W = king(figure::white);
@@ -40,7 +36,13 @@ checkboard::checkboard() {
  KNIGHT_B = knight(figure::black);
  KNIGHT_W = knight(figure::white);
  BISHOP_B = bishop(figure::black);
- BISHOP_W = bishop(figure::white);    
+ BISHOP_W = bishop(figure::white); 
+ 
+}
+
+
+checkboard::checkboard() {
+    set_figures();
     srand (time(NULL));
     is_castling_possible[figure::black] = true;    
     is_castling_possible[figure::white] = true;
@@ -71,20 +73,7 @@ checkboard::~checkboard() {
 checkboard::checkboard(const checkboard& orig){
     
 
- EMPTY = empty(figure::none);
- KING_B = king(figure::black);
- KING_W = king(figure::white);
- QUEEN_B = queen(figure::black);
- QUEEN_W = queen(figure::white);
- ROOK_B =  rook(figure::black);
- ROOK_W = rook(figure::white);
- PAWN_B = pawn(figure::black);
- PAWN_W = pawn(figure::white);
- KNIGHT_B = knight(figure::black);
- KNIGHT_W = knight(figure::white);
- BISHOP_B = bishop(figure::black);
- BISHOP_W = bishop(figure::white);    
-      who_is_next = orig.who_is_next;
+    set_figures();
     status = orig.status;
     history = orig.history;
     is_castling_possible[0] = orig.is_castling_possible[0];
@@ -102,59 +91,12 @@ checkboard::checkboard(const checkboard& orig){
 
 
 }
-checkboard::checkboard(const checkboard* orig) {
-    
 
- EMPTY = empty(figure::none);
- KING_B = king(figure::black);
- KING_W = king(figure::white);
- QUEEN_B = queen(figure::black);
- QUEEN_W = queen(figure::white);
- ROOK_B =  rook(figure::black);
- ROOK_W = rook(figure::white);
- PAWN_B = pawn(figure::black);
- PAWN_W = pawn(figure::white);
- KNIGHT_B = knight(figure::black);
- KNIGHT_W = knight(figure::white);
- BISHOP_B = bishop(figure::black);
- BISHOP_W = bishop(figure::white);    
-    who_is_next = orig->who_is_next;
-    status = orig->status;
-    history = orig->history;
-    is_castling_possible[0] = orig->is_castling_possible[0];
-    is_castling_possible[1] = orig->is_castling_possible[1];
-    
-
-    figures_position = orig->figures_position;
-
-    
-    for  (unsigned char y=0; y<8; y++) {
-        for (unsigned char x=0; x<8; x++) {
-            board[x][y]= orig->board[x][y]; 
-        }
-    }
-
-    
-   // return *this;
-   // *this = orig;
-      
-}
 checkboard& checkboard::operator= (const checkboard& orig ){
     
 
- EMPTY = empty(figure::none);
- KING_B = king(figure::black);
- KING_W = king(figure::white);
- QUEEN_B = queen(figure::black);
- QUEEN_W = queen(figure::white);
- ROOK_B =  rook(figure::black);
- ROOK_W = rook(figure::white);
- PAWN_B = pawn(figure::black);
- PAWN_W = pawn(figure::white);
- KNIGHT_B = knight(figure::black);
- KNIGHT_W = knight(figure::white);
- BISHOP_B = bishop(figure::black);
- BISHOP_W = bishop(figure::white);    
+    set_figures();
+ 
     who_is_next = orig.who_is_next;
     status = orig.status;
     history = orig.history;

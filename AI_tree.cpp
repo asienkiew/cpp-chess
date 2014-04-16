@@ -11,17 +11,13 @@
 #include <vector>
 #include <map>
 #include <cstdlib>
-
 #include <utility>                   // for std::pair
 #include <algorithm>
 #include <iostream>
 #include <fstream>
-#include <cmath> 
 #include <thread>
-#include <chrono>
 
-#include <future>
-//
+
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/graphviz.hpp>
@@ -44,7 +40,7 @@ move AI_tree::select_move() {
     manage_is_end_game_flag();
     move chosen_move;
 
-    checkboard check_cp(check);
+    func_call_counter = 0;
     
     possible_moves_0_level_to_score_map.clear();
     if (!possible_moves_0_level_stack.empty()){
@@ -52,7 +48,12 @@ move AI_tree::select_move() {
     }
     
 
-    std::vector<move> possible_moves_0_level = get_possible_moves(check_cp);
+    std::vector<move> possible_moves_0_level = get_possible_moves(*check);
+    
+    //tworzymy "mapę" z wektora wypełnioną tak jakby nullami
+    for (unsigned i = 0; i < possible_moves_0_level.size(); ++i) {
+        possible_moves_0_level_to_score_map.push_back(std::make_pair(possible_moves_0_level[i],SHORT_MAX_INT));
+    }
 
     std::vector < move >::iterator it;
     std::vector<std::thread >  threads;
@@ -66,31 +67,25 @@ move AI_tree::select_move() {
    }
    for (unsigned i = 0 ; i < number_of_threads ; i++) {
        
-       threads.push_back(std::thread(&AI_tree::run_thread, this, check_cp, std::ref(possible_moves_0_level_to_score_map) , std::ref(possible_moves_0_level_stack)  )); 
+       threads.push_back(std::thread(&AI_tree::run_thread, this, std::ref(possible_moves_0_level_to_score_map) , std::ref(possible_moves_0_level_stack)  )); 
    }
    for (unsigned i = 0 ; i < number_of_threads ; i++) {
        threads[i].join();
    }
    
-
-    
     short int max = - SHORT_MAX_INT;
-    //std::cout<<"*"<<futures.size()<<"*\n";
 
-    for (unsigned i = 0; i < possible_moves_0_level.size(); ++i) {
-        int val;
-        for (unsigned j = 0; j < possible_moves_0_level_to_score_map.size(); ++j) {
-            
-            if (possible_moves_0_level_to_score_map[j].first == possible_moves_0_level[i]) {
-                val = possible_moves_0_level_to_score_map[i].second;
-                break;
-            }
+    for (unsigned i = 0; i < possible_moves_0_level_to_score_map.size(); ++i) {
+        
+        //std::cout<<possible_moves_0_level_to_score_map[i].first<<" "<<possible_moves_0_level_to_score_map[i].second<<"\n";
+        int val = possible_moves_0_level_to_score_map[i].second;
+
+        if (val == SHORT_MAX_INT)  { // SHORT_MAX_INT to taki jakby null, nie powinno go być bo wątki powinn zamienić tego nulla na konkretne wartości
+            throw "error";
         }
-         
-
         if ( val > max) {
             max = val;
-            chosen_move = possible_moves_0_level[i]; 
+            chosen_move = possible_moves_0_level_to_score_map[i].first; 
         }
         
     }
@@ -98,45 +93,54 @@ move AI_tree::select_move() {
     
     std::cout<<"Wybrany ruch to:\n";
     std::cout<<chosen_move.raw()<<"\n";
+    //std::cout<<func_call_counter<<"\n";
 
     return chosen_move;
 }
-void AI_tree::run_thread(checkboard ch, std::vector<move_int_pair> & scores_map,  std::stack<move,std::vector<move> > & moves_stack) {
-    while (true) {
+void AI_tree::run_thread(std::vector<move_int_pair> & scores_map,  std::stack<move,std::vector<move> > & moves_stack) {
+    int counter = 0;
+    while (counter < 100) { //zabezpieczenie przed zapętleniem
+        possible_moves_0_level_stack_mutex.lock();
         if (moves_stack.empty()) {
-            //std::cout<<"empty";
+            possible_moves_0_level_stack_mutex.unlock();
             return;
         } else {
-            possible_moves_0_level_stack_mutex.lock();
+            
             move current_move = possible_moves_0_level_stack.top();
             possible_moves_0_level_stack.pop();
             possible_moves_0_level_stack_mutex.unlock();
            
-            int current_value = get_value_for_move(current_move, ch);
+            int current_value = get_value_for_move(current_move);
             
-            
-            possible_moves_0_level_to_score_map_mutex.lock();
-            possible_moves_0_level_to_score_map.push_back(std::make_pair(current_move, current_value));
-            possible_moves_0_level_to_score_map_mutex.unlock();
+            for (unsigned i = 0; i < possible_moves_0_level_to_score_map.size(); ++i) {
+                
+                if (possible_moves_0_level_to_score_map[i].first == current_move && 
+                        possible_moves_0_level_to_score_map[i].second == SHORT_MAX_INT) {
+                    possible_moves_0_level_to_score_map[i].second = current_value;
+                }
+            }
+
             
         }
-        
+        counter++;
     }
 }
 
-int AI_tree::get_value_for_move(move m, checkboard ch) {
+int AI_tree::get_value_for_move(move m) {
+    checkboard check_cp(*check);
     long_int_pair empty_pair = std::make_pair(SHORT_MAX_INT,SHORT_MAX_INT); // ma to odpowiadać za NULL 
     graph g;
     vertex_t root = boost::add_vertex(empty_pair,g); //root
-    ch.move_without_assert(m, true);
-    int a = fill_possible_moves(g, root, ch, 1);
+    check_cp.move_without_assert(m, true);
+    int a = fill_possible_moves(g, root, check_cp, 1);
     g.clear();
     return a;
 }
 int AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & checkb, int  parent_depth){
     long_int_pair empty_pair = std::make_pair(SHORT_MAX_INT,SHORT_MAX_INT); // ma to odpowiadać za NULL 
    // std::cout<<parent_depth;
-    int counter = 0;
+
+    
     
     
     std::vector<move> possible_moves = get_possible_moves(checkb);
@@ -148,9 +152,7 @@ int AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & ch
 
     
     int current_depth = parent_depth + 1;
-    if (parent_depth == 0) {
-        counter = 0;
-    } 
+
 
     if (possible_moves.empty()) {
         g[parent_v].first = g[parent_v].second = get_score(checkb);
@@ -160,11 +162,16 @@ int AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & ch
 
     
     for(unsigned int i = 0 ; i < possible_moves.size(); ++i) {
+        /*
+        possible_moves_0_level_stack_mutex.lock();
+        func_call_counter++;
+        possible_moves_0_level_stack_mutex.unlock();
+        */
         move * it = & possible_moves[i];
         vertex_t current_v = boost::add_vertex(empty_pair,g);
         boost::tie(e,b) = boost::add_edge(parent_v,current_v,g);
         g[e] = *it;
-        counter++;
+
         //std::cout<<it->which_was_captured;
         if((current_depth  >= max_depth && it->which_was_captured == '.') || 
                 ( current_depth  >= max_depth + add_depth )) {
