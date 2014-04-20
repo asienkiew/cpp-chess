@@ -5,8 +5,9 @@
  * Created on 15 grudzień 2013, 22:32
  */
 
-#include <cstdlib>
+
 #include <iostream>
+#include <fstream>
 #include "gameplay.h"
 
 int main(int argc, char** argv) {
@@ -18,7 +19,9 @@ int main(int argc, char** argv) {
            return 0;  
         }          
         if (argc == 4) {
-            if (access( argv[3], F_OK ) == -1) {
+            std::ifstream infile(argv[3]);
+    
+            if (!infile.good()) {
                 std::cerr<<"Bad file\n";
                 return 0;
             } 

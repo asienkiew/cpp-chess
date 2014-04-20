@@ -12,7 +12,6 @@
 gameplay::gameplay(char * white_player_sign,  char * black_player_sign, std::string file) {
     check = new checkboard();
     check->load_from_file(file);
-    check->print();
     
     if (*white_player_sign == 'H') {
         players[figure::white] = new human(figure::white, check);
@@ -40,6 +39,7 @@ gameplay::~gameplay() {
     delete check;
 }
 void gameplay::start() {
+    check-> print();
     while (check->status == check->in_progress) {
         clock_t t1 = clock();
 

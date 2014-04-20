@@ -37,6 +37,7 @@ AI_tree::AI_tree(figure::color c, checkboard * check, unsigned char var1, unsign
 }
 
 move AI_tree::select_move() {
+    srand(time(NULL));
     manage_is_end_game_flag();
     move chosen_move;
 
@@ -49,6 +50,8 @@ move AI_tree::select_move() {
     
 
     std::vector<move> possible_moves_0_level = get_possible_moves(*check);
+    
+    std::vector<move> best_moves;
     
     //tworzymy "mapę" z wektora wypełnioną tak jakby nullami
     for (unsigned i = 0; i < possible_moves_0_level.size(); ++i) {
@@ -77,19 +80,24 @@ move AI_tree::select_move() {
 
     for (unsigned i = 0; i < possible_moves_0_level_to_score_map.size(); ++i) {
         
-        //std::cout<<possible_moves_0_level_to_score_map[i].first<<" "<<possible_moves_0_level_to_score_map[i].second<<"\n";
+       // std::cout<<possible_moves_0_level_to_score_map[i].first<<" "<<possible_moves_0_level_to_score_map[i].second<<"\n";
         int val = possible_moves_0_level_to_score_map[i].second;
 
         if (val == SHORT_MAX_INT)  { // SHORT_MAX_INT to taki jakby null, nie powinno go być bo wątki powinn zamienić tego nulla na konkretne wartości
             throw "error";
         }
         if ( val > max) {
+            best_moves.clear();
             max = val;
-            chosen_move = possible_moves_0_level_to_score_map[i].first; 
+        }    
+            
+        if (val >= max) {
+            best_moves.push_back(possible_moves_0_level_to_score_map[i].first); 
         }
         
+        
     }
-    
+    chosen_move = best_moves[rand() % best_moves.size()]; 
     
     std::cout<<"Wybrany ruch to:\n";
     std::cout<<chosen_move.raw()<<"\n";
@@ -368,7 +376,7 @@ int AI_tree::get_score(checkboard & check) {
                 return max;
             }
        case checkboard::draw:
-           return 1; //minimalnie większa od 0
+           return -1; //minimalnie mnijesza od 0
        default:
            break; 
     }
@@ -389,7 +397,7 @@ int AI_tree::get_score(checkboard & check) {
                     multiplier *= 0.8;
                     if (check.history.size() > 6) {
                         if (check.history[check.history.size() - 1 - 6].is_opposite_to(*last_move) ) {
-                            multiplier *= 0.8;
+                            multiplier *= 0.7;
                         }
                     }                   
                 } 

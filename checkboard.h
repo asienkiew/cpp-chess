@@ -54,6 +54,8 @@ public:
     //do poprawy (powinno być private)
     bool move_without_assert(move, bool);
     
+    void revert_last_two_moves();
+    
 private:
      empty EMPTY;
       king KING_B, KING_W;
@@ -72,8 +74,8 @@ private:
  
     void update_figures_position(int_pair &, figure::color , int_pair );
     
- 
     bool revert_move_without_assert(move, bool);
+    
     std::vector< move > history;
     figure * sign_to_object(char sign); 
     bool is_another_figure_between(unsigned char,unsigned char,unsigned char,unsigned char);

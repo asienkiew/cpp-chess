@@ -448,6 +448,19 @@ bool checkboard::revert_move_without_assert(move m, bool remove_last_move_from_h
 
     return true;
 }
+
+void checkboard::revert_last_two_moves() {
+    if (history.size() < 2) { 
+        return;
+    }
+    move m;
+    m = *history.rbegin();
+    revert_move_without_assert(m, true);
+    
+    m = *history.rbegin();
+    revert_move_without_assert(m, true);
+    
+}
 bool checkboard::check_whether_castling_is_possible(bool right_side, figure::color c){
     if (!is_castling_possible[c]) {
         return false;
@@ -595,13 +608,17 @@ void checkboard::update_status() {
     } else if (figures_position[figure::black].size() == 1 && figures_position[figure::white].size() ==  1) {
         status = draw;
         return;
+    } else if (history.size() > 600) { // zastępcza dla reguły 50 powtórzen
+        status = draw;  
     } else {
-        if (history.size() >= 12) {
+        if (history.size() >= 8) {
             move last_move = history.back();
             move before_last_move = history[history.size()-2];
             //std::cout<<last_move<<"\n"<<before_last_move<<"\n";
-            unsigned char last_moved_count = 0;
-            unsigned char before_last_moved_count = 0;
+            unsigned char last_move_count = 0;
+            unsigned char before_last_move_count = 0;
+
+
             std::vector<move>::reverse_iterator rit;
 
             for (rit = history.rbegin(); rit!= history.rend(); ++rit) {
@@ -611,18 +628,26 @@ void checkboard::update_status() {
                           rit->is_enpassant ||
                              rit->is_castling || 
                                 rit->is_promotion) {
-                   return;
+                   break;
                }
-               if (*rit == last_move) {
-                   last_moved_count++;
+               if (*rit == last_move || 
+                       (rit->which_moved == last_move.which_moved && 
+                       rit->x1 == last_move.x2 && rit->y1 == last_move.y2 && 
+                       last_move_count == 2)) {
+                   last_move_count++;
                }
-               if (*rit == before_last_move) {
-                   before_last_moved_count++;
+               if (*rit == before_last_move || 
+                       (rit->which_moved == before_last_move.which_moved && 
+                       rit->x1 == before_last_move.x2 && rit->y1 == before_last_move.y2 && 
+                       before_last_move_count == 2)) {
+                   before_last_move_count++;
                }
-               if (before_last_moved_count >= 3 && last_moved_count >= 3) {
-                   status = draw; 
-                   return;
-               }
+
+               
+            }
+            if (before_last_move_count >= 3 && last_move_count >= 3) {
+                status = draw; 
+                return;
             }
 
         }
