@@ -47,3 +47,5 @@ Sterowanie
 * ruchy podajemy w postaci np. a2a3 lub A2A3 (wielkośc liter nie ma znaczenia)
 
 * w przypadku promocji podajemy czwartą literę [whgs], oznczającaą na co chcemy promować, gdy jej nie podamy to promocja jest do królowej 
+
+* cofanie ruchu - r
