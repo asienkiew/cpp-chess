@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   AI.h
  * Author: sienio
  *
@@ -15,14 +15,14 @@
 
 class AI : public player {
 public:
-    
-    
+
+
     virtual move select_move() = 0;
     AI(figure::color, checkboard *);
 
     std::vector <move> get_possible_moves(checkboard & check);
 private:
-   typedef std::pair<unsigned char, unsigned char> int_pair; 
+   typedef std::pair<unsigned char, unsigned char> int_pair;
 };
 
 #endif	/* AI_H */

@@ -42,20 +42,19 @@ char figure::get_sign_raw() {
 };
 
 void figure::set_possible_moves_table() {
+
     //std::cout<<"dups";
-       possible_non_capture_moves.resize(8);
-        possible_capture_moves.resize(8);
-        all_moves.resize(8);
+    possible_non_capture_moves.resize(8);
+    possible_capture_moves.resize(8);
+    all_moves.resize(8);
+
     for (unsigned char x1 = 0; x1 < 8; x1++) {
-       possible_non_capture_moves[x1].resize(8);
+        possible_non_capture_moves[x1].resize(8);
         possible_capture_moves[x1].resize(8);
         all_moves[x1].resize(8);
         for (unsigned char y1 = 0; y1 < 8; y1++) {
-            int_pair from = std::make_pair(x1, y1);
             for (unsigned char x2 = 0; x2 < 8; x2++) {
-
                 for (unsigned char y2 = 0; y2 < 8; y2++) {
-
 
                     int_pair to = std::make_pair(x2, y2);
                     std::vector<int_pair> empty_vector;

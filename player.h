@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   player.h
  * Author: sienio
  *
@@ -11,11 +11,11 @@
 #include "checkboard.h"
 
 class player {
-public: 
+public:
     virtual ~player();
     virtual move select_move() = 0;
     virtual std::string get_type();
-    
+
 protected:
     std::string type;
     player(figure::color , checkboard * check);

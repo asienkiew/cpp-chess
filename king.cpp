@@ -1,39 +1,39 @@
-/* 
+/*
  * File:   king.cpp
  * Author: sienio
- * 
+ *
  * Created on 4 styczeń 2014, 20:56
  */
 
 #include "king.h"
 #include <cmath>
 
-king::king(figure::color cc):figure(cc){ 
+king::king(figure::color cc):figure(cc){
     sign = 'K';
     is_capturable = false;
      this->set_possible_moves_table();
 }
 king::king() {
-    
+
 }
 
 
 bool king::can_move_raw(unsigned char x1, unsigned char x2, unsigned char y1, unsigned char y2) {
- 
+
         if  (std::abs(x1 - x2) <= 1 && std::abs(y1 - y2) <= 1 && !(x1 == x2 && y1 == y2)) {
-            return true;   
-        } else if  ( x1 == 4 && (x2 == 2 || x2 == 6) && 
-                ((y1 == 0 && y2 == 0 && c == figure::white) || 
+            return true;
+        } else if  ( x1 == 4 && (x2 == 2 || x2 == 6) &&
+                ((y1 == 0 && y2 == 0 && c == figure::white) ||
                  (y1 == 7 && y2 == 7 && c == figure::black)  ) ) { //roszada
-            return true;  
-        } 
+            return true;
+        }
 
     return false;
 }
 
 bool king::can_capture_raw(unsigned char x1, unsigned char x2, unsigned char y1, unsigned char y2 ) {
     if  (std::abs(x1 - x2) <= 1 && std::abs(y1 - y2) <= 1 && !(x1 == x2 && y1 == y2)) {
-            return true;  
+            return true;
     }
     return false;
-}  
+}

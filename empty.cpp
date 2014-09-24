@@ -1,7 +1,7 @@
-/* 
+/*
  * File:   empty.cpp
  * Author: sienio
- * 
+ *
  * Created on 4 styczeń 2014, 21:00
  */
 

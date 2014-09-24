@@ -1,7 +1,7 @@
-/* 
+/*
  * File:   AI_tree.cpp
  * Author: sienio
- * 
+ *
  * Created on 5 luty 2014, 21:39
  */
 
@@ -33,8 +33,8 @@ AI_tree::AI_tree(figure::color c, checkboard * check, unsigned char var1, unsign
     add_depth = var2;
     type = "AI_tree";
 
-  
-   
+
+
 }
 
 move AI_tree::select_move() {
@@ -43,17 +43,17 @@ move AI_tree::select_move() {
     move chosen_move;
 
     func_call_counter = 0;
-    
+
     possible_moves_0_level_to_score_map.clear();
     if (!possible_moves_0_level_stack.empty()){
         throw "Error";
     }
-    
+
 
     std::vector<move> possible_moves_0_level = get_possible_moves(*check);
-    
+
     std::vector<move> best_moves;
-    
+
     //tworzymy "mapę" z wektora wypełnioną tak jakby nullami
     for (unsigned i = 0; i < possible_moves_0_level.size(); ++i) {
         possible_moves_0_level_to_score_map.push_back(std::make_pair(possible_moves_0_level[i],SHORT_MAX_INT));
@@ -61,26 +61,26 @@ move AI_tree::select_move() {
 
     std::vector < move >::iterator it;
     std::vector<std::thread >  threads;
-    
+
     possible_moves_0_level_stack = std::stack<move,std::vector<move> >  (possible_moves_0_level);
-    
+
    unsigned number_of_threads = sysconf( _SC_NPROCESSORS_ONLN );
 
    if (number_of_threads == 0) {
        number_of_threads = 1;
    }
    for (unsigned i = 0 ; i < number_of_threads ; i++) {
-       
-       threads.push_back(std::thread(&AI_tree::run_thread, this, std::ref(possible_moves_0_level_to_score_map) , std::ref(possible_moves_0_level_stack)  )); 
+
+       threads.push_back(std::thread(&AI_tree::run_thread, this, std::ref(possible_moves_0_level_to_score_map) , std::ref(possible_moves_0_level_stack)  ));
    }
    for (unsigned i = 0 ; i < number_of_threads ; i++) {
        threads[i].join();
    }
-   
+
     short int max = - SHORT_MAX_INT;
 
     for (unsigned i = 0; i < possible_moves_0_level_to_score_map.size(); ++i) {
-        
+
        // std::cout<<possible_moves_0_level_to_score_map[i].first<<" "<<possible_moves_0_level_to_score_map[i].second<<"\n";
         int val = possible_moves_0_level_to_score_map[i].second;
 
@@ -90,16 +90,16 @@ move AI_tree::select_move() {
         if ( val > max) {
             best_moves.clear();
             max = val;
-        }    
-            
-        if (val >= max) {
-            best_moves.push_back(possible_moves_0_level_to_score_map[i].first); 
         }
-        
-        
+
+        if (val >= max) {
+            best_moves.push_back(possible_moves_0_level_to_score_map[i].first);
+        }
+
+
     }
-    chosen_move = best_moves[rand() % best_moves.size()]; 
-    
+    chosen_move = best_moves[rand() % best_moves.size()];
+
     std::cout<<"Wybrany ruch to:\n";
     std::cout<<chosen_move.raw()<<"\n";
     //std::cout<<func_call_counter<<"\n";
@@ -114,22 +114,22 @@ void AI_tree::run_thread(std::vector<move_int_pair> & scores_map,  std::stack<mo
             possible_moves_0_level_stack_mutex.unlock();
             return;
         } else {
-            
+
             move current_move = possible_moves_0_level_stack.top();
             possible_moves_0_level_stack.pop();
             possible_moves_0_level_stack_mutex.unlock();
-           
+
             int current_value = get_value_for_move(current_move);
-            
+
             for (unsigned i = 0; i < possible_moves_0_level_to_score_map.size(); ++i) {
-                
-                if (possible_moves_0_level_to_score_map[i].first == current_move && 
+
+                if (possible_moves_0_level_to_score_map[i].first == current_move &&
                         possible_moves_0_level_to_score_map[i].second == SHORT_MAX_INT) {
                     possible_moves_0_level_to_score_map[i].second = current_value;
                 }
             }
 
-            
+
         }
         counter++;
     }
@@ -137,7 +137,7 @@ void AI_tree::run_thread(std::vector<move_int_pair> & scores_map,  std::stack<mo
 
 int AI_tree::get_value_for_move(move m) {
     checkboard check_cp(*check);
-    long_int_pair empty_pair = std::make_pair(SHORT_MAX_INT,SHORT_MAX_INT); // ma to odpowiadać za NULL 
+    long_int_pair empty_pair = std::make_pair(SHORT_MAX_INT,SHORT_MAX_INT); // ma to odpowiadać za NULL
     graph g;
     vertex_t root = boost::add_vertex(empty_pair,g); //root
     check_cp.move_without_assert(m, true);
@@ -146,20 +146,14 @@ int AI_tree::get_value_for_move(move m) {
     return a;
 }
 int AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & checkb, int  parent_depth){
-    long_int_pair empty_pair = std::make_pair(SHORT_MAX_INT,SHORT_MAX_INT); // ma to odpowiadać za NULL 
-   // std::cout<<parent_depth;
+    long_int_pair empty_pair = std::make_pair(SHORT_MAX_INT,SHORT_MAX_INT); // ma to odpowiadać za NULL
 
-    
-    
-    
     std::vector<move> possible_moves = get_possible_moves(checkb);
-     
+
 
     std::vector < move >::iterator it;
     edge_t e; bool b;
-    
 
-    
     int current_depth = parent_depth + 1;
 
 
@@ -167,9 +161,8 @@ int AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & ch
         g[parent_v].first = g[parent_v].second = get_score(checkb);
         return g[parent_v].first;
     }
-   
 
-    
+
     for(unsigned int i = 0 ; i < possible_moves.size(); ++i) {
         /*
         possible_moves_0_level_stack_mutex.lock();
@@ -182,27 +175,27 @@ int AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & ch
         g[e] = *it;
 
         //std::cout<<it->which_was_captured;
-        if((current_depth  >= max_depth && it->which_was_captured == '.') || 
+        if((current_depth  >= max_depth && it->which_was_captured == '.') ||
                 ( current_depth  >= max_depth + add_depth )) {
-       
+
             g[current_v].first = g[current_v].second = get_score(checkb);;
 
             continue;
         }
         checkb.move_without_assert(*it, true);
-        
+
         fill_possible_moves(g, current_v, checkb,current_depth);
         checkb.revert_move_without_assert(*it, true);
     }
-    
+
     short int max, min;
     min = SHORT_MAX_INT - 1;
     max = -min;
-    
+
     short int vertex_value;
-    
+
     out_edge_it out_i, out_end;
-    
+
     if (current_depth % 2 == 1) {
         for (boost::tie(out_i, out_end) = out_edges(parent_v, g); out_i != out_end; ++out_i) {
             vertex_value = g[boost::target(*out_i, g)].first;
@@ -216,22 +209,18 @@ int AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & ch
             if ( vertex_value < min ) {
                 min = vertex_value;
             }
-        }   
+        }
      }
-    
-    //remove edge and vertex
-        
-    //boost::remove_edge(out_i, g);
-    // boost::remove_vertex(boost::target(*out_i, g), g);
+
     if (current_depth % 2 == 1) { //ja
         if (max > (SHORT_MAX_INT - 1 - 60) ) {
             max -=10;
         }
         if (max < (-SHORT_MAX_INT + 1 + 60)) {
             max +=10;
-        }  
+        }
 
-        g[parent_v].first = max;  
+        g[parent_v].first = max;
         //std::cout<<"max:"<<max<<"*\n";
     } else {  // przeciwnik
         if (min > (SHORT_MAX_INT - 1 - 60) ) {
@@ -239,14 +228,14 @@ int AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & ch
         }
         if (min < (-SHORT_MAX_INT + 1 + 60)) {
             min +=10;
-        }  
-        g[parent_v].first = min; 
-        
+        }
+        g[parent_v].first = min;
 
-        
+
+
        //  std::cout<<"min:"<<min<<"*\n";
-    }        
-   
+    }
+
     if (parent_depth == 1 ) {
         return g[parent_v].first;
     }
@@ -254,25 +243,25 @@ int AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & ch
 }
 
 int AI_tree::evaluation_function(checkboard & check, figure::color player) {
-    
+
     int score = 0;
 
      std::vector < int_pair >::iterator it_pair;
 
-     
-    for (it_pair = check.figures_position[player].begin(); it_pair != check.figures_position[player].end(); ++it_pair) {       
+
+    for (it_pair = check.figures_position[player].begin(); it_pair != check.figures_position[player].end(); ++it_pair) {
         unsigned char x = it_pair->first;
         unsigned char y = it_pair->second;
 
         char sign = check.board[x][y]->get_sign_raw();
-  
+
         switch(sign) {
             case 'H':
                 score += H_VALUE;
                 if (player == figure::white) {
                     score += H_TABLE_WHITE[x][y];
                 } else {
-                    score += H_TABLE_BLACK[x][y]; 
+                    score += H_TABLE_BLACK[x][y];
                 }
                 break;
             case 'W':
@@ -280,7 +269,7 @@ int AI_tree::evaluation_function(checkboard & check, figure::color player) {
                 if (player == figure::white) {
                     score += W_TABLE_WHITE[x][y];
                 } else {
-                    score += W_TABLE_BLACK[x][y]; 
+                    score += W_TABLE_BLACK[x][y];
                 }
                 break;
             case 'G':
@@ -288,7 +277,7 @@ int AI_tree::evaluation_function(checkboard & check, figure::color player) {
                 if (player == figure::white) {
                     score += G_TABLE_WHITE[x][y];
                 } else {
-                    score += G_TABLE_BLACK[x][y]; 
+                    score += G_TABLE_BLACK[x][y];
                 }
                 break;
             case 'S':
@@ -296,7 +285,7 @@ int AI_tree::evaluation_function(checkboard & check, figure::color player) {
                 if (player == figure::white) {
                     score += S_TABLE_WHITE[x][y];
                 } else {
-                    score += S_TABLE_BLACK[x][y]; 
+                    score += S_TABLE_BLACK[x][y];
                 }
                 break;
             case 'P':
@@ -304,41 +293,41 @@ int AI_tree::evaluation_function(checkboard & check, figure::color player) {
                 if (player == figure::white) {
                     score += P_TABLE_WHITE[x][y];
                 } else {
-                    score += P_TABLE_BLACK[x][y]; 
+                    score += P_TABLE_BLACK[x][y];
                 }
-                break; 
+                break;
             case 'K':
-               
-                if (player == figure::white) {     
+
+                if (player == figure::white) {
                     if (!is_endgame) {
                         score += K_TABLE_WHITE_MIDDLEGAME[x][y];
                     } else {
-                        score += K_TABLE_WHITE_ENDGAME[x][y]; 
+                        score += K_TABLE_WHITE_ENDGAME[x][y];
                     }
                 } else {
                     if (!is_endgame) {
                         score += K_TABLE_BLACK_MIDDLEGAME[x][y];
                     } else {
-                        score += K_TABLE_BLACK_ENDGAME[x][y]; 
+                        score += K_TABLE_BLACK_ENDGAME[x][y];
                     }
                 }
-                break;                 
+                break;
         }
     }
     return score;
 }
 int AI_tree::simple_evaluation_function(checkboard & check, figure::color player) {
-    
+
     int score = 0;
      std::vector < int_pair >::iterator it_pair;
 
-     
-    for (it_pair = check.figures_position[player].begin(); it_pair != check.figures_position[player].end(); ++it_pair) {       
+
+    for (it_pair = check.figures_position[player].begin(); it_pair != check.figures_position[player].end(); ++it_pair) {
         unsigned char x = it_pair->first;
         unsigned char y = it_pair->second;
 
         char sign = check.board[x][y]->get_sign_raw();
-  
+
         switch(sign) {
             case 'H':
                 score += H_VALUE;
@@ -354,7 +343,7 @@ int AI_tree::simple_evaluation_function(checkboard & check, figure::color player
                 break;
             case 'P':
                 score += P_VALUE;
-                break;              
+                break;
         }
     }
     return score;
@@ -369,7 +358,7 @@ int AI_tree::get_score(checkboard & check) {
             } else {
                 return -max;
             }
-              
+
         case checkboard::white_won:
              if (who == figure::black) {
                 return -max;
@@ -379,34 +368,34 @@ int AI_tree::get_score(checkboard & check) {
        case checkboard::draw:
            return -1; //minimalnie mnijesza od 0
        default:
-           break; 
+           break;
     }
     float multiplier =1.0;
     int score = evaluation_function(check, who) - evaluation_function(check,opposite);
     if (is_endgame) {
         score += get_king_distance_modifier(check);
     }
-    
 
-   
+
+
     move * last_move = & check.history.back();
     if (check.history.size() > 2) {
         if (check.history[check.history.size() - 1 - 2].is_opposite_to(*last_move) ) {
             multiplier = is_endgame ? 0.5 : 0.9;
-            if (check.history.size() > 4) {  
+            if (check.history.size() > 4) {
                 if (check.history[check.history.size() - 1 - 4] == (*last_move) ) {
                     multiplier *= 0.8;
                     if (check.history.size() > 6) {
                         if (check.history[check.history.size() - 1 - 6].is_opposite_to(*last_move) ) {
                             multiplier *= 0.7;
                         }
-                    }                   
-                } 
+                    }
+                }
             }
-        }        
+        }
     }
 
-   
+
 
     return (short int)(multiplier*score);
 }
@@ -420,7 +409,7 @@ int AI_tree::get_king_distance_modifier(checkboard & ch) {
     } else {
         return 0;
     }
-        
+
 }
 void AI_tree::manage_is_end_game_flag(){
       int s_w = simple_evaluation_function(*check, figure::white);
@@ -429,14 +418,14 @@ void AI_tree::manage_is_end_game_flag(){
           is_endgame = true;
           max_depth = MAX_DEPTH + 2;
       } else if (s_w < 1200 && s_b < 1200) {
-          is_endgame = true;  
+          is_endgame = true;
            max_depth = MAX_DEPTH + 1;
       } else {
-          is_endgame = false;  
+          is_endgame = false;
            max_depth = MAX_DEPTH;
       }
 
-    
+
   //std::cout<<"*white:"<<evaluation_function(*check, figure::white)<<"*black:"<<  evaluation_function(*check, figure::black)<<"\n";
 }
 const short int AI_tree::SHORT_MAX_INT =  std::numeric_limits<short int>::max();
@@ -561,7 +550,7 @@ const int AI_tree::K_TABLE_BLACK_MIDDLEGAME[8][8] =  {
     {-50,-50,-50,-50,-40,-20,  0,  0},
     {-40,-40,-40,-40,-30,-20,  0, 10},
     {-40,-40,-40,-40,-30,-20, 20, 30},
-    {-30,-30,-30,-30,-20,-10, 20, 20}        
+    {-30,-30,-30,-30,-20,-10, 20, 20}
 };
 const int AI_tree::K_TABLE_WHITE_ENDGAME[8][8] =  {
     {-50,-30,-30,-30,-30,-30,-30,-50},

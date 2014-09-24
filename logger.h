@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   logger.h
  * Author: sienio
  *
@@ -12,20 +12,20 @@
 
 class logger {
 public:
-    
+
     static logger& get_instance();
     void log(const std::string&);
-private:    
+private:
     std::ofstream log_file;
-    logger(); 
+    logger();
     logger(const logger& orig);
     logger& operator=(const logger&);
-    ~logger(); 
-    
+    ~logger();
 
-        
 
-    
+
+
+
 };
 
 #endif	/* LOGGER_H */

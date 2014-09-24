@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   human.h
  * Author: sienio
  *
@@ -17,8 +17,8 @@ public:
     virtual ~human();
     move select_move();
     // sprawdza tylko czy format komendy jest poprawny
-    bool is_command_ok(std::string s); 
-    
+    bool is_command_ok(std::string s);
+
 private:
 
 };

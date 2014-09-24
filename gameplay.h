@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   gameplay.h
  * Author: sienio
  *

@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   move.h
  * Author: sienio
  *
@@ -12,14 +12,11 @@
 
 class move {
 public:
-        char which_was_captured;
-    unsigned char x1, x2, y1, y2;
 
-    char promote_to;
+    unsigned char x1, x2, y1, y2;
     bool is_castling, is_enpassant, is_promotion, is_valid;
-    
     figure::color c;
-    char which_moved;
+    char which_moved, which_was_captured, promote_to;
 
     move();
     move(std::string, figure::color);
@@ -27,12 +24,12 @@ public:
     bool is_opposite_to(move &);
     std::string extended();
     std::string raw();
-    
+
     virtual ~move();
     friend std::ostream& operator<<(std::ostream&, move&);
     friend bool operator== (move &, move &);
 private:
-    
+
 
 };
 

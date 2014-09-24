@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   AI_basic.h
  * Author: sienio
  *
@@ -11,10 +11,10 @@
 #include "checkboard.h"
 
 class AI_basic : private AI {
-public:    
+public:
     move select_move();
     AI_basic(figure::color c, checkboard *);
-    
+
 private:
 
 };

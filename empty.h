@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   empty.h
  * Author: sienio
  *
@@ -11,7 +11,7 @@
 
 class empty : public figure{
 public:
-    
+
     empty(figure::color cc);
     bool can_move_raw(unsigned char x1, unsigned char x2, unsigned char y1, unsigned char y2);
     virtual ~empty();

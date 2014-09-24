@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   rook.h
  * Author: sienio
  *
@@ -11,8 +11,8 @@
 
 class rook : public figure{
 public:
-    
-    
+
+
     rook(figure::color cc);
     rook();
     virtual bool can_move_raw(unsigned char x1, unsigned char x2, unsigned char y1, unsigned char y2);

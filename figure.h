@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   figure.h
  * Author: sienio
  *
@@ -17,8 +17,8 @@ class figure {
 public:
     char sign;
     enum color {black, white, none};
-    typedef std::pair<unsigned char, unsigned char> int_pair; 
-    
+    typedef std::pair<unsigned char, unsigned char> int_pair;
+
     bool can_jump_over();
     color get_color();
     figure( );
@@ -40,7 +40,7 @@ protected:
     void set_possible_moves_table();
     std::vector< std::vector< std::vector<int_pair> > >possible_non_capture_moves;
     std::vector< std::vector< std::vector<int_pair> > >possible_capture_moves;
-        
+
     std::vector< std::vector< std::vector<int_pair> > >all_moves;
     bool can_capture_bool_table[8][8][8][8];
     bool can_move_bool_table[8][8][8][8];
