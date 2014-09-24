@@ -47,6 +47,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/human.o \
 	${OBJECTDIR}/king.o \
 	${OBJECTDIR}/knight.o \
+	${OBJECTDIR}/logger.o \
 	${OBJECTDIR}/move.o \
 	${OBJECTDIR}/pawn.o \
 	${OBJECTDIR}/player.o \
@@ -144,6 +145,11 @@ ${OBJECTDIR}/knight.o: knight.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/knight.o knight.cpp
+
+${OBJECTDIR}/logger.o: logger.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/logger.o logger.cpp
 
 ${OBJECTDIR}/move.o: move.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -362,6 +368,19 @@ ${OBJECTDIR}/knight_nomain.o: ${OBJECTDIR}/knight.o knight.cpp
 	    $(COMPILE.cc) -O2 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/knight_nomain.o knight.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/knight.o ${OBJECTDIR}/knight_nomain.o;\
+	fi
+
+${OBJECTDIR}/logger_nomain.o: ${OBJECTDIR}/logger.o logger.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/logger.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/logger_nomain.o logger.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/logger.o ${OBJECTDIR}/logger_nomain.o;\
 	fi
 
 ${OBJECTDIR}/move_nomain.o: ${OBJECTDIR}/move.o move.cpp 

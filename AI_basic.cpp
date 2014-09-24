@@ -15,6 +15,7 @@
 #include <ctime>
 
 AI_basic::AI_basic(figure::color c, checkboard * check):AI(c, check) {
+    type = "AI_basic";
 }
 
 

@@ -56,6 +56,8 @@ public:
     
     void revert_last_two_moves();
     
+    std::string to_string();
+    
 private:
      empty EMPTY;
       king KING_B, KING_W;

@@ -10,9 +10,11 @@
 #include <fstream>
 #include "gameplay.h"
 
+
 int main(int argc, char** argv) {
     
     try {
+        
         gameplay * g;
         if (argc<3 || argc > 4) {
            std::cerr<<"There should be 2 or 3 arguments\n";

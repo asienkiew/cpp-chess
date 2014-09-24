@@ -10,6 +10,7 @@
 #include <string>
 
 human::human(figure::color c, checkboard * check):player(c, check) {
+    type = "Human";
 }
 
 human::~human() {

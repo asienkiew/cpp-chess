@@ -7,14 +7,26 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/sienio/NetBeansProjects/Chess/AI_tree.cpp</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/AI.h</file>
             <file>file:/home/sienio/NetBeansProjects/Chess/chess.cpp</file>
-            <file>file:/home/sienio/NetBeansProjects/Chess/white_win.chess</file>
-            <file>file:/home/sienio/NetBeansProjects/Chess/king.cpp</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/figure.h</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/checkboard.h</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/empty.cpp</file>
             <file>file:/home/sienio/NetBeansProjects/Chess/gameplay.cpp</file>
-            <file>file:/home/sienio/NetBeansProjects/Chess/king_and_rook.chess</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/AI_tree.h</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/logger.cpp</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/AI_basic.cpp</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/move.cpp</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/AI_tree.cpp</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/player.cpp</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/empty.h</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/bishop.cpp</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/player.h</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/logger.h</file>
             <file>file:/home/sienio/NetBeansProjects/Chess/human.cpp</file>
-            <file>file:/home/sienio/NetBeansProjects/Chess/AI_basic.h</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/checkboard.cpp</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/AI.cpp</file>
+            <file>file:/home/sienio/NetBeansProjects/Chess/figure.cpp</file>
         </group>
     </open-files>
 </project-private>

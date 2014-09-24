@@ -31,6 +31,7 @@ AI_tree::AI_tree(figure::color c, checkboard * check, unsigned char var1, unsign
     MAX_DEPTH = var1;
     max_depth = MAX_DEPTH;
     add_depth = var2;
+    type = "AI_tree";
 
   
    

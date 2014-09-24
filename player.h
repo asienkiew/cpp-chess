@@ -14,8 +14,10 @@ class player {
 public: 
     virtual ~player();
     virtual move select_move() = 0;
+    virtual std::string get_type();
     
 protected:
+    std::string type;
     player(figure::color , checkboard * check);
     figure::color who, opposite;
     checkboard * check;

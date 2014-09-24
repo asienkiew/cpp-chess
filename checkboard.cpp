@@ -171,9 +171,9 @@ void checkboard::print() {
         for (unsigned char x=0; x<8; x++) {
             if (board[x][y]->get_sign() == '.' ) {
                 if ( (x + y) % 2 == 0) {
-                    std::cout<<"\033[35;1m"<<board[x][y]->get_sign()<<"\033[0m ";
+                    std::cout<<"\033[35;1m.\033[0m ";
                 } else {
-                    std::cout<<"\033[37;1m"<<board[x][y]->get_sign()<<"\033[0m ";
+                    std::cout<<"\033[37;1m.\033[0m ";
                 }
                 
             } else {
@@ -192,6 +192,17 @@ void checkboard::print() {
     std::cout<<"\n\n"<<"   a b c d e f g h\n";
 }
 
+std::string checkboard::to_string() {
+    std:: string s;
+    s += "\n";
+    for (signed char y=7; y>=0; y--) {        
+        for (unsigned char x=0; x<8; x++) {
+            s += board[x][y]->get_sign();                 
+        }
+        s += "\n";
+    }
+    return s;
+}
 
 
 bool checkboard::is_another_figure_between(unsigned char  x1, unsigned char  x2, unsigned char  y1, unsigned char  y2) {
@@ -261,6 +272,9 @@ figure * checkboard::sign_to_object(char sign) {
        case '.':
             f = & EMPTY;
             break;
+       case '*':
+            f = & EMPTY;         
+            break;            
         case 'k':
             f = &  KING_B;
             break;
@@ -297,9 +311,6 @@ figure * checkboard::sign_to_object(char sign) {
         case 'G':
             f = & BISHOP_W;          
             break;       
-       case '*':
-            f = & EMPTY;         
-            break;
         default:
             std::cerr<<"^"<<sign<<"^";
             throw "BadSign:";
