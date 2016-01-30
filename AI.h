@@ -21,7 +21,7 @@ public:
     AI(figure::color, checkboard *);
 
     std::vector <move> get_possible_moves(checkboard & check);
-private:
+protected:
    typedef std::pair<unsigned char, unsigned char> int_pair;
 };
 

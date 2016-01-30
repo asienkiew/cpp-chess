@@ -48,7 +48,7 @@ move AI_tree::select_move() {
     if (!possible_moves_0_level_stack.empty()){
         throw "Error";
     }
-
+    
 
     std::vector<move> possible_moves_0_level = get_possible_moves(*check);
 
@@ -239,6 +239,7 @@ int AI_tree::fill_possible_moves(graph & g, vertex_t & parent_v, checkboard & ch
     if (parent_depth == 1 ) {
         return g[parent_v].first;
     }
+    return 0;
 
 }
 

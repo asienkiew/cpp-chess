@@ -34,4 +34,5 @@ logger& logger::get_instance(){
 
 void logger::log(const std::string & s) {
     log_file << s;
+    log_file.flush();
 }
