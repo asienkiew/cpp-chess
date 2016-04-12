@@ -9,9 +9,13 @@
 #include <ctime>
 #include <fstream>
 #include <string>
+#include <sys/stat.h>
+#include <errno.h>
 
 logger::logger() {
-    std::system("mkdir -p ./log");
+    int err = mkdir("./log", S_IRWXU );
+    if (err != 0  && errno != EEXIST) throw "Cannot create log directory";
+   
     time_t rawtime;
     struct tm * timeinfo;
     char buffer [80];
