@@ -1,23 +1,16 @@
-/*
- * File:   AI_basic.h
- * Author: sienio
- *
- * Created on 31 styczeń 2014, 23:19
- */
-
 #ifndef AI_BASIC_H
-#define	AI_BASIC_H
+#define AI_BASIC_H
 #include "AI.h"
 #include "checkboard.h"
 
 class AI_basic : private AI {
 public:
     move select_move();
-    AI_basic(figure::color c, checkboard *);
+    AI_basic(figure::color c, std::shared_ptr<checkboard>);
 
 private:
 
 };
 
-#endif	/* AI_BASIC_H */
+#endif /* AI_BASIC_H */
 

@@ -1,12 +1,5 @@
-/*
- * File:   move.h
- * Author: sienio
- *
- * Created on 7 styczeń 2014, 00:33
- */
-
 #ifndef MOVE_H
-#define	MOVE_H
+#define MOVE_H
 #include "figure.h"
 #include <iostream>
 
@@ -20,18 +13,18 @@ public:
 
     move();
     move(std::string, figure::color);
-    move(unsigned char,unsigned char,unsigned char,unsigned char, figure::color, char, char, char);
+    move(unsigned char, unsigned char, unsigned char, unsigned char, figure::color, char, char, char);
     bool is_opposite_to(move &);
     std::string extended();
     std::string raw();
 
     virtual ~move();
     friend std::ostream& operator<<(std::ostream&, move&);
-    friend bool operator== (move &, move &);
+    friend bool operator==(move &, move &);
 private:
 
 
 };
 
-#endif	/* MOVE_H */
+#endif /* MOVE_H */
 

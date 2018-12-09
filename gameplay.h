@@ -1,14 +1,8 @@
-/*
- * File:   gameplay.h
- * Author: sienio
- *
- * Created on 5 styczeń 2014, 18:48
- */
-
 #ifndef GAMEPLAY_H
-#define	GAMEPLAY_H
+#define GAMEPLAY_H
 #include <string>
 #include <vector>
+#include <memory>
 #include "player.h"
 #include "figure.h"
 #include "checkboard.h"
@@ -16,15 +10,14 @@
 class gameplay {
 public:
     gameplay(char *, char *, std::string file = "samples/sample.chess");
-    gameplay(const gameplay& orig);
-    virtual ~gameplay();
+    virtual ~gameplay() = default;
     void start();
 
 private:
-    checkboard * check;
+    std::shared_ptr<checkboard> check;
     std::vector< std::string > history;
-    player * players[2];
+    std::vector<std::unique_ptr<player>> players;
 };
 
-#endif	/* GAMEPLAY_H */
+#endif /* GAMEPLAY_H */
 

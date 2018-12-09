@@ -1,12 +1,5 @@
-/*
- * File:   AI.h
- * Author: sienio
- *
- * Created on 6 styczeń 2014, 16:59
- */
-
 #ifndef AI_H
-#define	AI_H
+#define AI_H
 #include "checkboard.h"
 #include "figure.h"
 #include <vector>
@@ -18,12 +11,12 @@ public:
 
 
     virtual move select_move() = 0;
-    AI(figure::color, checkboard *);
+    AI(figure::color, std::shared_ptr<checkboard>);
 
     std::vector <move> get_possible_moves(checkboard & check);
 protected:
-   typedef std::pair<unsigned char, unsigned char> int_pair;
+    typedef std::pair<unsigned char, unsigned char> int_pair;
 };
 
-#endif	/* AI_H */
+#endif /* AI_H */
 

@@ -1,12 +1,5 @@
-/*
- * File:   figure.h
- * Author: sienio
- *
- * Created on 25 grudzień 2013, 15:09
- */
-
 #ifndef FIGURE_H
-#define	FIGURE_H
+#define FIGURE_H
 
 #include <string>
 #include <utility>
@@ -16,15 +9,18 @@
 class figure {
 public:
     char sign;
-    enum color {black, white, none};
+
+    enum color {
+        black, white, none
+    };
     typedef std::pair<unsigned char, unsigned char> int_pair;
 
     bool can_jump_over();
     color get_color();
-    figure( );
-    figure(color );
-    figure(const figure& );
-    virtual ~figure();
+    figure();
+    figure(color);
+    figure(const figure&);
+    virtual ~figure() = default;
     char get_sign();
     char get_sign_raw();
     std::vector <int_pair> & get_possible_moves_for_figure(int_pair &);
@@ -50,5 +46,5 @@ protected:
 
 };
 
-#endif	/* FIGURE_H */
+#endif /* FIGURE_H */
 

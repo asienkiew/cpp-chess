@@ -1,12 +1,5 @@
-/*
- * File:   AI_tree.h
- * Author: sienio
- *
- * Created on 5 luty 2014, 21:39
- */
-
 #ifndef AI_TREE_H
-#define	AI_TREE_H
+#define AI_TREE_H
 #include "AI.h"
 #include "checkboard.h"
 #include <mutex>
@@ -17,10 +10,10 @@
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
 
-class AI_tree : public AI{
+class AI_tree : public AI {
 public:
-     move select_move();
-    AI_tree(figure::color c, checkboard *, unsigned char, unsigned char );
+    move select_move();
+    AI_tree(figure::color c, std::shared_ptr<checkboard>, unsigned char, unsigned char);
 
     int get_score(checkboard & check);
 
@@ -49,7 +42,7 @@ private:
 
     typedef std::pair<int, int> long_int_pair;
     typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS,
-            long_int_pair, move> graph;
+    long_int_pair, move> graph;
 
     typedef boost::graph_traits<graph>::vertex_descriptor vertex_t;
     typedef boost::graph_traits<graph>::edge_descriptor edge_t;
@@ -64,7 +57,7 @@ private:
 
     std::vector<move_int_pair> possible_moves_0_level_to_score_map;
 
-    std::stack<move,std::vector<move> >   possible_moves_0_level_stack;
+    std::stack<move, std::vector<move> > possible_moves_0_level_stack;
     std::mutex possible_moves_0_level_stack_mutex;
 
     int evaluation_function(checkboard & check, figure::color);
@@ -73,11 +66,11 @@ private:
     int get_king_mobility(checkboard & check, figure::color);
 
     void manage_is_end_game_flag();
-    int fill_possible_moves(graph & g, vertex_t & v,  checkboard & check, int  parent_depth);
+    int fill_possible_moves(graph & g, vertex_t & v, checkboard & check, int parent_depth);
     int get_value_for_move(move);
-    void run_thread(std::vector<move_int_pair> &,  std::stack<move,std::vector<move> >  &);
+    void run_thread(std::vector<move_int_pair> &, std::stack<move, std::vector<move> > &);
 };
 
 
-#endif	/* AI_TREE_H */
+#endif /* AI_TREE_H */
 

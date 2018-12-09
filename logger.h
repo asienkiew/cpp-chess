@@ -1,12 +1,5 @@
-/*
- * File:   logger.h
- * Author: sienio
- *
- * Created on July 24, 2014, 10:09 PM
- */
-
 #ifndef LOGGER_H
-#define	LOGGER_H
+#define LOGGER_H
 
 #include <fstream>
 
@@ -28,5 +21,5 @@ private:
 
 };
 
-#endif	/* LOGGER_H */
+#endif /* LOGGER_H */
 

@@ -1,32 +1,24 @@
-/*
- * File:   player.h
- * Author: sienio
- *
- * Created on 17 luty 2014, 00:52
- */
-
 #ifndef PLAYER_H
-#define	PLAYER_H
+#define PLAYER_H
+#include <memory>
 #include "figure.h"
 #include "checkboard.h"
 
 class player {
 public:
-    virtual ~player();
+    virtual ~player() = default;
     virtual move select_move() = 0;
     virtual std::string get_type();
 
 protected:
     std::string type;
-    player(figure::color , checkboard * check);
+    player(figure::color, std::shared_ptr<checkboard> check);
     figure::color who, opposite;
-    checkboard * check;
-    player();
-    player(const player& orig);
+    std::shared_ptr<checkboard> check;
 
 private:
 
 };
 
-#endif	/* PLAYER_H */
+#endif /* PLAYER_H */
 
